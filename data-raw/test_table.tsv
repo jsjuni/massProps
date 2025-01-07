@@ -1,0 +1,13 @@
+id	parent	mass	Cx	Cy	Cz	Ixx	Ixy	Ixz	Iyy	Iyz	Izz	POIconv	Ipoint
+A.1		NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	-	FALSE
+A.2	A.1	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	-	FALSE
+A.3	A.1	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	-	FALSE
+C.1	A.1	5	0	0	0	80	-4	-24	80	-24	75	-	FALSE
+P.1	A.2	2	1	1	1	4	-0.1	-0.1	4	0.1	4	-	FALSE
+P.2	A.2	2	1	1	-1	4	-0.1	-0.1	4	0.1	4	-	FALSE
+P.3	A.2	2	1	-1	1	4	-0.1	-0.1	4	0.1	4	-	FALSE
+P.4	A.2	2	1	-1	-1	4	-0.1	-0.1	4	0.1	4	-	FALSE
+P.5	A.3	2	-1	1	1	4	-0.1	-0.1	4	0.1	4	-	FALSE
+P.6	A.3	2	-1	1	-1	4	-0.1	-0.1	4	0.1	4	-	FALSE
+P.7	A.3	2	-1	-1	1	4	-0.1	-0.1	4	0.1	4	-	FALSE
+P.8	A.3	2	-1	-1	-1	4	-0.1	-0.1	4	0.1	4	-	FALSE

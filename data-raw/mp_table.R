@@ -1,4 +1,3 @@
-## code to prepare `massprops` dataset goes here
 library(igraph)
 
 mp_table <- read.table("data-raw/mp_table.tsv", header = TRUE, sep = "\t")
