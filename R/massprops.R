@@ -37,3 +37,44 @@ df_get_mass_props <- function(df, id) {
     point = df_get_by_id(df, id, "Ipoint")
   )
 }
+
+#' Get mass property set and uncertainties for a row in a data frame
+#'
+#' `df_get_mass_props_and_unc()` gets a mass property set with uncertainties for a specified row in a data frame
+#' with (at least) these columns: `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
+#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `σ_mass`, `σ_Cx`, `σ_Cy`, `σ_Cz`, `σ_Ixx`, `σ_Iyy`, `σ_Izz`, `σ_Ixy`, `σ_Ixz`, `σ_Iyz`.
+#'
+#' @param df A data frame
+#' @param id ID value of the desired row
+#'
+#' @return
+#' A list with the following named elements:
+#' - `mass` mass (numeric)
+#' - `center_mass` center of mass (3-dimensional numeric)
+#' - `inertia` Inertia tensor (3x3 numeric matrix)
+#' - `point` Logical indicating point mass, i.e., negligible inertia
+#' - `σ_mass` mass uncertainty
+#' - `σ_center_mass` center of mass uncertainty (3-dimensional numeric)
+#' - `σ_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
+#' @export
+#'
+#' @examples
+#' df_get_mass_props_and_unc(mp_table, "C.1.2.2.3.1.2.3")
+df_get_mass_props_and_unc <- function(df, id) {
+  r <- df_get_mass_props(df, id)
+  r$σ_mass <- df_get_by_id(df, id, "σ_mass")
+  r$σ_center_mass <- sapply(c(x = "σ_Cx", y = "σ_Cy", z = "σ_Cz"), FUN=function(p) df_get_by_id(df, id, p))
+  r$σ_it <- {
+    xyz <- list("x", "y", "z")
+    σ_it <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
+    σ_it["x", "x"] <- df_get_by_id(df, id, "σ_Ixx")
+    σ_it["y", "y"] <- df_get_by_id(df, id, "σ_Iyy")
+    σ_it["z", "z"] <- df_get_by_id(df, id, "σ_Izz")
+    σ_it["x", "y"] <- σ_it["y", "x"] <- df_get_by_id(df, id, "σ_Ixy")
+    σ_it["x", "z"] <- σ_it["z", "x"] <- df_get_by_id(df, id, "σ_Ixz")
+    σ_it["y", "z"] <- σ_it["z", "y"] <- df_get_by_id(df, id, "σ_Iyz")
+    σ_it
+  }
+  r
+}
+
