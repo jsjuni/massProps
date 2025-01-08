@@ -97,6 +97,10 @@ df_get_mass_props_and_unc <- function(df, id) {
 #' @export
 #'
 #' @examples
+#' df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
+#' v <- df_get_mass_props(mp_table, "C.1.2.2.3.2.1.1")
+#' v$poi_conv = "+"
+#' df_set_mass_props(df, "C.1.2.2.3.2.1.1", v)
 df_set_mass_props <- function(df, id, v) {
   m <- v$inertia
   poi_factor <- if (v$poi_conv == "-") 1 else -1
@@ -119,7 +123,7 @@ df_set_mass_props <- function(df, id, v) {
 
 #' Set mass properties and uncertainties for a row in a data frame
 #'
-#' `df_set_mass_props_and_unc()` sets mass properties and uncdertainties for a
+#' `df_set_mass_props_and_unc()` sets mass properties and uncertainties for a
 #' specified row in a data frame with an `id` column.
 #'
 #' @param df A data frame
@@ -139,6 +143,10 @@ df_set_mass_props <- function(df, id, v) {
 #' @export
 #'
 #' @examples
+#' df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
+#' v <- df_get_mass_props_and_unc(mp_table, "C.1.2.2.3.2.1.1")
+#' v$poi_conv = "+"
+#' df_set_mass_props_and_unc(df, "C.1.2.2.3.2.1.1", v)
 df_set_mass_props_and_unc <- function(df, id, v) {
   df |> df_set_mass_props(id, v) |>
 

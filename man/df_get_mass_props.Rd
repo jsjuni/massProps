@@ -22,7 +22,7 @@ A list with the following named elements:
 }
 \description{
 \code{df_get_mass_props()} gets mass properties for a specified row in a data frame
-with (at least) these columns: \code{mass}, \code{Cx}, \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy},
+with (at least) these columns: \code{id}, \code{mass}, \code{Cx}, \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy},
 \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.
 }
 \examples{
