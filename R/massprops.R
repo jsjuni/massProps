@@ -265,3 +265,125 @@ combine_mass_props_and_unc <- function(vl) {
 
   r
 }
+
+#' Set POI convention for mass properties object to "+"
+#'
+#' @description
+#' `set_poi_conv_plus()` sets the products of inertia convention for a
+#' mass properties object to "+". This does not affect the values of
+#' object, but it determines how products of inertia are saved to a
+#' data set.
+#'
+#' The signature of `set_poi_conv_plus()` is such that it can be passed as an `override` argument
+#' to `update_mass_props()` and `update_mass_props_and_unc()`, thus ensuring
+#' that all calculated POI values follow the positive integral convention.
+#'
+#' @param ds Ignored
+#' @param target Ignored
+#' @param v A mass properties object
+#'
+#' @return The mass properties object with the POI convention set to "+"
+#' @export
+#'
+#' @examples
+#' set_poi_conv_plus(NULL, NULL, df_get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+set_poi_conv_plus <- function(ds, target, v) {
+  v$poi_conv <- "+"
+  v
+}
+
+#' Set POI convention for mass properties object to "-"
+#'
+#' @description
+#' `set_poi_conv_minus()` sets the products of inertia convention for a
+#' mass properties object to "+". This does not affect the values of
+#' object, but it determines how products of inertia are saved to a
+#' data set.
+#'
+#' The signature `of set_poi_conv_minus()` is such that it can be passed as an `override` argument
+#' to `update_mass_props()` and `update_mass_props_and_unc()`, thus ensuring
+#' that all calculated POI values follow the negative integral convention.
+#'
+#' @param ds Ignored
+#' @param target Ignored
+#' @param v A mass properties object
+#'
+#' @return The mass properties object with the POI convention set to "-"
+#' @export
+#'
+#' @examples
+#' set_poi_conv_minus(NULL, NULL, df_get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+set_poi_conv_minus <- function(ds, target, v) {
+  v$poi_conv <- "-"
+  v
+}
+
+#' Set POI convention for mass properties object to match the target item
+#'
+#' @description
+#' `set_poi_conv_from_target()` sets the products of inertia convention for a
+#' mass properties object to that of the target item in the mass properties table. This does not affect the values of
+#' object, but it determines how products of inertia are saved to the
+#' data frame.
+#'
+#' The signature `of set_poi_conv_from_target()` is such that it can be passed as an `override` argument
+#' to `update_mass_props()` and `update_mass_props_and_unc()`, thus ensuring
+#' that all calculated POI values follow the negative integral convention of the target item to which they are written.
+#'
+#' @param df A data frame with column `id`
+#' @param target ID value for the target item
+#' @param v A mass properties object
+#'
+#' @return The mass properties object with the POI convention set to that of the target item
+#' @export
+#'
+#' @examples
+#' set_poi_conv_from_target(mp_table, "C.1.2.2.3.2.1", df_get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+set_poi_conv_from_target <- function(df, target, v) {
+  v$poi_conv <- df_get_by_id(df, target, "POIconv")
+  v
+}
+
+#' Update mass properties
+#'
+#' @param ds
+#' @param parent_key
+#' @param child_keys
+#'
+#' @return
+#' @export
+#'
+#' @examples
+update_mass_props <- function(ds, parent_key, child_keys) {
+  update_prop(
+    ds,
+    target = parent_key,
+    sources = child_keys,
+    set = df_set_mass_props,
+    get = df_get_mass_props,
+    combine = combine_mass_props,
+    override = df_override_mass_props
+  )
+}
+
+#' Title
+#'
+#' @param ds
+#' @param parent_key
+#' @param child_keys
+#'
+#' @return
+#' @export
+#'
+#' @examples
+update_mass_props_and_unc <- function(ds, parent_key, child_keys) {
+  update_prop(
+    ds,
+    target = parent_key,
+    sources = child_keys,
+    set = df_set_mass_props_and_unc,
+    get = df_get_mass_props_and_unc,
+    combine = combine_mass_props_and_unc,
+    override = df_override_mass_props
+  )
+}

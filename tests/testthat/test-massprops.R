@@ -250,3 +250,20 @@ test_that("combine_mass_props_and_unc() works", {
                tolerance = tol
   )
 })
+
+test_that("set_poi_conv_plus() works", {
+  result <- set_poi_conv_plus(NULL, NULL, mp_set$"-") # either works
+  expect_equal(result$poi_conv, "+")
+})
+
+test_that("set_poi_conv_minus() works", {
+  result <- set_poi_conv_minus(NULL, NULL, mp_set$"+") # either works
+  expect_equal(result$poi_conv, "-")
+})
+
+test_that("set_poi_from_target() works", {
+  result_plus <- set_poi_conv_from_target(mp_table, "C.1.2.2.3.1.2.3", mp_set$"-") # either works
+  result_minus <- set_poi_conv_from_target(mp_table, "C.1.2.2.3.2.1.1", mp_set$"+") # either works
+  expect_equal(result_plus$poi_conv, "+")
+  expect_equal(result_minus$poi_conv, "-")
+})
