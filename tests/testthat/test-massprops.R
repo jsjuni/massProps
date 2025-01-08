@@ -1,5 +1,5 @@
 xyz <- list("x", "y", "z")
-expected <- list(
+mp_set <- list(
   '+' = list(
     mass = 0.121334510659333,
     center_mass = c(x = 70.5484760459512, y = 81.5438871271908, z = 44.5226242300123),
@@ -33,42 +33,42 @@ expected <- list(
 test_that("df_get_mass_props() works for positive convention", {
   result <- df_get_mass_props(mp_table, "C.1.2.2.3.1.2.3")
 
-  expect_equal(result$mass, expected$"+"$mass)
-  expect_equal(result$center_mass, expected$"+"$center_mass)
-  expect_equal(result$inertia, expected$"+"$inertia)
+  expect_equal(result$mass, mp_set$"+"$mass)
+  expect_equal(result$center_mass, mp_set$"+"$center_mass)
+  expect_equal(result$inertia, mp_set$"+"$inertia)
   expect_false(result$point)
 })
 
 test_that("df_get_mass_props() works for negative convention", {
   result <- df_get_mass_props(mp_table, "C.1.2.2.3.2.1.1")
 
-  expect_equal(result$mass, expected$"-"$mass)
-  expect_equal(result$center_mass, expected$"-"$center_mass)
-  expect_equal(result$inertia, expected$"-"$inertia)
+  expect_equal(result$mass, mp_set$"-"$mass)
+  expect_equal(result$center_mass, mp_set$"-"$center_mass)
+  expect_equal(result$inertia, mp_set$"-"$inertia)
   expect_false(result$point)
 })
 
 test_that("df_get_mass_props_and_unc() works for positive convention", {
   result <- df_get_mass_props_and_unc(mp_table, "C.1.2.2.3.1.2.3")
 
-  expect_equal(result$mass, expected$"+"$mass)
-  expect_equal(result$center_mass, expected$"+"$center_mass)
-  expect_equal(result$inertia, expected$"+"$inertia)
+  expect_equal(result$mass, mp_set$"+"$mass)
+  expect_equal(result$center_mass, mp_set$"+"$center_mass)
+  expect_equal(result$inertia, mp_set$"+"$inertia)
   expect_false(result$point)
-  expect_equal(result$σ_mass, expected$"+"$σ_mass)
-  expect_equal(result$σ_center_mass, expected$"+"$σ_center_mass)
-  expect_equal(result$σ_inertia, expected$"+"$σ_inertia)
+  expect_equal(result$σ_mass, mp_set$"+"$σ_mass)
+  expect_equal(result$σ_center_mass, mp_set$"+"$σ_center_mass)
+  expect_equal(result$σ_inertia, mp_set$"+"$σ_inertia)
 })
 
 test_that("df_get_mass_props_and_unc() works for negative convention", {
   result <- df_get_mass_props_and_unc(mp_table, "C.1.2.2.3.2.1.1")
 
-  expect_equal(result$mass, expected$"-"$mass)
-  expect_equal(result$center_mass, expected$"-"$center_mass)
-  expect_equal(result$inertia, expected$"-"$inertia)
+  expect_equal(result$mass, mp_set$"-"$mass)
+  expect_equal(result$center_mass, mp_set$"-"$center_mass)
+  expect_equal(result$inertia, mp_set$"-"$inertia)
   expect_false(result$point)
-  expect_equal(result$σ_mass, expected$"-"$σ_mass)
-  expect_equal(result$σ_center_mass, expected$"-"$σ_center_mass)
-  expect_equal(result$σ_inertia, expected$"-"$σ_inertia)
+  expect_equal(result$σ_mass, mp_set$"-"$σ_mass)
+  expect_equal(result$σ_center_mass, mp_set$"-"$σ_center_mass)
+  expect_equal(result$σ_inertia, mp_set$"-"$σ_inertia)
 })
 

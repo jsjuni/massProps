@@ -2,7 +2,7 @@
 % Please edit documentation in R/massprops.R
 \name{df_get_mass_props_and_unc}
 \alias{df_get_mass_props_and_unc}
-\title{Get mass property set and uncertainties for a row in a data frame}
+\title{Get mass properties and uncertainties for a row in a data frame}
 \usage{
 df_get_mass_props_and_unc(df, id)
 }
@@ -24,7 +24,7 @@ A list with the following named elements:
 }
 }
 \description{
-\code{df_get_mass_props_and_unc()} gets a mass property set with uncertainties for a specified row in a data frame
+\code{df_get_mass_props_and_unc()} gets mass properties with uncertainties for a specified row in a data frame
 with (at least) these columns: \code{mass}, \code{Cx}, \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy},
 \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}, \code{σ_mass}, \code{σ_Cx}, \code{σ_Cy}, \code{σ_Cz}, \code{σ_Ixx}, \code{σ_Iyy}, \code{σ_Izz}, \code{σ_Ixy}, \code{σ_Ixz}, \code{σ_Iyz}.
 }
