@@ -184,3 +184,43 @@ test_that("df_set_mass_props_and_unc() works for negative convention", {
 
 })
 
+test_that("combine_mass_props() works for non-point masses", {
+  leaves <- test_table[which(!is.na(test_table$mass)), "id"]
+  vl <- Map(f = function(id) df_get_mass_props(test_table, id), leaves)
+  result <- combine_mass_props(vl)
+
+  expect_equal(result$mass, 21)
+  expect_equal(result$center_mass, c(x = 0, y = 0, z = 0))
+  expect_equal(result$inertia,
+               matrix(data = c(144, -4.8, -24.8, -4.8, 144, -23.2, -24.8, -23.2, 139), nrow = 3, byrow = TRUE, dimnames = list(xyz, xyz))
+               )
+  expect_false(result$point)
+})
+
+test_that("combine_mass_props() works for point masses", {
+  leaves <- test_table[which(!is.na(test_table$mass)), "id"]
+  vl <- Map(f = function(v) { v$point = TRUE; v },
+            Map(f = function(id) df_get_mass_props(test_table, id), leaves))
+  result <- combine_mass_props(vl)
+
+  expect_equal(result$mass, 21)
+  expect_equal(result$center_mass, c(x = 0, y = 0, z = 0))
+  expect_equal(result$inertia,
+               matrix(data = c(32, 0, 0, 0, 32, 0, 0, 0, 32), nrow = 3, byrow = TRUE, dimnames = list(xyz, xyz))
+  )
+
+  expect_false(result$point)
+})
+
+test_that("combine_mass_props() works for point masses at the origin", {
+  leaves <- test_table[which(!is.na(test_table$mass)), "id"]
+  vl <- Map(f = function(v) { v$center_mass = c(x = 0, y = 0, z = 0); v },
+            Map(f = function(v) { v$point = TRUE; v },
+                Map(f = function(id) df_get_mass_props(test_table, id), leaves)))
+  result <- combine_mass_props(vl)
+
+  expect_equal(result$mass, 21)
+  expect_equal(result$center_mass, c(x = 0, y = 0, z = 0))
+
+  expect_true(result$point)
+})

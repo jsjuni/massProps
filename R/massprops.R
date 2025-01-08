@@ -163,3 +163,52 @@ df_set_mass_props_and_unc <- function(df, id, v) {
     df_set_by_id(id, "σ_Ixz", v$σ_inertia["x", "z"]) |>
     df_set_by_id(id, "σ_Iyz", v$σ_inertia["y", "z"])
 }
+
+#' Combine mass properties
+#'
+#' @param vl List of mass properties lists
+#'
+#' @return Combined mass properties list
+#' @export
+#'
+#' @examples
+#' leaves <- test_table[which(!is.na(test_table$mass)), "id"]
+#' vl <- Map(f = function(id) df_get_mass_props(test_table, id), leaves)
+#' result <- combine_mass_props(vl)
+
+combine_mass_props <- function(vl) {
+
+  r <- list()
+
+  # sum of masses
+
+  r$mass <- Reduce(`+`, Map(f = function(v) v$mass, vl))
+
+  # mass-weighted sum of centers of mass
+
+  r$center_mass <- Reduce(`+`, Map(f = function(v) v$mass * v$center_mass, vl)) / r$mass
+
+  # parallel axis theorem
+  # https://en.wikipedia.org/wiki/Parallel_axis_theorem#Moment_of_inertia_matrix
+  # d_ss2 is [d]^2 computed using the identities given
+  r$inertia <- Reduce(
+    `+`,
+    Map(
+      f  = function(v) {
+        d <- r$center_mass - v$center_mass
+        ddt <- outer(d, d)
+        d_ss2 <- ddt - sum(diag(ddt)) * diag(3)
+        if (v$point) -v$mass * d_ss2 else v$inertia - v$mass * d_ss2
+      },
+      vl
+    )
+  )
+
+  # aggregate is a point mass iff all parts are point masses at the same center
+
+  r$point = Reduce(f = `&&`,
+         Map(f = function(v) v$point && isTRUE(all.equal(v$center_mass, r$center_mass)), vl)
+  )
+
+  r
+}
