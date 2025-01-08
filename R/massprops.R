@@ -64,16 +64,16 @@ df_get_mass_props_and_unc <- function(df, id) {
   r <- df_get_mass_props(df, id)
   r$σ_mass <- df_get_by_id(df, id, "σ_mass")
   r$σ_center_mass <- sapply(c(x = "σ_Cx", y = "σ_Cy", z = "σ_Cz"), FUN=function(p) df_get_by_id(df, id, p))
-  r$σ_it <- {
+  r$σ_inertia <- {
     xyz <- list("x", "y", "z")
-    σ_it <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
-    σ_it["x", "x"] <- df_get_by_id(df, id, "σ_Ixx")
-    σ_it["y", "y"] <- df_get_by_id(df, id, "σ_Iyy")
-    σ_it["z", "z"] <- df_get_by_id(df, id, "σ_Izz")
-    σ_it["x", "y"] <- σ_it["y", "x"] <- df_get_by_id(df, id, "σ_Ixy")
-    σ_it["x", "z"] <- σ_it["z", "x"] <- df_get_by_id(df, id, "σ_Ixz")
-    σ_it["y", "z"] <- σ_it["z", "y"] <- df_get_by_id(df, id, "σ_Iyz")
-    σ_it
+    σ_inertia <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
+    σ_inertia["x", "x"] <- df_get_by_id(df, id, "σ_Ixx")
+    σ_inertia["y", "y"] <- df_get_by_id(df, id, "σ_Iyy")
+    σ_inertia["z", "z"] <- df_get_by_id(df, id, "σ_Izz")
+    σ_inertia["x", "y"] <- σ_inertia["y", "x"] <- df_get_by_id(df, id, "σ_Ixy")
+    σ_inertia["x", "z"] <- σ_inertia["z", "x"] <- df_get_by_id(df, id, "σ_Ixz")
+    σ_inertia["y", "z"] <- σ_inertia["z", "y"] <- df_get_by_id(df, id, "σ_Iyz")
+    σ_inertia
   }
   r
 }
