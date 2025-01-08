@@ -1,6 +1,6 @@
 #' Get mass properties for a row in a data frame
 #'
-#' `df_get_mass_props()` gets mass properties for a specified row in a data frame
+#' `get_mass_props()` gets mass properties for a specified row in a data frame
 #' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
 #' `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
 #'
@@ -16,8 +16,8 @@
 #' @export
 #'
 #' @examples
-#' df_get_mass_props(mp_table, "C.1.2.2.3.1.2.3")
-df_get_mass_props <- function(df, id) {
+#' get_mass_props(mp_table, "C.1.2.2.3.1.2.3")
+get_mass_props <- function(df, id) {
   poi_conv <- df_get_by_id(df, id, "POIconv")
   list(
     mass = df_get_by_id(df, id, "mass"),
@@ -40,7 +40,7 @@ df_get_mass_props <- function(df, id) {
 
 #' Get mass properties and uncertainties for a row in a data frame
 #'
-#' `df_get_mass_props_and_unc()` gets mass properties with uncertainties for a specified row in a data frame
+#' `get_mass_props_and_unc()` gets mass properties with uncertainties for a specified row in a data frame
 #' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
 #' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `σ_mass`, `σ_Cx`, `σ_Cy`, `σ_Cz`, `σ_Ixx`, `σ_Iyy`, `σ_Izz`, `σ_Ixy`, `σ_Ixz`, `σ_Iyz`.
 #'
@@ -59,9 +59,9 @@ df_get_mass_props <- function(df, id) {
 #' @export
 #'
 #' @examples
-#' df_get_mass_props_and_unc(mp_table, "C.1.2.2.3.1.2.3")
-df_get_mass_props_and_unc <- function(df, id) {
-  r <- df_get_mass_props(df, id)
+#' get_mass_props_and_unc(mp_table, "C.1.2.2.3.1.2.3")
+get_mass_props_and_unc <- function(df, id) {
+  r <- get_mass_props(df, id)
   r$σ_mass <- df_get_by_id(df, id, "σ_mass")
   r$σ_center_mass <- sapply(c(x = "σ_Cx", y = "σ_Cy", z = "σ_Cz"), FUN=function(p) df_get_by_id(df, id, p))
   r$σ_inertia <- {
@@ -80,7 +80,7 @@ df_get_mass_props_and_unc <- function(df, id) {
 
 #' Set mass properties for a row in a data frame
 #'
-#' `df_set_mass_props()` sets mass properties for a specified row in a data frame with
+#' `set_mass_props()` sets mass properties for a specified row in a data frame with
 #' an `id` column.
 #'
 #' @param df A data frame
@@ -98,10 +98,10 @@ df_get_mass_props_and_unc <- function(df, id) {
 #'
 #' @examples
 #' df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
-#' v <- df_get_mass_props(mp_table, "C.1.2.2.3.2.1.1")
+#' v <- get_mass_props(mp_table, "C.1.2.2.3.2.1.1")
 #' v$poi_conv = "+"
-#' df_set_mass_props(df, "C.1.2.2.3.2.1.1", v)
-df_set_mass_props <- function(df, id, v) {
+#' set_mass_props(df, "C.1.2.2.3.2.1.1", v)
+set_mass_props <- function(df, id, v) {
   m <- v$inertia
   poi_factor <- if (v$poi_conv == "-") 1 else -1
   df |> df_set_by_id(id, "mass", v$mass) |>
@@ -123,7 +123,7 @@ df_set_mass_props <- function(df, id, v) {
 
 #' Set mass properties and uncertainties for a row in a data frame
 #'
-#' `df_set_mass_props_and_unc()` sets mass properties and uncertainties for a
+#' `set_mass_props_and_unc()` sets mass properties and uncertainties for a
 #' specified row in a data frame with an `id` column.
 #'
 #' @param df A data frame
@@ -144,11 +144,11 @@ df_set_mass_props <- function(df, id, v) {
 #'
 #' @examples
 #' df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
-#' v <- df_get_mass_props_and_unc(mp_table, "C.1.2.2.3.2.1.1")
+#' v <- get_mass_props_and_unc(mp_table, "C.1.2.2.3.2.1.1")
 #' v$poi_conv = "+"
-#' df_set_mass_props_and_unc(df, "C.1.2.2.3.2.1.1", v)
-df_set_mass_props_and_unc <- function(df, id, v) {
-  df |> df_set_mass_props(id, v) |>
+#' set_mass_props_and_unc(df, "C.1.2.2.3.2.1.1", v)
+set_mass_props_and_unc <- function(df, id, v) {
+  df |> set_mass_props(id, v) |>
 
     df_set_by_id(id, "σ_mass", v$σ_mass) |>
 
@@ -173,7 +173,7 @@ df_set_mass_props_and_unc <- function(df, id, v) {
 #'
 #' @examples
 #' leaves <- test_table[which(!is.na(test_table$mass)), "id"]
-#' vl <- Map(f = function(id) df_get_mass_props(test_table, id), leaves)
+#' vl <- Map(f = function(id) get_mass_props(test_table, id), leaves)
 #' combine_mass_props(vl)
 
 combine_mass_props <- function(vl) {
@@ -221,7 +221,7 @@ combine_mass_props <- function(vl) {
 #' @export
 #'
 #' @examples
-#' vl <- Map(f = function(id) df_get_mass_props_and_unc(sawe_table, id), list("Widget", "2nd Part"))
+#' vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), list("Widget", "2nd Part"))
 #' combine_mass_props_and_unc(vl)
 combine_mass_props_and_unc <- function(vl) {
 
@@ -286,7 +286,7 @@ combine_mass_props_and_unc <- function(vl) {
 #' @export
 #'
 #' @examples
-#' set_poi_conv_plus(NULL, NULL, df_get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+#' set_poi_conv_plus(NULL, NULL, get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
 set_poi_conv_plus <- function(ds, target, v) {
   v$poi_conv <- "+"
   v
@@ -312,7 +312,7 @@ set_poi_conv_plus <- function(ds, target, v) {
 #' @export
 #'
 #' @examples
-#' set_poi_conv_minus(NULL, NULL, df_get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+#' set_poi_conv_minus(NULL, NULL, get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
 set_poi_conv_minus <- function(ds, target, v) {
   v$poi_conv <- "-"
   v
@@ -338,7 +338,7 @@ set_poi_conv_minus <- function(ds, target, v) {
 #' @export
 #'
 #' @examples
-#' set_poi_conv_from_target(mp_table, "C.1.2.2.3.2.1", df_get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+#' set_poi_conv_from_target(mp_table, "C.1.2.2.3.2.1", get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
 set_poi_conv_from_target <- function(df, target, v) {
   v$poi_conv <- df_get_by_id(df, target, "POIconv")
   v
@@ -346,44 +346,57 @@ set_poi_conv_from_target <- function(df, target, v) {
 
 #' Update mass properties
 #'
-#' @param ds
-#' @param parent_key
-#' @param child_keys
+#' `update_mass_props()` updates mass properties for a specified target row from
+#' specified source rows in a data frame
+#' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
+#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
 #'
-#' @return
+#' @param df A data frame
+#' @param target ID of the target row
+#' @param sources IDs of the source rows
+#' @param override An override function, called as override(df, target, value)
+#'
+#' @return The updated data fram
 #' @export
 #'
 #' @examples
-update_mass_props <- function(ds, parent_key, child_keys) {
+update_mass_props <- function(df, target, sources, override = set_poi_conv_from_target) {
   update_prop(
-    ds,
-    target = parent_key,
-    sources = child_keys,
-    set = df_set_mass_props,
-    get = df_get_mass_props,
+    df,
+    target = target,
+    sources = sources,
+    set = set_mass_props,
+    get = get_mass_props,
     combine = combine_mass_props,
-    override = df_override_mass_props
+    override = override
   )
 }
 
-#' Title
+#' Update mass properties and uncertainties
 #'
-#' @param ds
-#' @param parent_key
-#' @param child_keys
+#' `update_mass_props_and_unc()` updates mass properties and uncertainties
+#' for a specified target row from
+#' specified source rows in a data frame
+#' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
+#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `σ_mass`, `σ_Cx`, `σ_Cy`, `σ_Cz`, `σ_Ixx`, `σ_Iyy`, `σ_Izz`, `σ_Ixy`, `σ_Ixz`, `σ_Iyz`.
 #'
-#' @return
+#' @param df A data frame
+#' @param target ID of the target row
+#' @param sources IDs of the source rows
+#' @param override An override function, called as override(df, target, value)
+#'
+#' @return The updated data frame
 #' @export
 #'
 #' @examples
-update_mass_props_and_unc <- function(ds, parent_key, child_keys) {
+update_mass_props_and_unc <- function(df, target, sources, override = set_poi_conv_from_target) {
   update_prop(
-    ds,
-    target = parent_key,
-    sources = child_keys,
-    set = df_set_mass_props_and_unc,
-    get = df_get_mass_props_and_unc,
+    df,
+    target = target,
+    sources = sources,
+    set = set_mass_props_and_unc,
+    get = get_mass_props_and_unc,
     combine = combine_mass_props_and_unc,
-    override = df_override_mass_props
+    override = override
   )
 }

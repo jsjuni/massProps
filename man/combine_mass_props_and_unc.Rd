@@ -16,6 +16,6 @@ Combined mass properties and uncertainties
 Combine mass properties and uncertainties
 }
 \examples{
-vl <- Map(f = function(id) df_get_mass_props_and_unc(sawe_table, id), list("Widget", "2nd Part"))
+vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), list("Widget", "2nd Part"))
 combine_mass_props_and_unc(vl)
 }

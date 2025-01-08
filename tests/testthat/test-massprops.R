@@ -32,8 +32,8 @@ mp_set <- list(
   )
 )
 
-test_that("df_get_mass_props() works for positive convention", {
-  result <- df_get_mass_props(mp_table, "C.1.2.2.3.1.2.3")
+test_that("get_mass_props() works for positive convention", {
+  result <- get_mass_props(mp_table, "C.1.2.2.3.1.2.3")
 
   expect_equal(result$mass, mp_set$"+"$mass)
   expect_equal(result$center_mass, mp_set$"+"$center_mass)
@@ -41,8 +41,8 @@ test_that("df_get_mass_props() works for positive convention", {
   expect_equal(result$point, mp_set$"+"$point)
 })
 
-test_that("df_get_mass_props() works for negative convention", {
-  result <- df_get_mass_props(mp_table, "C.1.2.2.3.2.1.1")
+test_that("get_mass_props() works for negative convention", {
+  result <- get_mass_props(mp_table, "C.1.2.2.3.2.1.1")
 
   expect_equal(result$mass, mp_set$"-"$mass)
   expect_equal(result$center_mass, mp_set$"-"$center_mass)
@@ -50,8 +50,8 @@ test_that("df_get_mass_props() works for negative convention", {
   expect_equal(result$point, mp_set$"+"$point)
 })
 
-test_that("df_get_mass_props_and_unc() works for positive convention", {
-  result <- df_get_mass_props_and_unc(mp_table, "C.1.2.2.3.1.2.3")
+test_that("get_mass_props_and_unc() works for positive convention", {
+  result <- get_mass_props_and_unc(mp_table, "C.1.2.2.3.1.2.3")
 
   expect_equal(result$mass, mp_set$"+"$mass)
   expect_equal(result$center_mass, mp_set$"+"$center_mass)
@@ -62,8 +62,8 @@ test_that("df_get_mass_props_and_unc() works for positive convention", {
   expect_equal(result$σ_inertia, mp_set$"+"$σ_inertia)
 })
 
-test_that("df_get_mass_props_and_unc() works for negative convention", {
-  result <- df_get_mass_props_and_unc(mp_table, "C.1.2.2.3.2.1.1")
+test_that("get_mass_props_and_unc() works for negative convention", {
+  result <- get_mass_props_and_unc(mp_table, "C.1.2.2.3.2.1.1")
 
   expect_equal(result$mass, mp_set$"-"$mass)
   expect_equal(result$center_mass, mp_set$"-"$center_mass)
@@ -74,11 +74,11 @@ test_that("df_get_mass_props_and_unc() works for negative convention", {
   expect_equal(result$σ_inertia, mp_set$"-"$σ_inertia)
 })
 
-test_that("df_set_mass_props() works for positive convention", {
+test_that("set_mass_props() works for positive convention", {
   input <- mp_set$"+"
   input$poi_conv = "+"
   df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
-  result <- df_set_mass_props(df, "C.1.2.2.3.1.2.3", input)[1, ]
+  result <- set_mass_props(df, "C.1.2.2.3.1.2.3", input)[1, ]
 
   expect_equal(result$mass, input$mass)
   expect_equal(result$Cx, input$center_mass[["x"]])
@@ -95,11 +95,11 @@ test_that("df_set_mass_props() works for positive convention", {
   expect_equal(result$Ipoint, input$point)
 })
 
-test_that("df_set_mass_props() works for negative convention", {
+test_that("set_mass_props() works for negative convention", {
   input <- mp_set$"-"
   input$poi_conv = "-"
   df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
-  result <- df_set_mass_props(df, "C.1.2.2.3.2.1.1", input)[2, ]
+  result <- set_mass_props(df, "C.1.2.2.3.2.1.1", input)[2, ]
 
   expect_equal(result$mass, input$mass)
   expect_equal(result$Cx, input$center_mass[["x"]])
@@ -116,11 +116,11 @@ test_that("df_set_mass_props() works for negative convention", {
   expect_equal(result$Ipoint, input$point)
 })
 
-test_that("df_set_mass_prop_and_unc() works for positive convention", {
+test_that("set_mass_prop_and_unc() works for positive convention", {
   input <- mp_set$"+"
   input$poi_conv = "+"
   df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
-  result <- df_set_mass_props_and_unc(df, "C.1.2.2.3.1.2.3", input)[1, ]
+  result <- set_mass_props_and_unc(df, "C.1.2.2.3.1.2.3", input)[1, ]
 
   expect_equal(result$mass, input$mass)
   expect_equal(result$Cx, input$center_mass[["x"]])
@@ -150,11 +150,11 @@ test_that("df_set_mass_prop_and_unc() works for positive convention", {
 
 })
 
-test_that("df_set_mass_props_and_unc() works for negative convention", {
+test_that("set_mass_props_and_unc() works for negative convention", {
   input <- mp_set$"-"
   input$poi_conv = "-"
   df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
-  result <- df_set_mass_props_and_unc(df, "C.1.2.2.3.2.1.1", input)[2, ]
+  result <- set_mass_props_and_unc(df, "C.1.2.2.3.2.1.1", input)[2, ]
 
   expect_equal(result$mass, input$mass)
   expect_equal(result$Cx, input$center_mass[["x"]])
@@ -186,7 +186,7 @@ test_that("df_set_mass_props_and_unc() works for negative convention", {
 
 test_that("combine_mass_props() works for non-point masses", {
   leaves <- test_table[which(!is.na(test_table$mass)), "id"]
-  vl <- Map(f = function(id) df_get_mass_props(test_table, id), leaves)
+  vl <- Map(f = function(id) get_mass_props(test_table, id), leaves)
   result <- combine_mass_props(vl)
 
   expect_equal(result$mass, 21)
@@ -200,7 +200,7 @@ test_that("combine_mass_props() works for non-point masses", {
 test_that("combine_mass_props() works for point masses", {
   leaves <- test_table[which(!is.na(test_table$mass)), "id"]
   vl <- Map(f = function(v) { v$point = TRUE; v },
-            Map(f = function(id) df_get_mass_props(test_table, id), leaves))
+            Map(f = function(id) get_mass_props(test_table, id), leaves))
   result <- combine_mass_props(vl)
 
   expect_equal(result$mass, 21)
@@ -216,7 +216,7 @@ test_that("combine_mass_props() works for point masses at the origin", {
   leaves <- test_table[which(!is.na(test_table$mass)), "id"]
   vl <- Map(f = function(v) { v$center_mass = c(x = 0, y = 0, z = 0); v },
             Map(f = function(v) { v$point = TRUE; v },
-                Map(f = function(id) df_get_mass_props(test_table, id), leaves)))
+                Map(f = function(id) get_mass_props(test_table, id), leaves)))
   result <- combine_mass_props(vl)
 
   expect_equal(result$mass, 21)
@@ -229,7 +229,7 @@ test_that("combine_mass_props_and_unc() works", {
   expected = sawe_table[3, ]
   tol <- .002 # published numbers are not precise
   leaves <- list("Widget", "2nd Part")
-  vl <- Map(f = function(id) df_get_mass_props_and_unc(sawe_table, id), leaves)
+  vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
   result <- combine_mass_props_and_unc(vl)
 
   expect_equal(result$mass, expected$mass, tolerance = tol)

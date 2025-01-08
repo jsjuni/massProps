@@ -27,5 +27,5 @@ to \code{update_mass_props()} and \code{update_mass_props_and_unc()}, thus ensur
 that all calculated POI values follow the negative integral convention of the target item to which they are written.
 }
 \examples{
-set_poi_conv_from_target(mp_table, "C.1.2.2.3.2.1", df_get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+set_poi_conv_from_target(mp_table, "C.1.2.2.3.2.1", get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
 }

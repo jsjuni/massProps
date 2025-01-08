@@ -17,6 +17,6 @@ Combine mass properties
 }
 \examples{
 leaves <- test_table[which(!is.na(test_table$mass)), "id"]
-vl <- Map(f = function(id) df_get_mass_props(test_table, id), leaves)
+vl <- Map(f = function(id) get_mass_props(test_table, id), leaves)
 combine_mass_props(vl)
 }
