@@ -1,7 +1,7 @@
 #' Get mass properties for a row in a data frame
 #'
 #' `df_get_mass_props()` gets mass properties for a specified row in a data frame
-#' with (at least) these columns: `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
+#' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
 #' `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
 #'
 #' @param df A data frame
@@ -41,7 +41,7 @@ df_get_mass_props <- function(df, id) {
 #' Get mass properties and uncertainties for a row in a data frame
 #'
 #' `df_get_mass_props_and_unc()` gets mass properties with uncertainties for a specified row in a data frame
-#' with (at least) these columns: `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
+#' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
 #' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `σ_mass`, `σ_Cx`, `σ_Cy`, `σ_Cz`, `σ_Ixx`, `σ_Iyy`, `σ_Izz`, `σ_Ixy`, `σ_Ixz`, `σ_Iyz`.
 #'
 #' @param df A data frame
@@ -80,9 +80,8 @@ df_get_mass_props_and_unc <- function(df, id) {
 
 #' Set mass properties for a row in a data frame
 #'
-#' `df_set_mass_props()` sets mass properties for a specified row in a data frame
-#' with (at least) these columns: `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
-#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
+#' `df_set_mass_props()` sets mass properties for a specified row in a data frame with
+#' an `id` column.
 #'
 #' @param df A data frame
 #' @param id ID value of the desired row
@@ -116,4 +115,43 @@ df_set_mass_props <- function(df, id, v) {
 
     df_set_by_id(id, "POIconv", v$poi_conv) |>
     df_set_by_id(id, "Ipoint", v$point)
+}
+
+#' Set mass properties and uncertainties for a row in a data frame
+#'
+#' `df_set_mass_props_and_unc()` sets mass properties and uncdertainties for a
+#' specified row in a data frame with an `id` column.
+#'
+#' @param df A data frame
+#' @param id ID value of the desired row
+#' @param v
+#' #' A list with the following named elements:
+#' - `mass` mass (numeric)
+#' - `center_mass` center of mass (3-dimensional numeric)
+#' - `inertia` Inertia tensor (3x3 numeric matrix)
+#' - `point` Logical indicating point mass, i.e., negligible inertia
+#' - `poi_conv` Enumeration c("+", "-") indicating sign convention for products of inertia
+#' - `σ_mass` mass uncertainty (numeric)
+#' - `σ_center_mass` center of mass uncertainty (3-dimensional numeric)
+#' - `σ_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
+#'
+#' @return The updated data frame
+#' @export
+#'
+#' @examples
+df_set_mass_props_and_unc <- function(df, id, v) {
+  df |> df_set_mass_props(id, v) |>
+
+    df_set_by_id(id, "σ_mass", v$σ_mass) |>
+
+    df_set_by_id(id, "σ_Cx", v$σ_center_mass[1]) |>
+    df_set_by_id(id, "σ_Cy", v$σ_center_mass[2]) |>
+    df_set_by_id(id, "σ_Cz", v$σ_center_mass[3]) |>
+
+    df_set_by_id(id, "σ_Ixx", v$σ_inertia["x", "x"]) |>
+    df_set_by_id(id, "σ_Iyy", v$σ_inertia["y", "y"]) |>
+    df_set_by_id(id, "σ_Izz", v$σ_inertia["z", "z"]) |>
+    df_set_by_id(id, "σ_Ixy", v$σ_inertia["x", "y"]) |>
+    df_set_by_id(id, "σ_Ixz", v$σ_inertia["x", "z"]) |>
+    df_set_by_id(id, "σ_Iyz", v$σ_inertia["y", "z"])
 }

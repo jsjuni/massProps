@@ -115,3 +115,72 @@ test_that("df_set_mass_props() works for negative convention", {
   expect_equal(result$POIconv, input$poi_conv)
   expect_equal(result$Ipoint, input$point)
 })
+
+test_that("df_set_mass_prop_and_unc() works for positive convention", {
+  input <- mp_set$"+"
+  input$poi_conv = "+"
+  df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
+  result <- df_set_mass_props_and_unc(df, "C.1.2.2.3.1.2.3", input)[1, ]
+
+  expect_equal(result$mass, input$mass)
+  expect_equal(result$Cx, input$center_mass[["x"]])
+  expect_equal(result$Cy, input$center_mass[["y"]])
+  expect_equal(result$Cz, input$center_mass[["z"]])
+  it <- input$inertia
+  expect_equal(result$Ixx, it["x", "x"])
+  expect_equal(result$Iyy, it["y", "y"])
+  expect_equal(result$Izz, it["z", "z"])
+  expect_equal(result$Ixy, -it["x", "y"])
+  expect_equal(result$Ixz, -it["x", "z"])
+  expect_equal(result$Iyz, -it["y", "z"])
+  expect_equal(result$POIconv, input$poi_conv)
+  expect_equal(result$Ipoint, input$point)
+
+  expect_equal(result$σ_mass, input$σ_mass)
+  expect_equal(result$σ_Cx, input$σ_center_mass[["x"]])
+  expect_equal(result$σ_Cy, input$σ_center_mass[["y"]])
+  expect_equal(result$σ_Cz, input$σ_center_mass[["z"]])
+  σ_it <- input$σ_inertia
+  expect_equal(result$σ_Ixx, σ_it["x", "x"])
+  expect_equal(result$σ_Iyy, σ_it["y", "y"])
+  expect_equal(result$σ_Izz, σ_it["z", "z"])
+  expect_equal(result$σ_Ixy, σ_it["x", "y"])
+  expect_equal(result$σ_Ixz, σ_it["x", "z"])
+  expect_equal(result$σ_Iyz, σ_it["y", "z"])
+
+})
+
+test_that("df_set_mass_props_and_unc() works for negative convention", {
+  input <- mp_set$"-"
+  input$poi_conv = "-"
+  df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
+  result <- df_set_mass_props_and_unc(df, "C.1.2.2.3.2.1.1", input)[2, ]
+
+  expect_equal(result$mass, input$mass)
+  expect_equal(result$Cx, input$center_mass[["x"]])
+  expect_equal(result$Cy, input$center_mass[["y"]])
+  expect_equal(result$Cz, input$center_mass[["z"]])
+  it <- input$inertia
+  expect_equal(result$Ixx, it["x", "x"])
+  expect_equal(result$Iyy, it["y", "y"])
+  expect_equal(result$Izz, it["z", "z"])
+  expect_equal(result$Ixy, it["x", "y"])
+  expect_equal(result$Ixz, it["x", "z"])
+  expect_equal(result$Iyz, it["y", "z"])
+  expect_equal(result$POIconv, input$poi_conv)
+  expect_equal(result$Ipoint, input$point)
+
+  expect_equal(result$σ_mass, input$σ_mass)
+  expect_equal(result$σ_Cx, input$σ_center_mass[["x"]])
+  expect_equal(result$σ_Cy, input$σ_center_mass[["y"]])
+  expect_equal(result$σ_Cz, input$σ_center_mass[["z"]])
+  σ_it <- input$σ_inertia
+  expect_equal(result$σ_Ixx, σ_it["x", "x"])
+  expect_equal(result$σ_Iyy, σ_it["y", "y"])
+  expect_equal(result$σ_Izz, σ_it["z", "z"])
+  expect_equal(result$σ_Ixy, σ_it["x", "y"])
+  expect_equal(result$σ_Ixz, σ_it["x", "z"])
+  expect_equal(result$σ_Iyz, σ_it["y", "z"])
+
+})
+
