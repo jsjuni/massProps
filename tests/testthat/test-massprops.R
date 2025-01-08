@@ -224,3 +224,29 @@ test_that("combine_mass_props() works for point masses at the origin", {
 
   expect_true(result$point)
 })
+
+test_that("combine_mass_props_and_unc() works", {
+  expected = sawe_table[3, ]
+  tol <- .002 # published numbers are not precise
+  leaves <- list("Widget", "2nd Part")
+  vl <- Map(f = function(id) df_get_mass_props_and_unc(sawe_table, id), leaves)
+  result <- combine_mass_props_and_unc(vl)
+
+  expect_equal(result$mass, expected$mass, tolerance = tol)
+  expect_equal(result$center_mass, c(x = expected$Cx, y = expected$Cy, z = expected$Cz), tolerance = tol)
+  expect_equal(result$inertia,
+               matrix(data = c( expected$Ixx, -expected$Ixy, -expected$Ixz,
+                               -expected$Ixy,  expected$Iyy, -expected$Iyz,
+                               -expected$Ixz, -expected$Iyz,  expected$Izz), nrow = 3, byrow = TRUE, dimnames = list(xyz, xyz)),
+               tolerance = tol
+  )
+
+  expect_equal(result$σ_mass, expected$σ_mass, tolerance = tol)
+  expect_equal(result$σ_center_mass, c(x = expected$σ_Cx, y = expected$σ_Cy, z = expected$σ_Cz), tolerance = tol)
+  expect_equal(result$σ_inertia,
+               matrix(data = c(expected$σ_Ixx, expected$σ_Ixy, expected$σ_Ixz,
+                               expected$σ_Ixy, expected$σ_Iyy, expected$σ_Iyz,
+                               expected$σ_Ixz, expected$σ_Iyz, expected$σ_Izz), nrow = 3, byrow = TRUE, dimnames = list(xyz, xyz)),
+               tolerance = tol
+  )
+})

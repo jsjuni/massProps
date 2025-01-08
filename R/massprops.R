@@ -174,7 +174,7 @@ df_set_mass_props_and_unc <- function(df, id, v) {
 #' @examples
 #' leaves <- test_table[which(!is.na(test_table$mass)), "id"]
 #' vl <- Map(f = function(id) df_get_mass_props(test_table, id), leaves)
-#' result <- combine_mass_props(vl)
+#' combine_mass_props(vl)
 
 combine_mass_props <- function(vl) {
 
@@ -209,6 +209,59 @@ combine_mass_props <- function(vl) {
   r$point = Reduce(f = `&&`,
          Map(f = function(v) v$point && isTRUE(all.equal(v$center_mass, r$center_mass)), vl)
   )
+
+  r
+}
+
+#' Combine mass properties and uncertainties
+#'
+#' @param vl List of mass properties and uncertainties lists
+#'
+#' @return Combined mass properties and uncertainties
+#' @export
+#'
+#' @examples
+#' vl <- Map(f = function(id) df_get_mass_props_and_unc(sawe_table, id), list("Widget", "2nd Part"))
+#' combine_mass_props_and_unc(vl)
+combine_mass_props_and_unc <- function(vl) {
+
+  r <- combine_mass_props(vl)
+
+  # mass uncertainty
+
+  r$σ_mass = sqrt(Reduce(`+`, Map(f = function(v) v$σ_mass^2, vl)))
+
+  # center of mass uncertainty
+
+  r$σ_center_mass = sqrt(Reduce(`+`, Map(
+    f = function(v) {
+      (v$mass * v$σ_center_mass) ^ 2 +
+        (v$σ_mass * (v$center_mass - r$center_mass)) ^ 2
+    },
+    vl
+  ))) / r$mass
+
+  # inertia tensor uncertainty
+
+  r$σ_inertia = sqrt(Reduce(`+`, Map(
+    f = function(v) {
+
+      d <- r$center_mass - v$center_mass
+
+      P <- outer(d, v$σ_center_mass)
+      p <- diag(P)
+      diag_1 <- diag(c(p['x'] + 2 * p['y'], p['y'] + 2 * p['x'], p['z'] + 2 * p['x']))
+      diag_2 <- diag(c(p['x'] + 2 * p['z'], p['y'] + 2 * p['z'], p['z'] + 2 * p['y']))
+
+      Q <- outer(d, d)
+      diag_3 <- sum(diag(Q)) * diag(3)
+
+      v$σ_inertia^2 + (v$mass * (P - diag_1))^2 + (v$mass * (t(P) - diag_2))^2 + (v$σ_mass * (Q - diag_3))^2
+    },
+    vl
+  )))
+
+  # result
 
   r
 }
