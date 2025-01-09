@@ -400,6 +400,49 @@ test_that("validate_mass_props_and_unc() works", {
   invalid$σ_mass <- -1
   expect_error(validate_mass_props_and_unc(invalid), "mass uncertainty negative")
 
+  invalid <- valid
+  invalid$σ_center_mass <- NULL
+  expect_error(validate_mass_props_and_unc(invalid), "center of mass uncertainty missing")
+
+  invalid <- valid
+  invalid$σ_center_mass <- NA
+  expect_error(validate_mass_props_and_unc(invalid), "center of mass uncertainty not a 3-vector")
+
+  invalid <- valid
+  invalid$σ_center_mass <- c(1, 2)
+  expect_error(validate_mass_props_and_unc(invalid), "center of mass uncertainty not a 3-vector")
+
+  invalid <- valid
+  invalid$σ_center_mass <- c(1, NA, 2)
+  expect_error(validate_mass_props_and_unc(invalid), "center of mass uncertainty element missing")
+
+  invalid <- valid
+  invalid$σ_center_mass <- c(1, "bad", 2)
+  expect_error(validate_mass_props_and_unc(invalid), "center of mass uncertainty element non-numeric")
+
+  invalid <- valid
+  invalid$σ_center_mass <- c(1, -1, 2)
+  expect_error(validate_mass_props_and_unc(invalid), "center of mass uncertainty element negative")
+
+  invalid <- valid
+  invalid$σ_inertia <- NULL
+  expect_error(validate_mass_props_and_unc(invalid), "inertia tensor uncertainty missing")
+
+  invalid <- valid
+  invalid$σ_inertia <- diag(2)
+  expect_error(validate_mass_props_and_unc(invalid), "inertia tensor uncertainty not a 3x3 matrix")
+
+  invalid <- valid
+  invalid$σ_inertia <- diag(c(1, NA, 1))
+  expect_error(validate_mass_props_and_unc(invalid), "inertia tensor uncertainty element missing")
+
+  invalid <- valid
+  invalid$σ_inertia <- matrix(c(1, "bad", 1, "bad", 1, 1, 1, 1, 1), nrow = 3)
+  expect_error(validate_mass_props_and_unc(invalid), "inertia tensor uncertainty element non-numeric")
+
+  invalid <- valid
+  invalid$σ_inertia <-diag(c(1, -1, 1))
+  expect_error(validate_mass_props_and_unc(invalid), "inertia tensor uncertainty element negative")
 })
 
 test_that("validate_mass_props_table() works", {

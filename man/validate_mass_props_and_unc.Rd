@@ -18,7 +18,7 @@ ensures the following are true:
 \itemize{
 \item mass uncertainty is non-missing and non-negative
 \item center of mass uncertainty is a 3-vector of non-missing non-negative values
-\item the inertia tensor uncertainty is a 3x3 matrix of non-missing non-negative values
+\item for non-point masses, the inertia tensor uncertainty is a 3x3 matrix of non-missing non-negative values
 }
 }
 \examples{
