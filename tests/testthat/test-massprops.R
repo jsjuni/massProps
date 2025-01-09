@@ -306,75 +306,112 @@ test_that("validate_mass_props() works", {
 
   expect_true(validate_mass_props(valid))
 
-  null_mass <- valid
-  null_mass$mass <- NULL
-  expect_error(validate_mass_props(null_mass), "mass missing")
+  invalid <- valid
+  invalid$mass <- NULL
+  expect_error(validate_mass_props(invalid), "mass missing")
 
-  na_mass <- valid
-  na_mass$mass <- NA
-  expect_error(validate_mass_props(na_mass), "mass missing")
+  invalid <- valid
+  invalid$mass <- NA
+  expect_error(validate_mass_props(invalid), "mass missing")
 
-  nn_mass <- valid
-  nn_mass$mass <- "bad"
-  expect_error(validate_mass_props(nn_mass), "mass non-numeric")
+  invalid <- valid
+  invalid$mass <- "bad"
+  expect_error(validate_mass_props(invalid), "mass non-numeric")
 
-  np_mass <- valid
-  np_mass$mass <- -1
-  expect_error(validate_mass_props(np_mass), "mass non-positive")
+  invalid <- valid
+  invalid$mass <- -1
+  expect_error(validate_mass_props(invalid), "mass non-positive")
 
-  null_cm <- valid
-  null_cm$center_mass <- NULL
-  expect_error(validate_mass_props(null_cm), "center of mass missing")
+  invalid <- valid
+  invalid$center_mass <- NULL
+  expect_error(validate_mass_props(invalid), "center of mass missing")
 
-  na_cm <- valid
-  na_cm$center_mass <- NA
-  expect_error(validate_mass_props(na_cm), "center of mass not a 3-vector")
+  invalid <- valid
+  invalid$center_mass <- NA
+  expect_error(validate_mass_props(invalid), "center of mass not a 3-vector")
 
-  d2_cm <- valid
-  d2_cm$center_mass <- c(1, 2)
-  expect_error(validate_mass_props(d2_cm), "center of mass not a 3-vector")
+  invalid <- valid
+  invalid$center_mass <- c(1, 2)
+  expect_error(validate_mass_props(invalid), "center of mass not a 3-vector")
 
-  me_cm <- valid
-  me_cm$center_mass <- c(1, NA, 2)
-  expect_error(validate_mass_props(me_cm), "center of mass element missing")
+  invalid <- valid
+  invalid$center_mass <- c(1, NA, 2)
+  expect_error(validate_mass_props(invalid), "center of mass element missing")
 
-  nn_cm <- valid
-  nn_cm$center_mass <- c(1, "bad", 2)
-  expect_error(validate_mass_props(nn_cm), "center of mass element non-numeric")
+  invalid <- valid
+  invalid$center_mass <- c(1, "bad", 2)
+  expect_error(validate_mass_props(invalid), "center of mass element non-numeric")
 
-  null_point <- valid
-  null_point$point <- NULL
-  expect_error(validate_mass_props(null_point), "point mass indicator missing")
+  invalid <- valid
+  invalid$point <- NULL
+  expect_error(validate_mass_props(invalid), "point mass indicator missing")
 
-  na_point <- valid
-  na_point$point <- NA
-  expect_error(validate_mass_props(na_point), "point mass indicator non-logical")
+  invalid <- valid
+  invalid$point <- NA
+  expect_error(validate_mass_props(invalid), "point mass indicator non-logical")
 
-  nl_point <- valid
-  nl_point$point <- "bad"
-  expect_error(validate_mass_props(nl_point), "point mass indicator non-logical")
+  invalid <- valid
+  invalid$point <- "bad"
+  expect_error(validate_mass_props(invalid), "point mass indicator non-logical")
 
-  null_it <- valid
-  null_it$inertia <- NULL
-  expect_error(validate_mass_props(null_it), "inertia tensor missing")
+  invalid <- valid
+  invalid$inertia <- NULL
+  expect_error(validate_mass_props(invalid), "inertia tensor missing")
 
-  bd_it <- valid
-  bd_it$inertia <- diag(2)
-  expect_error(validate_mass_props(bd_it), "inertia tensor not a 3x3 matrix")
+  invalid <- valid
+  invalid$inertia <- diag(2)
+  expect_error(validate_mass_props(invalid), "inertia tensor not a 3x3 matrix")
 
-  mi_it <- valid
-  mi_it$inertia <- diag(c(1, NA, 1))
-  expect_error(validate_mass_props(mi_it), "inertia tensor element missing")
+  invalid <- valid
+  invalid$inertia <- diag(c(1, NA, 1))
+  expect_error(validate_mass_props(invalid), "inertia tensor element missing")
 
-  bd_it <- valid
-  bd_it$inertia <- matrix(c(1, "bad", 1, "bad", 1, 1, 1, 1, 1), nrow = 3)
-  expect_error(validate_mass_props(bd_it), "inertia tensor element non-numeric")
+  invalid <- valid
+  invalid$inertia <- matrix(c(1, "bad", 1, "bad", 1, 1, 1, 1, 1), nrow = 3)
+  expect_error(validate_mass_props(invalid), "inertia tensor element non-numeric")
 
-  id_it <- valid
-  id_it$inertia <- diag(c(1, -1, 1))
-  expect_error(validate_mass_props(id_it), "inertia tensor not positive definite")
+  invalid <- valid
+  invalid$inertia <- diag(c(1, -1, 1))
+  expect_error(validate_mass_props(invalid), "inertia tensor not positive definite")
 
-  tv_it <- valid
-  tv_it$inertia <- diag(c(1, 3, 1))
-  expect_error(validate_mass_props(tv_it), "inertia tensor violates triangle inequalities")
+  invalid <- valid
+  invalid$inertia <- diag(c(1, 3, 1))
+  expect_error(validate_mass_props(invalid), "inertia tensor violates triangle inequalities")
+})
+
+test_that("validate_mass_props_and_unc() works", {
+  valid <- get_mass_props_and_unc(sawe_table, "Widget")
+
+  expect_true(validate_mass_props_and_unc(valid))
+
+  invalid <- valid
+  invalid$σ_mass <- NULL
+  expect_error(validate_mass_props_and_unc(invalid), "mass uncertainty missing")
+
+  invalid <- valid
+  invalid$σ_mass <- NA
+  expect_error(validate_mass_props_and_unc(invalid), "mass uncertainty missing")
+
+  invalid <- valid
+  invalid$σ_mass <- "bad"
+  expect_error(validate_mass_props_and_unc(invalid), "mass uncertainty non-numeric")
+
+  invalid <- valid
+  invalid$σ_mass <- -1
+  expect_error(validate_mass_props_and_unc(invalid), "mass uncertainty negative")
+
+})
+
+test_that("validate_mass_props_table() works", {
+  expect_true(validate_mass_props_table(mp_tree, mp_table))
+
+  bad_table <- df_set_by_id(mp_table, "C.1.2.3.5.3.5.3", "mass", -5)
+  expect_error(validate_mass_props_table(mp_tree, bad_table), "mass non-positive")
+})
+
+test_that("validate_mass_props_and_unc_table() works", {
+  expect_true(validate_mass_props_and_unc_table(sawe_tree, sawe_table))
+
+  invalid <- df_set_by_id(sawe_table, "Widget", "σ_mass", -5)
+  expect_error(validate_mass_props_and_unc_table(sawe_tree, invalid), "mass uncertainty negative")
 })

@@ -474,3 +474,64 @@ validate_mass_props <- function(mp) {
 
   TRUE
 }
+
+#' Validate mass properties and uncertainties
+#'
+#' @description
+#' `validate_mass_props_and_unc()` performs the checks of `validate_mass_props()` and
+#' ensures the following are true:
+#' - mass uncertainty is non-missing and non-negative
+#' - center of mass uncertainty is a 3-vector of non-missing non-negative values
+#' - the inertia tensor uncertainty is a 3x3 matrix of non-missing non-negative values
+#'
+#' @param mp Mass properties and uncertainties object
+#'
+#' @return TRUE if valid, stops otherwise
+#' @export
+#'
+#' @examples
+#' mp <- get_mass_props_and_unc(sawe_table, "Widget")
+#' validate_mass_props_and_unc(mp)
+validate_mass_props_and_unc <- function(mp) {
+
+  validate_mass_props(mp)
+
+  # ensure mass uncertainty is numeric and positive.
+
+  if (is.null(mp$σ_mass) || is.na(mp$σ_mass)) stop("mass uncertainty missing")
+  if (!is.numeric(mp$σ_mass)) stop("mass uncertainty non-numeric")
+  if (mp$σ_mass < 0.) stop("mass uncertainty negative")
+
+  # ensure center of mass uncertainty is numeric.
+
+  if (is.null(mp$σ_center_mass)) stop("center of mass uncertainty missing")
+  if (length(mp$σ_center_mass) != 3) stop("center of mass uncertainty not a 3-vector")
+  if (any(is.na(mp$σ_center_mass))) stop("center of mass uncertainty element missing")
+  if (any(!is.numeric(mp$σ_center_mass))) stop("center of mass uncertainty element non-numeric")
+  if (any(mp$σ_center_mass < 0.0)) stop("center of mass uncertainty element negative")
+
+  TRUE
+}
+
+#' Validate a mass properties table
+#'
+#' @param tree An `igraph` tree with edges from child to parent
+#' @param df A data frame to validate
+#'
+#' @description
+#' `validate_mass_props_table()` ensures that the `id` column of the table and the vertices
+#' of the tree contain the same identifiers, and that the mass properties of every leaf element
+#' of the table are valid.
+#'
+#' @return TRUE if valid, stops with an error otherwise
+#' @export
+#'
+#' @examples
+#' validate_mass_props_table(mp_tree, mp_table)
+validate_mass_props_table <- function(tree, df) {
+  rollup::validate_ds(tree, df, rollup::df_get_ids, get_mass_props, validate_mass_props)
+}
+
+validate_mass_props_and_unc_table <- function(tree, df) {
+  rollup::validate_ds(tree, df, rollup::df_get_ids, get_mass_props_and_unc, validate_mass_props_and_unc)
+}
