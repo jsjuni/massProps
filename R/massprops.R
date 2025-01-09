@@ -360,6 +360,8 @@ set_poi_conv_from_target <- function(df, target, v) {
 #' @export
 #'
 #' @examples
+#' leaves <- test_table[which(!is.na(test_table$mass)), "id"]
+#' df <- update_mass_props(test_table, "A.1", leaves)
 update_mass_props <- function(df, target, sources, override = set_poi_conv_from_target) {
   update_prop(
     df,
@@ -389,6 +391,8 @@ update_mass_props <- function(df, target, sources, override = set_poi_conv_from_
 #' @export
 #'
 #' @examples
+#' leaves <- list("Widget", "2nd Part")
+#' df <- update_mass_props_and_unc(sawe_table, "Combined", leaves)
 update_mass_props_and_unc <- function(df, target, sources, override = set_poi_conv_from_target) {
   update_prop(
     df,
@@ -399,4 +403,74 @@ update_mass_props_and_unc <- function(df, target, sources, override = set_poi_co
     combine = combine_mass_props_and_unc,
     override = override
   )
+}
+
+#' Validate mass properties
+#'
+#' @description
+#' `validate_mass_props()` ensures that a mass properties object satisfies the following
+#' constraints:
+#' - mass is non-missing and positive
+#' - center of mass is a 3-vector of non-missing numeric values
+#' - point mass indicator is TRUE or FALSE
+#' - for every non-point mass:
+#'   - the inertia tensor is positive definite
+#'   - eigenvalues of the inertia tensor satisfy the triangle inequalities:
+#'     - e1 < e2 + e3
+#'     - e2 < e1 + e3
+#'     - e3 < e1 + e2
+#'
+#' @param mp Mass properties object
+#'
+#' @return TRUE if valid, stops otherwise
+#' @export
+#'
+#' @examples
+#' mp <- get_mass_props(test_table, "C.1")
+#' validate_mass_props(mp)
+validate_mass_props <- function(mp) {
+
+  # ensure mass is numeric and positive.
+
+  if (is.null(mp$mass) || is.na(mp$mass)) stop("mass missing")
+  if (!is.numeric(mp$mass)) stop("mass non-numeric")
+  if (mp$mass <= 0.) stop("mass non-positive")
+
+  # ensure center of mass is numeric.
+
+  if (is.null(mp$center_mass)) stop("center of mass missing")
+  if (length(mp$center_mass) != 3) stop("center of mass not a 3-vector")
+  if (any(is.na(mp$center_mass))) stop("center of mass element missing")
+  if (any(!is.numeric(mp$center_mass))) stop("center of mass element non-numeric")
+
+  # ensure inertia tensor point mass indicator is logical
+
+  if (is.null(mp$point)) stop("point mass indicator missing")
+  if (is.na(mp$point) || !is.logical(mp$point)) stop("point mass indicator non-logical")
+
+  if (!mp$point) {
+
+    # ensure inertia tensor elements for non-point-masses are numeric.
+
+    if (is.null(mp$inertia)) stop("inertia tensor missing")
+    if (!isTRUE(all.equal(dim(mp$inertia), c(3, 3)))) stop("inertia tensor not a 3x3 matrix")
+    if (any(is.na(mp$inertia))) stop("inertia tensor element missing")
+    if (!is.numeric(mp$inertia)) stop("inertia tensor element non-numeric")
+
+    # ensure inertia tensor is positive definite.
+
+    ev <- eigen(mp$inertia, symmetric=TRUE, only.values=TRUE)$values
+    if (any(ev <= 0.)) stop("inertia tensor not positive definite")
+
+    # ensure principal moments obey triangle inequalities
+
+    if (any(c(
+      ev[1] >= ev[2] + ev[3],
+      ev[2] >= ev[1] + ev[3],
+      ev[3] >= ev[1] + ev[2]
+    ))) stop("inertia tensor violates triangle inequalities")
+
+  }
+
+  TRUE
 }

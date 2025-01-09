@@ -24,3 +24,7 @@ specified source rows in a data frame
 with (at least) these columns: \code{id}, \code{mass}, \code{Cx}, \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy},
 \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.
 }
+\examples{
+leaves <- test_table[which(!is.na(test_table$mass)), "id"]
+df <- update_mass_props(test_table, "A.1", leaves)
+}
