@@ -562,3 +562,45 @@ validate_mass_props_table <- function(tree, df) {
 validate_mass_props_and_unc_table <- function(tree, df) {
   validate_ds(tree, df, df_get_ids, get_mass_props_and_unc, validate_mass_props_and_unc)
 }
+
+#' Roll Up Mass Properties
+#'
+#' @description
+#' 'rollup_mass_props()' rolls up mass properties in a data frame
+#' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
+#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
+#'
+#' @param tree An igraph directed graph that is a valid single-rooted in-tree with edges from child vertex to parent vertex.
+#' @param df A mass properties table
+#' @param validate_df A validator for the tree and table, default `validate_mass_props_table()`
+#' @param ... Other parameters passed `rollup()`
+#'
+#' @returns The updated data frame
+#' @export
+#'
+#' @examples
+#' rollup_mass_props(test_tree, test_table)
+rollup_mass_props <- function(tree, df, validate_df = validate_mass_props_table, ...) {
+  rollup(tree, df, update_mass_props, validate_df, ...)
+}
+
+#' Roll Up Mass Properties and Uncertainties
+#'
+#' @description
+#' 'rollup_mass_props()' rolls up mass properties in a data frame
+#' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
+#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `σ_mass`, `σ_Cx`, `σ_Cy`, `σ_Cz`, `σ_Ixx`, `σ_Iyy`, `σ_Izz`, `σ_Ixy`, `σ_Ixz`, `σ_Iyz`.
+#'
+#' @param tree An igraph directed graph that is a valid single-rooted in-tree with edges from child vertex to parent vertex.
+#' @param df A mass properties and uncertainties table
+#' @param validate_df A validator for the tree and table, default `validate_mass_props_and_unc_table()`
+#' @param ... Other parameters passed `rollup()`
+#'
+#' @returns The updated data frame
+#' @export
+#'
+#' @examples
+#' rollup_mass_props_and_unc(sawe_tree, sawe_table)
+rollup_mass_props_and_unc <- function(tree, df, validate_df = validate_mass_props_and_unc_table, ...) {
+  rollup(tree, df, update_mass_props_and_unc, validate_df, ...)
+}

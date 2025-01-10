@@ -458,3 +458,18 @@ test_that("validate_mass_props_and_unc_table() works", {
   invalid <- df_set_by_id(sawe_table, "Widget", "\u03c3_mass", -5)
   expect_error(validate_mass_props_and_unc_table(sawe_tree, invalid), "mass uncertainty negative")
 })
+
+test_that("rollup_mass_props() works", {
+  df <- rollup_mass_props(test_tree, test_table)
+  result <- df[which(df$id == "A.1"), ]
+
+  expect_equal(result$mass, 21)
+})
+
+test_that("rollup_mass_props_and_unc() works", {
+  df <- rollup_mass_props_and_unc(sawe_tree, sawe_table)
+  result <- df[which(df$id == "Combined"), ]
+
+  expect_equal(result$mass, 74.63, tolerance = .002)
+  expect_equal(result$"\u03c3_mass", 2.1301, tolerance = .002)
+})
