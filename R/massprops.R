@@ -53,27 +53,27 @@ get_mass_props <- function(df, id) {
 #' - `center_mass` center of mass (3-dimensional numeric)
 #' - `inertia` Inertia tensor (3x3 numeric matrix)
 #' - `point` Logical indicating point mass, i.e., negligible inertia
-#' - `σ_mass` mass uncertainty
-#' - `σ_center_mass` center of mass uncertainty (3-dimensional numeric)
-#' - `σ_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
+#' - `sigma_mass` mass uncertainty
+#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
+#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
 #' @export
 #'
 #' @examples
 #' get_mass_props_and_unc(mp_table, "C.1.2.2.3.1.2.3")
 get_mass_props_and_unc <- function(df, id) {
   r <- get_mass_props(df, id)
-  r$σ_mass <- df_get_by_id(df, id, "σ_mass")
-  r$σ_center_mass <- sapply(c(x = "σ_Cx", y = "σ_Cy", z = "σ_Cz"), FUN=function(p) df_get_by_id(df, id, p))
-  r$σ_inertia <- {
+  r$sigma_mass <- df_get_by_id(df, id, "\u03c3_mass")
+  r$sigma_center_mass <- sapply(c(x = "\u03c3_Cx", y = "\u03c3_Cy", z = "\u03c3_Cz"), FUN=function(p) df_get_by_id(df, id, p))
+  r$sigma_inertia <- {
     xyz <- list("x", "y", "z")
-    σ_inertia <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
-    σ_inertia["x", "x"] <- df_get_by_id(df, id, "σ_Ixx")
-    σ_inertia["y", "y"] <- df_get_by_id(df, id, "σ_Iyy")
-    σ_inertia["z", "z"] <- df_get_by_id(df, id, "σ_Izz")
-    σ_inertia["x", "y"] <- σ_inertia["y", "x"] <- df_get_by_id(df, id, "σ_Ixy")
-    σ_inertia["x", "z"] <- σ_inertia["z", "x"] <- df_get_by_id(df, id, "σ_Ixz")
-    σ_inertia["y", "z"] <- σ_inertia["z", "y"] <- df_get_by_id(df, id, "σ_Iyz")
-    σ_inertia
+    sigma_inertia <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
+    sigma_inertia["x", "x"] <- df_get_by_id(df, id, "\u03c3_Ixx")
+    sigma_inertia["y", "y"] <- df_get_by_id(df, id, "\u03c3_Iyy")
+    sigma_inertia["z", "z"] <- df_get_by_id(df, id, "\u03c3_Izz")
+    sigma_inertia["x", "y"] <- sigma_inertia["y", "x"] <- df_get_by_id(df, id, "\u03c3_Ixy")
+    sigma_inertia["x", "z"] <- sigma_inertia["z", "x"] <- df_get_by_id(df, id, "\u03c3_Ixz")
+    sigma_inertia["y", "z"] <- sigma_inertia["z", "y"] <- df_get_by_id(df, id, "\u03c3_Iyz")
+    sigma_inertia
   }
   r
 }
@@ -135,9 +135,9 @@ set_mass_props <- function(df, id, v) {
 #' - `inertia` Inertia tensor (3x3 numeric matrix)
 #' - `point` Logical indicating point mass, i.e., negligible inertia
 #' - `poi_conv` Enumeration c("+", "-") indicating sign convention for products of inertia
-#' - `σ_mass` mass uncertainty (numeric)
-#' - `σ_center_mass` center of mass uncertainty (3-dimensional numeric)
-#' - `σ_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
+#' - `sigma_mass` mass uncertainty (numeric)
+#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
+#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
 #'
 #' @return The updated data frame
 #' @export
@@ -150,18 +150,18 @@ set_mass_props <- function(df, id, v) {
 set_mass_props_and_unc <- function(df, id, v) {
   df |> set_mass_props(id, v) |>
 
-    df_set_by_id(id, "σ_mass", v$σ_mass) |>
+    df_set_by_id(id, "\u03c3_mass", v$sigma_mass) |>
 
-    df_set_by_id(id, "σ_Cx", v$σ_center_mass[1]) |>
-    df_set_by_id(id, "σ_Cy", v$σ_center_mass[2]) |>
-    df_set_by_id(id, "σ_Cz", v$σ_center_mass[3]) |>
+    df_set_by_id(id, "\u03c3_Cx", v$sigma_center_mass[1]) |>
+    df_set_by_id(id, "\u03c3_Cy", v$sigma_center_mass[2]) |>
+    df_set_by_id(id, "\u03c3_Cz", v$sigma_center_mass[3]) |>
 
-    df_set_by_id(id, "σ_Ixx", v$σ_inertia["x", "x"]) |>
-    df_set_by_id(id, "σ_Iyy", v$σ_inertia["y", "y"]) |>
-    df_set_by_id(id, "σ_Izz", v$σ_inertia["z", "z"]) |>
-    df_set_by_id(id, "σ_Ixy", v$σ_inertia["x", "y"]) |>
-    df_set_by_id(id, "σ_Ixz", v$σ_inertia["x", "z"]) |>
-    df_set_by_id(id, "σ_Iyz", v$σ_inertia["y", "z"])
+    df_set_by_id(id, "\u03c3_Ixx", v$sigma_inertia["x", "x"]) |>
+    df_set_by_id(id, "\u03c3_Iyy", v$sigma_inertia["y", "y"]) |>
+    df_set_by_id(id, "\u03c3_Izz", v$sigma_inertia["z", "z"]) |>
+    df_set_by_id(id, "\u03c3_Ixy", v$sigma_inertia["x", "y"]) |>
+    df_set_by_id(id, "\u03c3_Ixz", v$sigma_inertia["x", "z"]) |>
+    df_set_by_id(id, "\u03c3_Iyz", v$sigma_inertia["y", "z"])
 }
 
 #' Combine mass properties
@@ -229,26 +229,26 @@ combine_mass_props_and_unc <- function(vl) {
 
   # mass uncertainty
 
-  r$σ_mass = sqrt(Reduce(`+`, Map(f = function(v) v$σ_mass^2, vl)))
+  r$sigma_mass = sqrt(Reduce(`+`, Map(f = function(v) v$sigma_mass^2, vl)))
 
   # center of mass uncertainty
 
-  r$σ_center_mass = sqrt(Reduce(`+`, Map(
+  r$sigma_center_mass = sqrt(Reduce(`+`, Map(
     f = function(v) {
-      (v$mass * v$σ_center_mass) ^ 2 +
-        (v$σ_mass * (v$center_mass - r$center_mass)) ^ 2
+      (v$mass * v$sigma_center_mass) ^ 2 +
+        (v$sigma_mass * (v$center_mass - r$center_mass)) ^ 2
     },
     vl
   ))) / r$mass
 
   # inertia tensor uncertainty
 
-  r$σ_inertia = sqrt(Reduce(`+`, Map(
+  r$sigma_inertia = sqrt(Reduce(`+`, Map(
     f = function(v) {
 
       d <- r$center_mass - v$center_mass
 
-      P <- outer(d, v$σ_center_mass)
+      P <- outer(d, v$sigma_center_mass)
       p <- diag(P)
       diag_1 <- diag(c(p['x'] + 2 * p['y'], p['y'] + 2 * p['x'], p['z'] + 2 * p['x']))
       diag_2 <- diag(c(p['x'] + 2 * p['z'], p['y'] + 2 * p['z'], p['z'] + 2 * p['y']))
@@ -256,7 +256,7 @@ combine_mass_props_and_unc <- function(vl) {
       Q <- outer(d, d)
       diag_3 <- sum(diag(Q)) * diag(3)
 
-      v$σ_inertia^2 + (v$mass * (P - diag_1))^2 + (v$mass * (t(P) - diag_2))^2 + (v$σ_mass * (Q - diag_3))^2
+      v$sigma_inertia^2 + (v$mass * (P - diag_1))^2 + (v$mass * (t(P) - diag_2))^2 + (v$sigma_mass * (Q - diag_3))^2
     },
     vl
   )))
@@ -498,27 +498,27 @@ validate_mass_props_and_unc <- function(mp) {
 
   # ensure mass uncertainty is numeric and positive.
 
-  if (is.null(mp$σ_mass) || is.na(mp$σ_mass)) stop("mass uncertainty missing")
-  if (!is.numeric(mp$σ_mass)) stop("mass uncertainty non-numeric")
-  if (mp$σ_mass < 0.) stop("mass uncertainty negative")
+  if (is.null(mp$sigma_mass) || is.na(mp$sigma_mass)) stop("mass uncertainty missing")
+  if (!is.numeric(mp$sigma_mass)) stop("mass uncertainty non-numeric")
+  if (mp$sigma_mass < 0.) stop("mass uncertainty negative")
 
   # ensure center of mass uncertainties are numeric and non-negative.
 
-  if (is.null(mp$σ_center_mass)) stop("center of mass uncertainty missing")
-  if (length(mp$σ_center_mass) != 3) stop("center of mass uncertainty not a 3-vector")
-  if (any(is.na(mp$σ_center_mass))) stop("center of mass uncertainty element missing")
-  if (any(!is.numeric(mp$σ_center_mass))) stop("center of mass uncertainty element non-numeric")
-  if (any(mp$σ_center_mass < 0.0)) stop("center of mass uncertainty element negative")
+  if (is.null(mp$sigma_center_mass)) stop("center of mass uncertainty missing")
+  if (length(mp$sigma_center_mass) != 3) stop("center of mass uncertainty not a 3-vector")
+  if (any(is.na(mp$sigma_center_mass))) stop("center of mass uncertainty element missing")
+  if (any(!is.numeric(mp$sigma_center_mass))) stop("center of mass uncertainty element non-numeric")
+  if (any(mp$sigma_center_mass < 0.0)) stop("center of mass uncertainty element negative")
 
   if (!mp$point) {
 
     # ensure inertia tensor uncertainty elements for non-point-masses are numeric.
 
-    if (is.null(mp$σ_inertia)) stop("inertia tensor uncertainty missing")
-    if (!isTRUE(all.equal(dim(mp$σ_inertia), c(3, 3)))) stop("inertia tensor uncertainty not a 3x3 matrix")
-    if (any(is.na(mp$σ_inertia))) stop("inertia tensor uncertainty element missing")
-    if (!is.numeric(mp$σ_inertia)) stop("inertia tensor uncertainty element non-numeric")
-    if (any(mp$σ_inertia < 0.0)) stop("inertia tensor uncertainty element negative")
+    if (is.null(mp$sigma_inertia)) stop("inertia tensor uncertainty missing")
+    if (!isTRUE(all.equal(dim(mp$sigma_inertia), c(3, 3)))) stop("inertia tensor uncertainty not a 3x3 matrix")
+    if (any(is.na(mp$sigma_inertia))) stop("inertia tensor uncertainty element missing")
+    if (!is.numeric(mp$sigma_inertia)) stop("inertia tensor uncertainty element non-numeric")
+    if (any(mp$sigma_inertia < 0.0)) stop("inertia tensor uncertainty element negative")
 
   }
 

@@ -7,9 +7,9 @@ mp_set <- list(
                               -0.0123144483865307,  0.14586924090344,     0.000348565076916697,
                                0.00127739195911864, 0.000348565076916697, 0.130922827321144), nrow = 3, byrow = 3, dimnames = list(xyz, xyz)
                      ),
-    σ_mass = 0.289220546600936,
-    σ_center_mass = c(x = 28.8332142065316, y = 29.1637070837215, z = 29.5945914710325),
-    σ_inertia = matrix(data = c(0.372229441260767,  0.0219147131886038, 0.0214698151227243,
+    sigma_mass = 0.289220546600936,
+    sigma_center_mass = c(x = 28.8332142065316, y = 29.1637070837215, z = 29.5945914710325),
+    sigma_inertia = matrix(data = c(0.372229441260767,  0.0219147131886038, 0.0214698151227243,
                                 0.0219147131886038, 0.36942277459594,   0.0224252422361279,
                                 0.0214698151227243, 0.0224252422361279, 0.374164784864648), nrow = 3, byrow = 3, dimnames = list(xyz, xyz)
                        ),
@@ -22,9 +22,9 @@ mp_set <- list(
                                -0.0443698514655305,    0.452811377532981,    -4.51044268177994e-06,
                                -4.09633716939692e-05, -4.51044268177994e-06,  0.458318601936452), nrow = 3, byrow = 3, dimnames = list(xyz, xyz)
                      ),
-    σ_mass = 0.289220546600936,
-    σ_center_mass = c(x = 28.8332142065316, y = 29.1637070837215, z = 29.5945914710325),
-    σ_inertia = matrix(data = c(0.372229441260767,  0.0219147131886038, 0.0214698151227243,
+    sigma_mass = 0.289220546600936,
+    sigma_center_mass = c(x = 28.8332142065316, y = 29.1637070837215, z = 29.5945914710325),
+    sigma_inertia = matrix(data = c(0.372229441260767,  0.0219147131886038, 0.0214698151227243,
                                 0.0219147131886038, 0.36942277459594,   0.0224252422361279,
                                 0.0214698151227243, 0.0224252422361279, 0.374164784864648), nrow = 3, byrow = 3, dimnames = list(xyz, xyz)
                       ),
@@ -57,9 +57,9 @@ test_that("get_mass_props_and_unc() works for positive convention", {
   expect_equal(result$center_mass, mp_set$"+"$center_mass)
   expect_equal(result$inertia, mp_set$"+"$inertia)
   expect_equal(result$point, mp_set$"+"$point)
-  expect_equal(result$σ_mass, mp_set$"+"$σ_mass)
-  expect_equal(result$σ_center_mass, mp_set$"+"$σ_center_mass)
-  expect_equal(result$σ_inertia, mp_set$"+"$σ_inertia)
+  expect_equal(result$sigma_mass, mp_set$"+"$sigma_mass)
+  expect_equal(result$sigma_center_mass, mp_set$"+"$sigma_center_mass)
+  expect_equal(result$sigma_inertia, mp_set$"+"$sigma_inertia)
 })
 
 test_that("get_mass_props_and_unc() works for negative convention", {
@@ -69,9 +69,9 @@ test_that("get_mass_props_and_unc() works for negative convention", {
   expect_equal(result$center_mass, mp_set$"-"$center_mass)
   expect_equal(result$inertia, mp_set$"-"$inertia)
   expect_equal(result$point, mp_set$"+"$point)
-  expect_equal(result$σ_mass, mp_set$"-"$σ_mass)
-  expect_equal(result$σ_center_mass, mp_set$"-"$σ_center_mass)
-  expect_equal(result$σ_inertia, mp_set$"-"$σ_inertia)
+  expect_equal(result$sigma_mass, mp_set$"-"$sigma_mass)
+  expect_equal(result$sigma_center_mass, mp_set$"-"$sigma_center_mass)
+  expect_equal(result$sigma_inertia, mp_set$"-"$sigma_inertia)
 })
 
 test_that("set_mass_props() works for positive convention", {
@@ -136,17 +136,17 @@ test_that("set_mass_prop_and_unc() works for positive convention", {
   expect_equal(result$POIconv, input$poi_conv)
   expect_equal(result$Ipoint, input$point)
 
-  expect_equal(result$σ_mass, input$σ_mass)
-  expect_equal(result$σ_Cx, input$σ_center_mass[["x"]])
-  expect_equal(result$σ_Cy, input$σ_center_mass[["y"]])
-  expect_equal(result$σ_Cz, input$σ_center_mass[["z"]])
-  σ_it <- input$σ_inertia
-  expect_equal(result$σ_Ixx, σ_it["x", "x"])
-  expect_equal(result$σ_Iyy, σ_it["y", "y"])
-  expect_equal(result$σ_Izz, σ_it["z", "z"])
-  expect_equal(result$σ_Ixy, σ_it["x", "y"])
-  expect_equal(result$σ_Ixz, σ_it["x", "z"])
-  expect_equal(result$σ_Iyz, σ_it["y", "z"])
+  expect_equal(result$"\u03c3_mass", input$sigma_mass)
+  expect_equal(result$"\u03c3_Cx", input$sigma_center_mass[["x"]])
+  expect_equal(result$"\u03c3_Cy", input$sigma_center_mass[["y"]])
+  expect_equal(result$"\u03c3_Cz", input$sigma_center_mass[["z"]])
+  sigma_it <- input$sigma_inertia
+  expect_equal(result$"\u03c3_Ixx", sigma_it["x", "x"])
+  expect_equal(result$"\u03c3_Iyy", sigma_it["y", "y"])
+  expect_equal(result$"\u03c3_Izz", sigma_it["z", "z"])
+  expect_equal(result$"\u03c3_Ixy", sigma_it["x", "y"])
+  expect_equal(result$"\u03c3_Ixz", sigma_it["x", "z"])
+  expect_equal(result$"\u03c3_Iyz", sigma_it["y", "z"])
 
 })
 
@@ -170,17 +170,17 @@ test_that("set_mass_props_and_unc() works for negative convention", {
   expect_equal(result$POIconv, input$poi_conv)
   expect_equal(result$Ipoint, input$point)
 
-  expect_equal(result$σ_mass, input$σ_mass)
-  expect_equal(result$σ_Cx, input$σ_center_mass[["x"]])
-  expect_equal(result$σ_Cy, input$σ_center_mass[["y"]])
-  expect_equal(result$σ_Cz, input$σ_center_mass[["z"]])
-  σ_it <- input$σ_inertia
-  expect_equal(result$σ_Ixx, σ_it["x", "x"])
-  expect_equal(result$σ_Iyy, σ_it["y", "y"])
-  expect_equal(result$σ_Izz, σ_it["z", "z"])
-  expect_equal(result$σ_Ixy, σ_it["x", "y"])
-  expect_equal(result$σ_Ixz, σ_it["x", "z"])
-  expect_equal(result$σ_Iyz, σ_it["y", "z"])
+  expect_equal(result$"\u03c3_mass", input$sigma_mass)
+  expect_equal(result$"\u03c3_Cx", input$sigma_center_mass[["x"]])
+  expect_equal(result$"\u03c3_Cy", input$sigma_center_mass[["y"]])
+  expect_equal(result$"\u03c3_Cz", input$sigma_center_mass[["z"]])
+  sigma_it <- input$sigma_inertia
+  expect_equal(result$"\u03c3_Ixx", sigma_it["x", "x"])
+  expect_equal(result$"\u03c3_Iyy", sigma_it["y", "y"])
+  expect_equal(result$"\u03c3_Izz", sigma_it["z", "z"])
+  expect_equal(result$"\u03c3_Ixy", sigma_it["x", "y"])
+  expect_equal(result$"\u03c3_Ixz", sigma_it["x", "z"])
+  expect_equal(result$"\u03c3_Iyz", sigma_it["y", "z"])
 
 })
 
@@ -241,12 +241,12 @@ test_that("combine_mass_props_and_unc() works", {
                tolerance = tol
   )
 
-  expect_equal(result$σ_mass, expected$σ_mass, tolerance = tol)
-  expect_equal(result$σ_center_mass, c(x = expected$σ_Cx, y = expected$σ_Cy, z = expected$σ_Cz), tolerance = tol)
-  expect_equal(result$σ_inertia,
-               matrix(data = c(expected$σ_Ixx, expected$σ_Ixy, expected$σ_Ixz,
-                               expected$σ_Ixy, expected$σ_Iyy, expected$σ_Iyz,
-                               expected$σ_Ixz, expected$σ_Iyz, expected$σ_Izz), nrow = 3, byrow = TRUE, dimnames = list(xyz, xyz)),
+  expect_equal(result$sigma_mass, expected$"\u03c3_mass", tolerance = tol)
+  expect_equal(result$sigma_center_mass, c(x = expected$"\u03c3_Cx", y = expected$"\u03c3_Cy", z = expected$"\u03c3_Cz"), tolerance = tol)
+  expect_equal(result$sigma_inertia,
+               matrix(data = c(expected$"\u03c3_Ixx", expected$"\u03c3_Ixy", expected$"\u03c3_Ixz",
+                               expected$"\u03c3_Ixy", expected$"\u03c3_Iyy", expected$"\u03c3_Iyz",
+                               expected$"\u03c3_Ixz", expected$"\u03c3_Iyz", expected$"\u03c3_Izz"), nrow = 3, byrow = TRUE, dimnames = list(xyz, xyz)),
                tolerance = tol
   )
 })
@@ -385,63 +385,63 @@ test_that("validate_mass_props_and_unc() works", {
   expect_true(validate_mass_props_and_unc(valid))
 
   invalid <- valid
-  invalid$σ_mass <- NULL
+  invalid$sigma_mass <- NULL
   expect_error(validate_mass_props_and_unc(invalid), "mass uncertainty missing")
 
   invalid <- valid
-  invalid$σ_mass <- NA
+  invalid$sigma_mass <- NA
   expect_error(validate_mass_props_and_unc(invalid), "mass uncertainty missing")
 
   invalid <- valid
-  invalid$σ_mass <- "bad"
+  invalid$sigma_mass <- "bad"
   expect_error(validate_mass_props_and_unc(invalid), "mass uncertainty non-numeric")
 
   invalid <- valid
-  invalid$σ_mass <- -1
+  invalid$sigma_mass <- -1
   expect_error(validate_mass_props_and_unc(invalid), "mass uncertainty negative")
 
   invalid <- valid
-  invalid$σ_center_mass <- NULL
+  invalid$sigma_center_mass <- NULL
   expect_error(validate_mass_props_and_unc(invalid), "center of mass uncertainty missing")
 
   invalid <- valid
-  invalid$σ_center_mass <- NA
+  invalid$sigma_center_mass <- NA
   expect_error(validate_mass_props_and_unc(invalid), "center of mass uncertainty not a 3-vector")
 
   invalid <- valid
-  invalid$σ_center_mass <- c(1, 2)
+  invalid$sigma_center_mass <- c(1, 2)
   expect_error(validate_mass_props_and_unc(invalid), "center of mass uncertainty not a 3-vector")
 
   invalid <- valid
-  invalid$σ_center_mass <- c(1, NA, 2)
+  invalid$sigma_center_mass <- c(1, NA, 2)
   expect_error(validate_mass_props_and_unc(invalid), "center of mass uncertainty element missing")
 
   invalid <- valid
-  invalid$σ_center_mass <- c(1, "bad", 2)
+  invalid$sigma_center_mass <- c(1, "bad", 2)
   expect_error(validate_mass_props_and_unc(invalid), "center of mass uncertainty element non-numeric")
 
   invalid <- valid
-  invalid$σ_center_mass <- c(1, -1, 2)
+  invalid$sigma_center_mass <- c(1, -1, 2)
   expect_error(validate_mass_props_and_unc(invalid), "center of mass uncertainty element negative")
 
   invalid <- valid
-  invalid$σ_inertia <- NULL
+  invalid$sigma_inertia <- NULL
   expect_error(validate_mass_props_and_unc(invalid), "inertia tensor uncertainty missing")
 
   invalid <- valid
-  invalid$σ_inertia <- diag(2)
+  invalid$sigma_inertia <- diag(2)
   expect_error(validate_mass_props_and_unc(invalid), "inertia tensor uncertainty not a 3x3 matrix")
 
   invalid <- valid
-  invalid$σ_inertia <- diag(c(1, NA, 1))
+  invalid$sigma_inertia <- diag(c(1, NA, 1))
   expect_error(validate_mass_props_and_unc(invalid), "inertia tensor uncertainty element missing")
 
   invalid <- valid
-  invalid$σ_inertia <- matrix(c(1, "bad", 1, "bad", 1, 1, 1, 1, 1), nrow = 3)
+  invalid$sigma_inertia <- matrix(c(1, "bad", 1, "bad", 1, 1, 1, 1, 1), nrow = 3)
   expect_error(validate_mass_props_and_unc(invalid), "inertia tensor uncertainty element non-numeric")
 
   invalid <- valid
-  invalid$σ_inertia <-diag(c(1, -1, 1))
+  invalid$sigma_inertia <-diag(c(1, -1, 1))
   expect_error(validate_mass_props_and_unc(invalid), "inertia tensor uncertainty element negative")
 })
 
@@ -455,6 +455,6 @@ test_that("validate_mass_props_table() works", {
 test_that("validate_mass_props_and_unc_table() works", {
   expect_true(validate_mass_props_and_unc_table(sawe_tree, sawe_table))
 
-  invalid <- df_set_by_id(sawe_table, "Widget", "σ_mass", -5)
+  invalid <- df_set_by_id(sawe_table, "Widget", "\u03c3_mass", -5)
   expect_error(validate_mass_props_and_unc_table(sawe_tree, invalid), "mass uncertainty negative")
 })
