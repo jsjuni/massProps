@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(massprops)
+library(massProps)
 
-test_check("massprops")
+test_check("massProps")
