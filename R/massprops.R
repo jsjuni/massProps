@@ -541,7 +541,7 @@ validate_mass_props_and_unc <- function(mp) {
 #' @examples
 #' validate_mass_props_table(mp_tree, mp_table)
 validate_mass_props_table <- function(tree, df) {
-  rollup::validate_ds(tree, df, rollup::df_get_ids, get_mass_props, validate_mass_props)
+  validate_ds(tree, df, df_get_ids, get_mass_props, validate_mass_props)
 }
 
 #' Validate a mass properties and uncertainties table
@@ -560,5 +560,5 @@ validate_mass_props_table <- function(tree, df) {
 #' @examples
 #' validate_mass_props_and_unc_table(mp_tree, mp_table)
 validate_mass_props_and_unc_table <- function(tree, df) {
-  rollup::validate_ds(tree, df, rollup::df_get_ids, get_mass_props_and_unc, validate_mass_props_and_unc)
+  validate_ds(tree, df, df_get_ids, get_mass_props_and_unc, validate_mass_props_and_unc)
 }
