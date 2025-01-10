@@ -1,9 +1,14 @@
-Package: massprops
-Title: What the Package Does (One Line, Title Case)
+Package: massProps
+Title: Computing Mass Properties of Aggregates
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+    person("Steven", "Jenkins",
+      email = "sjenkins@studioj.us",
+      role = c("aut", "cre"),
+      comment = c(ORCID = "0000-0002-0725-0884")
+    )
+Description: `massProps` uses the `rollupTree` package to calculate mass properties and uncertainties
+  for tree structures (e.g., assembly bill of materials).
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
