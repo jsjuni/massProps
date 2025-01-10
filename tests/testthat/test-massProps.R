@@ -464,6 +464,10 @@ test_that("rollup_mass_props() works", {
   result <- df[which(df$id == "A.1"), ]
 
   expect_equal(result$mass, 21)
+
+  invalid_table <- test_table
+  invalid_table$mass <- NA
+  expect_error(rollup_mass_props(test_tree, invalid_table), "mass missing")
 })
 
 test_that("rollup_mass_props_and_unc() works", {
@@ -472,4 +476,9 @@ test_that("rollup_mass_props_and_unc() works", {
 
   expect_equal(result$mass, 74.63, tolerance = .002)
   expect_equal(result$"\u03c3_mass", 2.1301, tolerance = .002)
+
+  invalid_table <- sawe_table
+  invalid_table$"\u03c3_mass" <- NA
+  expect_error(rollup_mass_props_and_unc(sawe_tree, invalid_table), "mass uncertainty missing")
+
 })
