@@ -4,12 +4,12 @@
 \name{massProps-package}
 \alias{massProps}
 \alias{massProps-package}
-\title{massProps: What the Package Does (One Line, Title Case)}
+\title{massProps: Computing Mass Properties of Aggregates}
 \description{
-What the package does (one paragraph).
+`massProps` uses the `rollupTree` package to calculate mass properties and uncertainties for tree structures (e.g., assembly bill of materials).
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com}
+\strong{Maintainer}: Steven Jenkins \email{sjenkins@studioj.us} (\href{https://orcid.org/0000-0002-0725-0884}{ORCID})
 
 }
 \keyword{internal}
