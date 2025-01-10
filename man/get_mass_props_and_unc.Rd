@@ -18,9 +18,9 @@ A list with the following named elements:
 \item \code{center_mass} center of mass (3-dimensional numeric)
 \item \code{inertia} Inertia tensor (3x3 numeric matrix)
 \item \code{point} Logical indicating point mass, i.e., negligible inertia
-\item \code{σ_mass} mass uncertainty
-\item \code{σ_center_mass} center of mass uncertainty (3-dimensional numeric)
-\item \code{σ_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
+\item \code{sigma_mass} mass uncertainty
+\item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
+\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
 }
 }
 \description{

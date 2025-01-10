@@ -18,9 +18,9 @@ set_mass_props_and_unc(df, id, v)
 \item \code{inertia} Inertia tensor (3x3 numeric matrix)
 \item \code{point} Logical indicating point mass, i.e., negligible inertia
 \item \code{poi_conv} Enumeration c("+", "-") indicating sign convention for products of inertia
-\item \code{σ_mass} mass uncertainty (numeric)
-\item \code{σ_center_mass} center of mass uncertainty (3-dimensional numeric)
-\item \code{σ_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
+\item \code{sigma_mass} mass uncertainty (numeric)
+\item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
+\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
 }}
 }
 \value{
