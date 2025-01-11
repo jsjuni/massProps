@@ -604,3 +604,45 @@ rollup_mass_props <- function(tree, df, validate_df = validate_mass_props_table,
 rollup_mass_props_and_unc <- function(tree, df, validate_df = validate_mass_props_and_unc_table, ...) {
   rollup(tree, df, update_mass_props_and_unc, validate_df, ...)
 }
+
+#' Roll Up Mass Properties Without Input Validation
+#'
+#' @description
+#' `rollup_mass_props_fast()` performs the same operation as `rollup_mass_props()`
+#' but omits input validation. It is roughly 30% faster than  `rollup_mass_props()` but should
+#' be used with caution and only under circumstances in which the caller assumes
+#' responsibility for validity of input. Its behavior when passed ill-formed input is unspecified.
+#'
+#' @param tree tree passed to `rollup()`
+#' @param df mass properties and uncertainties table passed to `rollup()`
+#' @param root identifier of the root vertex in the tree
+#'
+#' @returns The updated data frame
+#' @export
+#'
+#' @examples
+#' rollup_mass_props_fast(test_tree, test_table, "A.1")
+rollup_mass_props_fast <- function(tree, df, root) {
+  rollup(tree, df, update_mass_props, validate_ds = function(t, d) TRUE, validate_tree = function(t) root)
+}
+
+#' Roll Up Mass Properties And Uncertainties Without Input Validation
+#'
+#' @description
+#' `rollup_mass_props_and_unc_fast()` performs the same operation as `rollup_mass_props_and_unc()`
+#' but omits input validation. It is roughly 30% faster than  `rollup_mass_propss_and_unc()` but should
+#' be used with caution and only under circumstances in which the caller assumes
+#' responsibility for validity of input. Its behavior when passed ill-formed input is unspecified.
+#'
+#' @param tree tree passed to `rollup()`
+#' @param df mass properties and uncertainties table passed to `rollup()`
+#' @param root identifier of the root vertex in the tree
+#'
+#' @returns The updated data frame
+#' @export
+#'
+#' @examples
+#' rollup_mass_props_and_unc_fast(sawe_tree, sawe_table, "Combined")
+rollup_mass_props_and_unc_fast <- function(tree, df, root) {
+  rollup(tree, df, update_mass_props_and_unc, validate_ds = function(t, d) TRUE, validate_tree = function(t) root)
+}
