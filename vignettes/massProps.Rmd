@@ -1,0 +1,166 @@
+---
+title: "massProps"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{massProps}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(massProps)
+```
+
+The `massProps` package extends `rollupTree` with functions to recursively calculate mass properties (and optionally, their uncertainties).
+
+$$
+\newcommand{\di}[1]{({#1}_i - \bar{#1})}
+\begin{align}
+\boldsymbol{d}_i & = (\di{x} \quad \di{y} \quad \di{z})^T \\
+\boldsymbol{Q}_i & = \boldsymbol{d}_i {\boldsymbol{d}_i}^T
+\end{align}
+$$
+Then
+
+$$
+\begin{align}
+\boldsymbol{Q}_i & =
+\begin{bmatrix}
+(x_i - \bar{x})^2 &\di{x}\di{y} &\di{x}\di{z} \\
+\di{y}(x_i - \bar{x}) & \di{y}^2 & \di{y}\di{z} \\
+\di{z}(x_i - \bar{x}) & \di{z}\di{y} & \di{z}^2 \\
+\end{bmatrix}
+\end{align}
+$$
+$$
+\begin{align}
+\boldsymbol{s}_i & = \boldsymbol{I}_i \\
+& -
+w_i \begin{bmatrix}
+-\di{y}^2 - \di{z}^2 & \di{x}\di{y} & \di{x}\di{z} \\
+(x_i - \bar{x})\di{y}                 & -\di{x}^2 - \di{z}^2 &  \di{y}\di{z} \\
+(x_i - \bar{x})\di{z}                 & \di{y}\di{z}                & -\di{x}^2 - \di{y}^2 \\
+\end{bmatrix} \\
+& =
+\boldsymbol{I}_i \\
+& -
+w_i \begin{bmatrix}
+(x_i - \bar{x})^2 &\di{x}\di{y} &\di{x}\di{z} \\
+(x_i - \bar{x})\di{y}                 & \di{y}^2 &  \di{y}\di{z} \\
+(x_i - \bar{x})\di{z}                 & \di{y}\di{z}                & \di{z}^2 \\
+\end{bmatrix} \\
+& +
+w_i \begin{bmatrix}
+(x_i - \bar{x})^2 + \di{y}^2 + \di{z}^2 & 0 & 0 \\
+0 &\di{x}^2 + \di{y}^2 + \di{z}^2 & 0 \\
+0 & 0 &\di{x}^2 + \di{y}^2 + \di{z}^2 \\
+\end{bmatrix} \\
+& = 
+\boldsymbol{I}_i
+- 
+w_i [ \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{I}_3 ]
+\end{align}
+$$
+
+As we saw with the inertia tensor, the inertia tensor uncertainty propagation equations can be rewritten in matrix form. Let
+
+$$
+\begin{align}
+\boldsymbol{d}_i & = (\di{x} \quad \di{y} \quad \di{z})^T \\
+{\boldsymbol{\sigma}_{c_m}}_i & = (\sigma_{x_i} \quad \sigma_{y_i} \quad \sigma_{z_i})^T \\
+\boldsymbol{P}_i & = \boldsymbol{d}_i {\boldsymbol{\sigma}_{c_m}}_i^T \\
+\boldsymbol{Q}_i & = \boldsymbol{d}_i {\boldsymbol{d}_i}^T
+\end{align}
+$$
+
+Then
+
+$$
+\begin{align}
+\boldsymbol{P}_i & = 
+\begin{bmatrix}
+(x_i - \bar{x})\sigma_{x_i} &\di{x}\sigma_{y_i} &\di{x}\sigma_{z_i} \\
+\di{y}\sigma_{x_i} & \di{y}\sigma_{y_i} & \di{y}\sigma_{z_i} \\
+\di{z}\sigma_{x_i} & \di{z}\sigma_{y_i} & \di{z}\sigma_{z_i} \\
+\end{bmatrix}
+\\
+\\
+\boldsymbol{Q}_i & =
+\begin{bmatrix}
+(x_i - \bar{x})^2 &\di{x}\di{y} &\di{x}\di{z} \\
+\di{y}(x_i - \bar{x}) & \di{y}^2 & \di{y}\di{z} \\
+\di{z}(x_i - \bar{x}) & \di{z}\di{y} & \di{z}^2 \\
+\end{bmatrix}
+\end{align}
+$$
+
+Let $\boldsymbol{s}_i^2$ be the matrix of inertia tensor uncertainty summands in the standard formulas for a given subcomponent $i$ above. Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $P_i$. If we interpret squaring a matrix as the Hadamard (element-wise) product with itself, then $$
+\begin{align}
+\boldsymbol{s}_i^2 & = {\boldsymbol{\sigma_I}}_i^2 \\
+& + 
+\begin{bmatrix}
+2 w_i \di{y} \sigma_{y_i} &   w_i\di{x} \sigma_{y_i} &   w_i\di{x} \sigma_{z_i} \\
+  w_i\di{x} \sigma_{y_i} & 2 w_i\di{x} \sigma_{x_i} &   w_i \di{y} \sigma_{z_i} \\
+  w_i\di{x} \sigma_{z_i} &   w_i \di{y} \sigma_{z_i} & 2 w_i\di{x} \sigma_{x_i}
+\end{bmatrix}^2 \\
+& +
+\begin{bmatrix}
+2 w_i \di{z} \sigma_{z_i} &   w_i \di{y} \sigma_{x_i} &   w_i \di{z} \sigma_{x_i} \\
+  w_i \di{y} \sigma_{x_i} & 2 w_i \di{z} \sigma_{z_i} &   w_i \di{z} \sigma_{y_i} \\
+  w_i \di{z} \sigma_{x_i} &   w_i \di{z} \sigma_{y_i} & 2 w_i \di{y} \sigma_{y_i}
+\end{bmatrix}^2 \\
+& +
+\begin{bmatrix}
+(\di{y}^2 + \di{z}^2)\sigma_{w_i} &\di{x}\di{y}\sigma_{w_i} &\di{x}\di{z}\sigma_{w_i} \\
+\di{y}(x_i - \bar{x})\sigma_{w_i} & ((x_i - \bar{x})^2 + \di{z}^2)\sigma_{w_i} & \di{y}\di{z}\sigma_{w_i} \\
+\di{z}(x_i - \bar{x})\sigma_{w_i} & \di{z}\di{y}\sigma_{w_i} & ((x_i - \bar{x})^2 + \di{y}^2)\sigma_{w_i} \\
+\end{bmatrix}^2 \\ \\
+& = {\boldsymbol{\sigma_I}}_i^2 \\
+& + w_i^2 \left(
+\boldsymbol{P}_i -
+\begin{bmatrix}
+(x_i - \bar{x})\sigma_{x_i} + 2 \di{y}\sigma_{y_i} & 0 & 0 \\
+0 & \di{y}\sigma_{y_i} + 2\di{x}\sigma_{x_i} & 0 \\
+0 & 0 & \di{z}\sigma_{y_i} + 2\di{x}\sigma_{x_i} \\
+\end{bmatrix}
+\right) ^2 \\
+& + w_i^2 \left(
+\boldsymbol{P}_i^T -
+\begin{bmatrix}
+(x_i - \bar{x})\sigma_{x_i} + 2 \di{z}\sigma_{y_i} & 0 & 0 \\
+0 & \di{y}\sigma_{y_i} + 2 \di{z}\sigma_{z_i} & 0 \\
+0 & 0 & \di{z}\sigma_{y_i} + 2 \di{y}\sigma_{y_i} \\
+\end{bmatrix}
+\right) ^2 \\
+& + \sigma_{w_i}^2 \left(
+\boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{I}_3
+\right)^2 \\ \\
+& = {\boldsymbol{\sigma_I}}_i^2 \\
+& + w_i^2 \left(
+\boldsymbol{P}_i -
+\begin{bmatrix}
+ {p_X}_i + 2 {p_Y}_i & 0 & 0 \\
+0 & {p_Y}_i + 2 {p_X}_i & 0 \\
+0 & 0 & {p_Z}_i + 2  {p_X}_i \\
+\end{bmatrix}
+\right) ^2 \\
+& + w_i^2 \left(
+\boldsymbol{P}_i^T -
+\begin{bmatrix}
+ {p_X}_i + 2{p_Z}_i & 0 & 0 \\
+0 & {p_Y}_i + 2 {p_Z}_i & 0 \\
+0 & 0 & {p_Z}_i + 2 {p_Y}_i \\
+\end{bmatrix}
+\right) ^2 \\
+& + \sigma_{w_i}^2 \left(
+\boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{I}_3
+\right)^2
+\end{align}
+$$
