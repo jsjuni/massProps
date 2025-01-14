@@ -111,6 +111,20 @@ Suppose we have the following mass properties table:
 test_table
 ```
 
+Suppose we also have this tree:
+
+```{r}
+suppressPackageStartupMessages({library(igraph)})
+test_tree
+```
+
+Then we can compute mass properties for non-leaf elements by calling `rollup_mass_props()`:
+
+```{r}
+library(massProps)
+rollup_mass_props(test_tree, test_table)
+```
+
 # Theory
 
 ### Mass
