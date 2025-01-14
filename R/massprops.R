@@ -196,8 +196,7 @@ combine_mass_props <- function(vl) {
     Map(
       f  = function(v) {
         d <- r$center_mass - v$center_mass
-        ddt <- outer(d, d)
-        d_ss2 <- ddt - sum(diag(ddt)) * diag(3)
+        d_ss2 <- outer(d, d) - sum(d^2) * diag(3)
         if (v$point) -v$mass * d_ss2 else v$inertia - v$mass * d_ss2
       },
       vl
