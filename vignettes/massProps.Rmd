@@ -193,6 +193,12 @@ w = \sumwi
 }
 $$
 
+The corresponding `R` code is
+
+``` R
+r$mass <- Reduce(`+`, Map(f = function(v) v$mass, vl))
+```
+
 ### Center of Mass
 
 $$
@@ -222,6 +228,12 @@ $$
 \boldsymbol{\bar{c}} = \frac{1}{w} \sumwivi{\boldsymbol{c}}
 }
 $$
+
+The corresponding `R` code is
+
+``` R
+r$center_mass <- Reduce(`+`, Map(f = function(v) v$mass * v$center_mass, vl)) / r$mass
+```
 
 ### Inertia Tensor
 
@@ -342,6 +354,22 @@ $$
 w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{I}_3 \right) \}
 }
 $$
+
+The corresponding `R` code is
+
+``` {.R .R}
+r$inertia <- Reduce(
+  `+`,
+  Map(
+    f  = function(v) {
+      d <- r$center_mass - v$center_mass
+      d_ss2 <- outer(d, d) - sum(d^2) * diag(3)
+      if (v$point) -v$mass * d_ss2 else v$inertia - v$mass * d_ss2
+    },
+    vl
+  )
+)
+```
 
 ## Mass Property Uncertainties
 
