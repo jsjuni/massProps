@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+library(rollupTree)
 library(massProps)
 ```
 
@@ -125,6 +126,36 @@ library(massProps)
 rollup_mass_props(test_tree, test_table)
 ```
 
+The input may also contain uncertainty data. This example is from the Society of Allied Weight Engineers:
+
+```{r echo = FALSE}
+na_mass_props_and_unc <- function(d, t, v) {
+  xyz <- c("x", "y", "z")
+  list(
+    mass = NA,
+    center_mass = c(x = NA, y = NA, z = NA),
+    inertia = matrix(nrow = 3, ncol = 3, dimnames = list(xyz, xyz)),
+    poi_conv = "+",
+    point = FALSE,
+    sigma_mass = NA,
+    sigma_center_mass = c(x = NA, y = NA, z = NA),
+    sigma_inertia = matrix(nrow = 3, ncol = 3, dimnames = list(xyz, xyz))
+  )
+}
+na_mass_props_and_unc_update <- function(d, t, s) {
+  update_mass_props_and_unc(d, t, s, override = na_mass_props_and_unc)
+}
+sawe_input <- rollup(sawe_tree, sawe_table, update = na_mass_props_and_unc_update, validate_ds = validate_mass_props_and_unc_table)
+```
+
+```{r}
+sawe_input
+```
+
+```{r}
+rollup_mass_props_and_unc(sawe_tree, sawe_input)
+```
+
 # Theory
 
 ### Mass
@@ -145,9 +176,9 @@ $$
 \end{align}
 $$
 
-## Inertia Tensor
+### Inertia Tensor
 
-##### Moments of Inertia
+#### Moments of Inertia
 
 $$
 \newcommand{\moia}[3]{
@@ -170,7 +201,7 @@ $$
 
 #### Products of Inertia
 
-#### $$
+$$
 \newcommand{\di}[1]{({#1}_i - \bar{#1})}
 \newcommand{\poia}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i {{#2}_i}{{#3}_i} -w_i (\bar{#2}\bar{#3})\right]}
 \newcommand{\poib}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i \di{#2}\di{#3}\right]}
@@ -179,7 +210,9 @@ I_{XY} & = \poia{XY}{x}{y} & = \poib{XY}{x}{y} \\
 I_{XZ} & = \poia{XZ}{x}{z} & = \poib{XZ}{x}{z} \\
 I_{YZ} & = \poia{YZ}{y}{z} & = \poib{YZ}{y}{z} \\
 \end{align}
-$$ Matrix Formulation
+$$
+
+#### Matrix Formulation
 
 Let
 
@@ -266,8 +299,8 @@ $$
 #### Products of Inertia Uncertainties
 
 $$
+\newcommand{\sigmapoi}[3]{\sqrt{ \sum_{i=1}^n \big\{  \sigma_{{I_{#1}}_i}^2 + \big[ \di{#2} w_i \sigma_{{#3}_i}\big]^2 + \big[  \di{#2}\di{#3}\sigma_{w_i} \big]^2 + \big[ \di{#3}  w_i \sigma_{{#2}_i} \big]^2 \big\} }}
 \begin{align}
-\newcommand{\sigmapoi}[3]{\sqrt{ \sum_{i=1}^n \big\{  \sigma_{{I_{#1}}_i}^2 + \big[ \di{#2} w_i \sigma_{{#3}_i} \big]^2 + \big[  \di{#2}\di{#3}\sigma_{w_i} \big]^2 + \big[ \di{#3}  w_i \sigma_{{#2}_i} \big]^2 \big\} }}
 \sigma_{I_{XY}} & = \sigmapoi{XY}{x}{y} \\
 \sigma_{I_{XZ}} & = \sigmapoi{XZ}{x}{z} \\
 \sigma_{I_{YZ}} & = \sigmapoi{YZ}{y}{z} \\
@@ -371,3 +404,5 @@ Let $\boldsymbol{s}_i^2$ be the matrix of inertia tensor uncertainty summands in
 \right)^2
 \end{align}
 $$
+
+# References
