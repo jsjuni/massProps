@@ -156,14 +156,40 @@ sawe_input
 rollup_mass_props_and_unc(sawe_tree, sawe_input)
 ```
 
+# Objectives and Strategy
+
+The objective of this package is to provide a trustworthy, well-documented, reference implementation for computation of mass properties (and their uncertainties) of aggregate objects from those of their parts. Aggregation can be recursive (e.g., indentured Bill of Materials), so it must accommodate trees of arbitrary depth and shape.
+
+Strategies for achieving the objective include
+
+-   basing the calculations on published industry references,
+
+-   re-casting those lengthy reference equations into concise vector or matrix forms to reduce the error surface for source code and exploit the capabilities of `R`, which treats vectors and matrices as first-class objects,
+
+-   delegating the orchestration to the `rollupTree` package, which, among other things, verifies that the input tree is well-formed,
+
+-   ensuring that all asserted leaf mass properties and uncertainties correspond to physically-realizable objects,
+
+-   writing the code in pure functional style, and
+
+-   covering the entire code base with unit tests.
+
+The author has intentionally made no effort to optimize for performance. That said, in its current form it handles computations on the scale encountered in the design of interplanetary spacecraft in a few seconds.
+
 # Theory
 
+In this section, we state the reference equations [@zimmerman:05:sawe] and show, where applicable, how those equations can be rewritten in more concise form. The form of the equations actually implemented is displayed within a box, e.g. $\boxed{F = ma}$.
+
+The reference uses the word *weight* and the symbol $w$ in equations. We interpret weight as mass. The reference refers to center of mass by its $x$, $y$, and $z$ components. Symbols for moments ($I_{XX}$) and products ($I_{XY}$) of inertia are conventional. Variables with subscripts designate properties of parts; those without designate properties of aggregates. The letter $\sigma$ denotes uncertainty. $\sigma_w$, for example, is the mass uncertainty
+
 ### Mass
+
+The mass equation is suitable as is.
 
 $$
 \boxed{
 \newcommand{\sumwi}{\sum_{i=1}^{n}w_i}
-W = \sumwi
+w = \sumwi
 }
 $$
 
@@ -178,9 +204,7 @@ $$
 \end{align}
 $$
 
-#### Vector Formulation
-
-Let
+We can express center of mass as a 3-vector:
 
 $$
 \boxed{
@@ -195,7 +219,7 @@ Then
 
 $$
 \boxed{
-\boldsymbol{\bar{c}} = \frac{1}{W} \sumwivi{\boldsymbol{c}}
+\boldsymbol{\bar{c}} = \frac{1}{w} \sumwivi{\boldsymbol{c}}
 }
 $$
 
@@ -237,7 +261,21 @@ $$
 
 #### Matrix Formulation
 
-Let
+Let $I$ be the inertia tensor of the aggregate and $I_i$ be that of part $i$. The equations for products of inertia above clearly follow the positive integral convention, so
+
+$$
+I =
+\left[ \begin{matrix}
+ I_{XX} & -I_{XY} & -I_{XZ} \\
+-I_{XY} &  I_{YY} & -I_{YZ} \\
+-I_{XZ} & -I_{YZ} &  I_{ZZ} 
+\end{matrix}
+\right]
+$$
+
+and similarly for $I_i$.
+
+Noting the repeated appearance of terms of the form $\di{x}$, we form the outer product
 
 $$
 \boxed{
@@ -259,7 +297,7 @@ $$
 \end{align}
 $$
 
-Let $\boldsymbol{s}_i$ be the matrix of inertia tensor summands in the standard formulas for a given subcomponent $i$ above. That is,
+Let $\boldsymbol{s}_i$ be the matrix of inertia tensor summands from the reference equations. That is,
 
 $$
 \boldsymbol{I} = \sum_{i=1}^{n} \boldsymbol{s}_i
@@ -295,7 +333,7 @@ w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{I}_3 \ri
 \end{align}
 $$
 
-Note that the products of inertia formulas clearly employ the positive sign convention. Consequently, we negate those values in the inertia tensor. Finally,
+Therefore
 
 $$
 \boxed{
@@ -342,11 +380,11 @@ $$
 }
 $$
 
-If we construe (as `R` does) squaring and taking square roots or vectors element-wise, then
+If we construe (as `R` does) squaring and taking square roots of vectors element-wise, then
 
 $$
 \boxed{
-\boldsymbol{\sigma_c} = \frac{1}{W} \sigmacm{\boldsymbol{\sigma_c}}{\boldsymbol{c}}
+\boldsymbol{\sigma_c} = \frac{1}{w} \sigmacm{\boldsymbol{\sigma_c}}{\boldsymbol{c}}
 }
 $$
 
@@ -382,8 +420,8 @@ $$
 \boxed{
 \begin{align}
 \boldsymbol{d}_i & = (\di{x} \quad \di{y} \quad \di{z})^T \\
-{\boldsymbol{\sigma}_{c_m}}_i & = (\sigma_{x_i} \quad \sigma_{y_i} \quad \sigma_{z_i})^T \\
-\boldsymbol{P}_i & = \boldsymbol{d}_i {\boldsymbol{\sigma}_{c_m}}_i^T \\
+{\boldsymbol{\sigma_c}}_i & = ({\sigma_x}_i \quad {\sigma_y}_i \quad {\sigma_z}_i)^T \\
+\boldsymbol{P}_i & = \boldsymbol{d}_i {\boldsymbol{\sigma_c}}_i^T \\
 \boldsymbol{Q}_i & = \boldsymbol{d}_i {\boldsymbol{d}_i}^T
 \end{align}
 }
