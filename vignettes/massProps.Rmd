@@ -161,8 +161,10 @@ rollup_mass_props_and_unc(sawe_tree, sawe_input)
 ### Mass
 
 $$
+\boxed{
 \newcommand{\sumwi}{\sum_{i=1}^{n}w_i}
 W = \sumwi
+}
 $$
 
 ### Center of Mass
@@ -174,6 +176,27 @@ $$
 \bar{y} & = \sumwivi{y} \bigg/ \sumwi \\
 \bar{z} & = \sumwivi{z} \bigg/ \sumwi \\
 \end{align}
+$$
+
+#### Vector Formulation
+
+Let
+
+$$
+\boxed{
+\begin{align}
+\boldsymbol{c}_i & = (x_i \quad y_i \quad z_i)^T \\
+\boldsymbol{\bar{c}}& = (\bar{x} \quad \bar{y} \quad \bar{z})^T
+\end{align}
+}
+$$
+
+Then
+
+$$
+\boxed{
+\boldsymbol{\bar{c}} = \frac{1}{W} \sumwivi{\boldsymbol{c}}
+}
 $$
 
 ### Inertia Tensor
@@ -217,10 +240,12 @@ $$
 Let
 
 $$
+\boxed{
 \begin{align}
 \boldsymbol{d}_i & = (\di{x} \quad \di{y} \quad \di{z})^T \\
 \boldsymbol{Q}_i & = \boldsymbol{d}_i {\boldsymbol{d}_i}^T
 \end{align}
+}
 $$ Then
 
 $$
@@ -232,7 +257,15 @@ $$
 \di{z}\di{x} & \di{z}\di{y} & \di{z}^2     \\
 \end{bmatrix}
 \end{align}
-$$ Let $\boldsymbol{s}_i$ be the matrix of inertia tensor summands in the standard formulas for a given subcomponent $i$ above. Note that the products of inertia formulas clearly employ the positive sign convention. Consequently, we negate those values in the inertia tensor. $$
+$$
+
+Let $\boldsymbol{s}_i$ be the matrix of inertia tensor summands in the standard formulas for a given subcomponent $i$ above. That is,
+
+$$
+\boldsymbol{I} = \sum_{i=1}^{n} \boldsymbol{s}_i
+$$
+
+where $$
 \begin{align}
 \boldsymbol{s}_i & = \boldsymbol{I}_i \\
 & -
@@ -258,8 +291,18 @@ w_i \begin{bmatrix}
 & = 
 \boldsymbol{I}_i
 - 
-w_i \left[ \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{I}_3 \right]
+w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{I}_3 \right)
 \end{align}
+$$
+
+Note that the products of inertia formulas clearly employ the positive sign convention. Consequently, we negate those values in the inertia tensor. Finally,
+
+$$
+\boxed{
+\boldsymbol{I} = \sum_{i=1}^{n} \{ \boldsymbol{I}_i
+- 
+w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{I}_3 \right) \}
+}
 $$
 
 ## Mass Property Uncertainties
@@ -267,20 +310,44 @@ $$
 ### Mass Uncertainty
 
 $$
+\boxed{
 \sigma_w = \sqrt{ \sum_{i=1}^n {{\sigma_w}_i}^2 }
+}
 $$
 
 ### Center of Mass Uncertainty
 
 $$
-\newcommand{\sigmacm}[1]{
-\sqrt{ \sum_{i=1}^n \big\{ (w_i {\sigma_{#1}}_i)^2 + [{\sigma_w}_i \di{#1}]^2 \big\}\bigg/ \sum_{i=1}^n w_i}
+\newcommand{\sumwi}{\sum_{i=1}^n w_i}
+\newcommand{\sigmacm}[2]{
+\sqrt{ \sum_{i=1}^n \big\{ (w_i {{#1}}_i)^2 + [{\sigma_w}_i \di{#2}]^2 \big\}}
 }
 \begin{align}
-\sigma_x & = \sigmacm{x} \\
-\sigma_y & = \sigmacm{y} \\
-\sigma_z & = \sigmacm{z} \\
+\sigma_x & = \sigmacm{\sigma_x}{x} \bigg/ \sumwi \\
+\sigma_y & = \sigmacm{\sigma_y}{y} \bigg/ \sumwi \\
+\sigma_z & = \sigmacm{\sigma_z}{z} \bigg/ \sumwi \\
 \end{align}
+$$
+
+### Vector Formulation
+
+Let
+
+$$
+\boxed{
+\begin{align}
+\boldsymbol{\sigma_c} & = (\sigma_x \quad \sigma_y \quad \sigma_z)^T \\
+{\boldsymbol{\sigma_c}}_i & = ({\sigma_x}_i \quad {\sigma_y}_i \quad {\sigma_z}_i)^T
+\end{align}
+}
+$$
+
+If we construe (as `R` does) squaring and taking square roots or vectors element-wise, then
+
+$$
+\boxed{
+\boldsymbol{\sigma_c} = \frac{1}{W} \sigmacm{\boldsymbol{\sigma_c}}{\boldsymbol{c}}
+}
 $$
 
 ### Inertia Tensor Uncertainty
@@ -312,12 +379,14 @@ $$
 Let
 
 $$
+\boxed{
 \begin{align}
 \boldsymbol{d}_i & = (\di{x} \quad \di{y} \quad \di{z})^T \\
 {\boldsymbol{\sigma}_{c_m}}_i & = (\sigma_{x_i} \quad \sigma_{y_i} \quad \sigma_{z_i})^T \\
 \boldsymbol{P}_i & = \boldsymbol{d}_i {\boldsymbol{\sigma}_{c_m}}_i^T \\
 \boldsymbol{Q}_i & = \boldsymbol{d}_i {\boldsymbol{d}_i}^T
 \end{align}
+}
 $$
 
 Then
@@ -341,7 +410,13 @@ $$
 \end{align}
 $$
 
-Let $\boldsymbol{s}_i^2$ be the matrix of inertia tensor uncertainty summands in the standard formulas for a given subcomponent $i$ above. Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $P_i$. If we interpret squaring a matrix as the Hadamard (element-wise) product with itself, then $$
+Let $\boldsymbol{s}_i^2$ be the matrix of inertia tensor uncertainty summands in the standard formulas for a given subcomponent $i$ above. That is,
+
+$$
+\boldsymbol{\sigma_I}^2 = \sum_{i=1}^{} \boldsymbol{s}_i^2
+$$
+
+Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $P_i$. If we interpret squaring a matrix as the Hadamard (element-wise) product with itself, then $$
 \begin{align}
 \boldsymbol{s}_i^2 & = {\boldsymbol{\sigma_I}}_i^2 \\
 & + 
@@ -403,6 +478,39 @@ Let $\boldsymbol{s}_i^2$ be the matrix of inertia tensor uncertainty summands in
 \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{I}_3
 \right)^2
 \end{align}
+$$
+
+Finally,
+
+$$
+\boxed{
+\boldsymbol{\sigma_I} = \left(
+\sum_{i=1}^{n} {\left\{
+\begin{align}
+{\boldsymbol{\sigma_I}}_i^2 \\
+& + w_i^2 \left(
+\boldsymbol{P}_i -
+\begin{bmatrix}
+{p_X}_i + 2 {p_Y}_i & 0 & 0 \\
+0 & {p_Y}_i + 2 {p_X}_i & 0 \\
+0 & 0 & {p_Z}_i + 2  {p_X}_i \\
+\end{bmatrix}
+\right) ^2 \\
+& + w_i^2 \left(
+\boldsymbol{P}_i^T -
+\begin{bmatrix}
+ {p_X}_i + 2{p_Z}_i & 0 & 0 \\
+0 & {p_Y}_i + 2 {p_Z}_i & 0 \\
+0 & 0 & {p_Z}_i + 2 {p_Y}_i \\
+\end{bmatrix}
+\right) ^2 \\
+& + \sigma_{w_i}^2 \left(
+\boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{I}_3
+\right)^2
+\end{align}
+\right\}}
+\right)^\frac{1}{2}
+}
 $$
 
 # References
