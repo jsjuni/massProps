@@ -252,7 +252,9 @@ combine_mass_props_and_unc <- function(vl) {
       Q <- outer(d, d)
       diag_3 <- sum(diag(Q)) * diag(3)
 
-      v$sigma_inertia^2 + (v$mass * (P - diag_1))^2 + (v$mass * (t(P) - diag_2))^2 + (v$sigma_mass * (Q - diag_3))^2
+      v$sigma_inertia^2 +
+        v$mass^2 * ((P - diag_1)^2 + (t(P) - diag_2)^2) +
+        (v$sigma_mass * (Q - diag_3))^2
     },
     vl
   )))
