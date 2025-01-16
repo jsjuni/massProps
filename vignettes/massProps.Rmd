@@ -216,6 +216,8 @@ In this section, we state the reference equations [@zimmerman:05:sawe] and show,
 
 The reference uses the word *weight* and the symbol $w$ in equations. We interpret weight as mass. The reference refers to center of mass by its $x$, $y$, and $z$ components. Symbols for moments ($I_{XX}$) and products ($I_{XY}$) of inertia are conventional. Variables with subscripts designate properties of parts; those without designate properties of aggregates. The letter $\sigma$ denotes uncertainty. $\sigma_w$, for example, is the mass uncertainty
 
+## Mass Properties
+
 ### Mass
 
 The mass equation is suitable as is.
@@ -589,17 +591,17 @@ $$
 & + w_i^2 \left(
 \boldsymbol{P}_i -
 \begin{bmatrix}
-{p_X}_i + 2 {p_Y}_i & 0 & 0 \\
-0 & {p_Y}_i + 2 {p_X}_i & 0 \\
-0 & 0 & {p_Z}_i + 2  {p_X}_i \\
+{p_X}_i - 2 {p_Y}_i & 0 & 0 \\
+0 & {p_Y}_i - 2 {p_X}_i & 0 \\
+0 & 0 & {p_Z}_i - 2  {p_X}_i \\
 \end{bmatrix}
 \right) ^2 \\
 & + w_i^2 \left(
 \boldsymbol{P}_i^T -
 \begin{bmatrix}
- {p_X}_i + 2{p_Z}_i & 0 & 0 \\
-0 & {p_Y}_i + 2 {p_Z}_i & 0 \\
-0 & 0 & {p_Z}_i + 2 {p_Y}_i \\
+ {p_X}_i - 2{p_Z}_i & 0 & 0 \\
+0 & {p_Y}_i - 2 {p_Z}_i & 0 \\
+0 & 0 & {p_Z}_i - 2 {p_Y}_i \\
 \end{bmatrix}
 \right) ^2 \\
 & + \sigma_{w_i}^2 \left(
