@@ -15,29 +15,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(rollupTree)
-library(massProps)
-```
-
-
-\newcommand{\sumwi}{\sum_{i=1}^{n}w_i}
-\newcommand{\sumwivi}[1]{\sum_{i=1}^{n}{w_i}{{#1}_i}}
-\newcommand{\moia}[3]{
-\sum_{i=1}^{n} \left[ {I_{#1}}_i
-  + w_i \left( {#2}_i^2 + {#3}_i^2 \right)
-  - w_i \left( \bar{#2}^2 + \bar{#3}^2 \right)
-\right]
-}
-\newcommand{\moib}[3]{
-\sum_{i=1}^{n} \left\{ {I_{#1}}_i
-  + w_i \left[ \left( {#2}_i - \bar{#2} \right)^2 + \left( {#3}_i - \bar{#3} \right)^2 \right]
-\right\}
-}
-\newcommand{\di}[1]{({#1}_i - \bar{#1})}
-\newcommand{\poia}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i {{#2}_i}{{#3}_i} -w_i (\bar{#2}\bar{#3})\right]}
-\newcommand{\poib}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i \di{#2}\di{#3}\right]}
-
 # Overview
 
 The `massProps` package extends `rollupTree` with functions to recursively calculate mass properties (and optionally, their uncertainties). Formulas implemented are described in a technical paper published by the Society of Allied Weight Engineers.[@zimmerman:05:sawe]
@@ -112,17 +89,24 @@ It is the caller's responsibility to ensure that all values are expressed in app
 
 #### Tree
 
-The tree is an `igraph::graph` with vertices named by identifiers in the mass properties table. The graph must satisfy certain well-formedness properties:
+The tree is an `igraph::graph` with vertices named by identifiers in the mass properties table. 
+It can be of arbitrary depth and shape as long as it satisfies certain well-formedness properties:
 
--   it is connected an acyclic (as an undirected graph), i.e., it is a tree
+-   it is connected and acyclic (as an undirected graph), i.e., it is a tree
 
 -   it is directed, with edge direction going from child to parent
 
--   it contains neither loops (self-edges) or multiple edges
+-   it contains neither loops (self-edges) nor multiple edges
 
 -   it contains a single root vertex (i.e., one whose out degree is zero)
 
 ## Invocation
+
+```{r setup}
+library(rollupTree)
+library(massProps)
+suppressPackageStartupMessages({library(igraph)})
+```
 
 Suppose we have the following mass properties table:
 
@@ -133,14 +117,16 @@ test_table
 Suppose we also have this tree:
 
 ```{r}
-suppressPackageStartupMessages({library(igraph)})
 test_tree
+```
+
+```{r echo = FALSE}
+plot(test_tree,layout=layout_as_tree(test_tree, 2, mode="in"), vertex.shape = 'none', edge.arrow.mode = 0)
 ```
 
 Then we can compute mass properties for non-leaf elements by calling `rollup_mass_props()`:
 
 ```{r}
-library(massProps)
 rollup_mass_props(test_tree, test_table)
 ```
 
@@ -184,17 +170,47 @@ Strategies for achieving the objective include
 
 -   re-casting those lengthy reference equations into concise vector or matrix forms to reduce the error surface for source code and exploit the capabilities of `R`, which treats vectors and matrices as first-class objects,
 
--   delegating the orchestration to the `rollupTree` package, which, among other things, verifies that the input tree is well-formed,
+-   delegating orchestration to the `rollupTree` package, which, among other things, verifies that the input tree is well-formed and ensures proper ordering of computations,
 
 -   ensuring that all asserted leaf mass properties and uncertainties correspond to physically-realizable objects,
 
--   writing the code in pure functional style, and
+-   coding in pure functional style, (i.e., avoiding mutable variables, implying iteration with `Map()` and `Reduce()`), and
 
 -   covering the entire code base with unit tests.
 
 The author has intentionally made no effort to optimize for performance. That said, in its current form it handles computations on the scale encountered in the design of interplanetary spacecraft in a few seconds.
 
 # Theory
+
+\newcommand{\sumwi}{\sum_{i=1}^{n}w_i}
+
+\newcommand{\sumwivi}[1]{\sum_{i=1}^{n}{w_i}{{#1}_i}}
+
+\newcommand{\moia}[3]{
+  \sum_{i=1}^{n} \left[ {I_{#1}}_i
+    + w_i \left( {#2}_i^2 + {#3}_i^2 \right)
+  - w_i \left( \bar{#2}^2 + \bar{#3}^2 \right)
+  \right]
+}
+
+\newcommand{\moib}[3]{
+\sum_{i=1}^{n} \left\{ {I_{#1}}_i
+  + w_i \left[ \left( {#2}_i - \bar{#2} \right)^2 + \left( {#3}_i - \bar{#3} \right)^2 \right]
+  \right\}
+}
+
+\newcommand{\di}[1]{({#1}_i - \bar{#1})}
+\newcommand{\poia}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i {{#2}_i}{{#3}_i} -w_i (\bar{#2}\bar{#3})\right]}
+\newcommand{\poib}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i \di{#2}\di{#3}\right]}
+\newcommand{\sigmacm}[2]{
+  \sqrt{ \sum_{i=1}^n \big\{ (w_i {{#1}}_i)^2 + [{\sigma_w}_i \di{#2}]^2 \big\}}
+}
+\newcommand{\sigmamoi}[3]{\sqrt{ \sum_{i=1}^n \big\{
+  \sigma_{{I_{#1}}_i}^2 + \big[ 2 w_i \di{#2} \sigma_{{#2}_i} \big]^2 + \big[ 2 w_i \di{#3} \sigma_{{#3}_i} \big]^2 + \big[ \big(\di{#2}^2 + \di{#3}^2 \big)\sigma_{w_i}\big]^2 \big\} }
+}
+\newcommand{\sigmapoi}[3]{\sqrt{ \sum_{i=1}^n \big\{
+  \sigma_{{I_{#1}}_i}^2 + \big[ \di{#2} w_i \sigma_{{#3}_i}\big]^2 + \big[  \di{#2}\di{#3}\sigma_{w_i} \big]^2 + \big[ \di{#3}  w_i \sigma_{{#2}_i} \big]^2 \big\} }
+}
 
 In this section, we state the reference equations [@zimmerman:05:sawe] and show, where applicable, how those equations can be rewritten in more concise form. The form of the equations actually implemented is displayed within a box, e.g. $\boxed{F = ma}$.
 
@@ -215,6 +231,11 @@ The corresponding `R` code is
 ``` r
   r$mass <- Reduce(`+`, Map(f = function(v) v$mass, vl))
 ```
+
+In this and the following code snippets, the variable `vl` is a list of input mass property sets, the variable `v`
+is a formal parameter of an anonymous function applied to each member of `vl`, and `r` is the resulting mass
+properties. The line above is an `R` functional programming idiom for "set the mass value of the result to the sum
+of the mass values of the inputs".
 
 ### Center of Mass
 
@@ -343,17 +364,17 @@ w_i \begin{bmatrix}
 & = 
 \boldsymbol{I}_i
 - 
-w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{I}_3 \right)
+w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{1}_3 \right)
 \end{align}
 $$
 
-Therefore
+where $\boldsymbol{1}_3$ is the $3x3$ identity matrix. Therefore
 
 $$
 \boxed{
 \boldsymbol{I} = \sum_{i=1}^{n} \left\{ \boldsymbol{I}_i
 - 
-w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{I}_3 \right) \right\}
+w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{1}_3 \right) \right\}
 }
 $$
 
@@ -391,10 +412,6 @@ The corresponding `R` code is
 ### Center of Mass Uncertainty
 
 $$
-\newcommand{\sum_{i=1}^{n}w_i}{\sum_{i=1}^n w_i}
-\newcommand{\sigmacm}[2]{
-\sqrt{ \sum_{i=1}^n \big\{ (w_i {{#1}}_i)^2 + [{\sigma_w}_i \di{#2}]^2 \big\}}
-}
 \begin{align}
 \sigma_x & = \sigmacm{\sigma_x}{x} \bigg/ \sum_{i=1}^{n}w_i\\
 \sigma_y & = \sigmacm{\sigma_y}{y} \bigg/ \sum_{i=1}^{n}w_i\\
@@ -426,8 +443,8 @@ The corresponding `R` code is
 ``` r
   r$sigma_center_mass = sqrt(Reduce(`+`, Map(
     f = function(v) {
-      (v$mass * v$sigma_center_mass) ^ 2 +
-        (v$sigma_mass * (v$center_mass - r$center_mass)) ^ 2
+      (v$mass * v$sigma_center_mass)^2 +
+        (v$sigma_mass * (v$center_mass - r$center_mass))^2
     },
     vl
   ))) / r$mass
@@ -438,7 +455,6 @@ The corresponding `R` code is
 #### Moments of Inertia Uncertainties
 
 $$
-\newcommand{\sigmamoi}[3]{\sqrt{ \sum_{i=1}^n \big\{  \sigma_{{I_{#1}}_i}^2 + \big[ 2 w_i \di{#2} \sigma_{{#2}_i} \big]^2 + \big[ 2 w_i \di{#3} \sigma_{{#3}_i} \big]^2 + \big[ \big(\di{#2}^2 + \di{#3}^2 \big)\sigma_{w_i}\big]^2 \big\} }}
 \begin{align}
 \sigma_{I_{XX}} & = \sigmamoi{XX}{y}{z} \\
 \sigma_{I_{YY}} & = \sigmamoi{YY}{x}{z} \\
@@ -449,7 +465,6 @@ $$
 #### Products of Inertia Uncertainties
 
 $$
-\newcommand{\sigmapoi}[3]{\sqrt{ \sum_{i=1}^n \big\{  \sigma_{{I_{#1}}_i}^2 + \big[ \di{#2} w_i \sigma_{{#3}_i}\big]^2 + \big[  \di{#2}\di{#3}\sigma_{w_i} \big]^2 + \big[ \di{#3}  w_i \sigma_{{#2}_i} \big]^2 \big\} }}
 \begin{align}
 \sigma_{I_{XY}} & = \sigmapoi{XY}{x}{y} \\
 \sigma_{I_{XZ}} & = \sigmapoi{XZ}{x}{z} \\

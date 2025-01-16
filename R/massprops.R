@@ -231,8 +231,8 @@ combine_mass_props_and_unc <- function(vl) {
 
   r$sigma_center_mass = sqrt(Reduce(`+`, Map(
     f = function(v) {
-      (v$mass * v$sigma_center_mass) ^ 2 +
-        (v$sigma_mass * (v$center_mass - r$center_mass)) ^ 2
+      (v$mass * v$sigma_center_mass)^2 +
+        (v$sigma_mass * (v$center_mass - r$center_mass))^2
     },
     vl
   ))) / r$mass
