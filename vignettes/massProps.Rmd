@@ -195,7 +195,7 @@ $$
 
 The corresponding `R` code is
 
-``` R
+``` r
 r$mass <- Reduce(`+`, Map(f = function(v) v$mass, vl))
 ```
 
@@ -231,7 +231,7 @@ $$
 
 The corresponding `R` code is
 
-``` R
+``` r
 r$center_mass <- Reduce(`+`, Map(f = function(v) v$mass * v$center_mass, vl)) / r$mass
 ```
 
@@ -349,37 +349,42 @@ Therefore
 
 $$
 \boxed{
-\boldsymbol{I} = \sum_{i=1}^{n} \{ \boldsymbol{I}_i
+\boldsymbol{I} = \sum_{i=1}^{n} \left\{ \boldsymbol{I}_i
 - 
-w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{I}_3 \right) \}
+w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{I}_3 \right) \right\}
 }
 $$
 
 The corresponding `R` code is
 
 ``` {.R .R}
-r$inertia <- Reduce(
-  `+`,
-  Map(
-    f  = function(v) {
-      d <- r$center_mass - v$center_mass
-      d_ss2 <- outer(d, d) - sum(d^2) * diag(3)
-      if (v$point) -v$mass * d_ss2 else v$inertia - v$mass * d_ss2
-    },
-    vl
-  )
-)
+r$inertia <- Reduce(`+`, Map(
+  f  = function(v) {
+    d <- r$center_mass - v$center_mass
+    d_ss2 <- outer(d, d) - sum(d^2) * diag(3)
+    if (v$point) -v$mass * d_ss2 else v$inertia - v$mass * d_ss2
+  },
+  vl
+))
 ```
 
 ## Mass Property Uncertainties
 
 ### Mass Uncertainty
 
+The mass uncertainty equation is suitable as is.
+
 $$
 \boxed{
 \sigma_w = \sqrt{ \sum_{i=1}^n {{\sigma_w}_i}^2 }
 }
 $$
+
+The corresponding `R` code is
+
+``` R
+r$sigma_mass = sqrt(Reduce(`+`, Map(f = function(v) v$sigma_mass^2, vl)))
+```
 
 ### Center of Mass Uncertainty
 
@@ -395,9 +400,7 @@ $$
 \end{align}
 $$
 
-### Vector Formulation
-
-Let
+As before, we create a 3-vector for center of mass uncertainties. Let
 
 $$
 \boxed{
@@ -415,6 +418,18 @@ $$
 \boldsymbol{\sigma_c} = \frac{1}{w} \sigmacm{\boldsymbol{\sigma_c}}{\boldsymbol{c}}
 }
 $$
+
+The corresponding `R` code is
+
+``` R
+r$sigma_center_mass = sqrt(Reduce(`+`, Map(
+  f = function(v) {
+    (v$mass * v$sigma_center_mass) ^ 2 +
+      (v$sigma_mass * (v$center_mass - r$center_mass)) ^ 2
+  },
+  vl
+))) / r$mass
+```
 
 ### Inertia Tensor Uncertainty
 
@@ -578,5 +593,28 @@ $$
 \right)^\frac{1}{2}
 }
 $$
+
+The corresponding `R` code is
+
+``` R
+r$sigma_inertia = sqrt(Reduce(`+`, Map(
+  f = function(v) {
+
+    d <- r$center_mass - v$center_mass
+
+    P <- outer(d, v$sigma_center_mass)
+    p <- diag(P)
+    diag_1 <- diag(c(p['x'] + 2 * p['y'], p['y'] + 2 * p['x'], p['z'] + 2 * p['x']))
+    diag_2 <- diag(c(p['x'] + 2 * p['z'], p['y'] + 2 * p['z'], p['z'] + 2 * p['y']))
+
+    Q <- outer(d, d)
+    diag_3 <- sum(diag(Q)) * diag(3)
+
+    v$sigma_inertia^2 + (v$mass * (P - diag_1))^2 + (v$mass * (t(P) - diag_2))^2 +
+      (v$sigma_mass * (Q - diag_3))^2
+  },
+  vl
+)))
+```
 
 # References

@@ -191,17 +191,14 @@ combine_mass_props <- function(vl) {
   # parallel axis theorem
   # https://en.wikipedia.org/wiki/Parallel_axis_theorem#Moment_of_inertia_matrix
   # d_ss2 is [d]^2 computed using the identities given
-  r$inertia <- Reduce(
-    `+`,
-    Map(
-      f  = function(v) {
-        d <- r$center_mass - v$center_mass
-        d_ss2 <- outer(d, d) - sum(d^2) * diag(3)
-        if (v$point) -v$mass * d_ss2 else v$inertia - v$mass * d_ss2
-      },
-      vl
-    )
-  )
+  r$inertia <- Reduce(`+`, Map(
+    f  = function(v) {
+      d <- r$center_mass - v$center_mass
+      d_ss2 <- outer(d, d) - sum(d^2) * diag(3)
+      if (v$point) -v$mass * d_ss2 else v$inertia - v$mass * d_ss2
+    },
+    vl
+  ))
 
   # aggregate is a point mass iff all parts are point masses at the same center
 
