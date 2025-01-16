@@ -14,7 +14,7 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports:
-  rollupTree
+    rollupTree (>= 0.1.0)
 Depends: 
     R (>= 3.5)
 LazyData: true
@@ -26,3 +26,5 @@ Suggests:
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://jsjuni.github.io/massProps/
+Remotes:  
+    jsjuni/rollupTree

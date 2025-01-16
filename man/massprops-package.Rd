@@ -8,6 +8,13 @@
 \description{
 `massProps` uses the `rollupTree` package to calculate mass properties and uncertainties for tree structures (e.g., assembly bill of materials).
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://jsjuni.github.io/massProps/}
+}
+
+}
 \author{
 \strong{Maintainer}: James Steven Jenkins \email{sjenkins@studioj.us} (\href{https://orcid.org/0000-0002-0725-0884}{ORCID}) [copyright holder]
 
