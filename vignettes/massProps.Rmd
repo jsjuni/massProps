@@ -639,4 +639,114 @@ The corresponding `R` code is
 
 # Testing and Validation
 
+In this section we will calculate the answers for the SAWE step by step and compare them with the package results. The inputs are:
+
+```{r echo = FALSE}
+sawe_input <- sawe_table[which(sawe_table$id != "Combined"), ]
+sawe_input
+```
+Our computed result is
+```{r}
+sawe_result <- rollup_mass_props_and_unc(sawe_tree, sawe_table)[3, ]
+sawe_result
+```
+
+## Mass
+
+```{r echo = FALSE}
+agree <- function(l) if (l) "agrees" else "does not agree"
+```
+
+```{r}
+mass <- sum(sawe_input$mass)
+```
+The independently-calculated mass is
+```{r echo = FALSE}
+mass
+```
+This `r agree(isTRUE(all.equal(mass, sawe_result$mass)))` with the computed result.
+
+## Center of Mass
+
+```{r}
+C <- apply(sawe_input$mass /mass * sawe_input[, c("Cx", "Cy", "Cz")], 2, sum)
+```
+The independently-calculated center of mass is
+```{r echo = FALSE}
+C
+```
+This `r agree(isTRUE(all.equal(unname(C), c(sawe_result$Cx, sawe_result$Cy, sawe_result$Cz))))` with the computed result.
+
+## Moments of Inertia
+
+```{r}
+moi <- function(I, v1, v2, m, c1, c2) {
+  I + m * ((v1^2 + v2^2) - (c1^2 + c2^2))
+}
+MOI <- c(
+  Ixx = sum(moi(sawe_input$Ixx, sawe_input$Cy, sawe_input$Cz, sawe_input$mass, C["Cy"], C["Cz"])),
+  Iyy = sum(moi(sawe_input$Iyy, sawe_input$Cx, sawe_input$Cz, sawe_input$mass, C["Cx"], C["Cz"])),
+  Izz = sum(moi(sawe_input$Izz, sawe_input$Cx, sawe_input$Cy, sawe_input$mass, C["Cx"], C["Cy"]))
+)
+```
+
+The independently-calculated moments of inertia are
+```{r echo = FALSE}
+MOI
+```
+This `r agree(isTRUE(all.equal(MOI, c(Ixx = sawe_result$Ixx, Iyy = sawe_result$Iyy, Izz = sawe_result$Izz))))` with the computed result.
+
+## Products of Inertia
+
+```{r}
+poi <- function(I, v1, v2, m, c1, c2) {
+  I + m * (v1 * v2 - c1 * c2)
+}
+POI <- c(
+  Ixy = sum(poi(sawe_input$Ixy, sawe_input$Cx, sawe_input$Cy, sawe_input$mass, C["Cx"], C["Cy"])),
+  Ixz = sum(poi(sawe_input$Ixz, sawe_input$Cx, sawe_input$Cz, sawe_input$mass, C["Cx"], C["Cz"])),
+  Iyz = sum(poi(sawe_input$Iyz, sawe_input$Cy, sawe_input$Cz, sawe_input$mass, C["Cy"], C["Cz"]))
+)
+```
+
+The independently-calculated products of inertia are
+```{r echo = FALSE}
+POI
+```
+This `r agree(isTRUE(all.equal(POI, c(Ixy = sawe_result$Ixy, Ixz = sawe_result$Ixz, Iyz = sawe_result$Iyz))))` with the computed result.
+
+## Mass Uncertainty
+
+```{r}
+sigma_mass <- sqrt(sum(sawe_input$`σ_mass`^2))
+```
+The independently-calculated mass uncertainty is
+```{r echo = FALSE}
+sigma_mass
+```
+
+This `r agree(isTRUE(all.equal(sigma_mass, sawe_result$σ_mass)))` with the computed result.
+
+## Center of Mass Uncertainty
+
+```{r}
+sigma_cm <- function(m, sigma_v, sigma_m, v, c) {
+  (m * sigma_v)^2 + (sigma_m * (v - c))^2
+}
+sigma_C <- c(
+  sigma_Cx = sqrt(sum(sigma_cm(sawe_input$mass, sawe_input$`σ_Cx`, sawe_input$`σ_mass`, sawe_input$Cx, C["Cx"]))) / mass,
+  sigma_Cy = sqrt(sum(sigma_cm(sawe_input$mass, sawe_input$`σ_Cy`, sawe_input$`σ_mass`, sawe_input$Cy, C["Cy"]))) / mass,
+  sigma_Cz = sqrt(sum(sigma_cm(sawe_input$mass, sawe_input$`σ_Cz`, sawe_input$`σ_mass`, sawe_input$Cz, C["Cz"]))) / mass
+)
+```
+The independently-calculated center of mass uncertainty is
+```{r echo = FALSE}
+sigma_C
+```
+This `r agree(isTRUE(all.equal(sigma_C, c(sigma_Cx = sawe_result$σ_Cx, sigma_Cy = sawe_result$σ_Cy, sigma_Cz = sawe_result$σ_Cz))))` with the computed result.
+
+## Moments of Inertia Uncertainty
+
+## Products of Inertia Uncertainty
+
 # References
