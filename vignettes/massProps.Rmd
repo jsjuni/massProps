@@ -739,7 +739,7 @@ sigma_C <- c(
   sigma_Cz = sqrt(sum(sigma_cm(sawe_input$mass, sawe_input$`σ_Cz`, sawe_input$`σ_mass`, sawe_input$Cz, C["Cz"]))) / mass
 )
 ```
-The independently-calculated center of mass uncertainty is
+The independently-calculated center of mass uncertainties are
 ```{r echo = FALSE}
 sigma_C
 ```
@@ -747,6 +747,50 @@ This `r agree(isTRUE(all.equal(sigma_C, c(sigma_Cx = sawe_result$σ_Cx, sigma_Cy
 
 ## Moments of Inertia Uncertainty
 
+```{r}
+sigma_moi <- function(sigma_I, mass, sigma_mass, v1, v2, c1, c2, sigma_v1, sigma_v2) {
+  sigma_I^2 +
+    (2 * mass * (v1 - c1) * sigma_v1)^2 +
+    (2 * mass * (v2 - c2) * sigma_v2)^2 +
+    (((v1 - c1)^2 + (v2 - c2)^2) * sigma_mass)^2
+}
+sigma_MOI <- c(
+  sigma_Ixx = sqrt(sum(sigma_moi(sawe_input$σ_Ixx, sawe_input$mass, sawe_input$σ_mass, sawe_input$Cy,
+                                  sawe_input$Cz, C["Cy"], C["Cz"], sawe_input$σ_Cy, sawe_input$σ_Cz))),
+  sigma_Iyy = sqrt(sum(sigma_moi(sawe_input$σ_Iyy, sawe_input$mass, sawe_input$σ_mass, sawe_input$Cx,
+                                  sawe_input$Cz, C["Cx"], C["Cz"], sawe_input$σ_Cx, sawe_input$σ_Cz))),
+  sigma_Izz = sqrt(sum(sigma_moi(sawe_input$σ_Izz, sawe_input$mass, sawe_input$σ_mass, sawe_input$Cx,
+                                  sawe_input$Cy, C["Cx"], C["Cy"], sawe_input$σ_Cx, sawe_input$σ_Cy)))
+)
+```
+The independently-calculated moments of inertia uncertainties are
+```{r echo = FALSE}
+sigma_MOI
+```
+This `r agree(isTRUE(all.equal(sigma_MOI, c(sigma_Ixx = sawe_result$σ_Ixx, sigma_Iyy = sawe_result$σ_Iyy, sigma_Izz = sawe_result$σ_Izz))))` with the computed result.
+
 ## Products of Inertia Uncertainty
+
+```{r}
+sigma_poi <- function(sigma_I, mass, sigma_mass, v1, v2, c1, c2, sigma_v1, sigma_v2) {
+  sigma_I^2 +
+    ((v1 - c1) * mass * sigma_v2)^2 +
+    ((v1 - c1) * (v2 - c2) * sigma_mass)^2 +
+    ((v2 - c2) * mass * sigma_v1)^2
+}
+sigma_POI <- c(
+  sigma_Ixy = sqrt(sum(sigma_poi(sawe_input$σ_Ixy, sawe_input$mass, sawe_input$σ_mass, sawe_input$Cx,
+                                  sawe_input$Cy, C["Cx"], C["Cy"], sawe_input$σ_Cx, sawe_input$σ_Cy))),
+  sigma_Ixz = sqrt(sum(sigma_poi(sawe_input$σ_Ixz, sawe_input$mass, sawe_input$σ_mass, sawe_input$Cx,
+                                  sawe_input$Cz, C["Cx"], C["Cz"], sawe_input$σ_Cx, sawe_input$σ_Cz))),
+  sigma_Iyz = sqrt(sum(sigma_poi(sawe_input$σ_Iyz, sawe_input$mass, sawe_input$σ_mass, sawe_input$Cy,
+                                  sawe_input$Cz, C["Cy"], C["Cz"], sawe_input$σ_Cy, sawe_input$σ_Cz)))
+)
+```
+The independently-calculated products of inertia uncertainties are
+```{r echo = FALSE}
+sigma_POI
+```
+This `r agree(isTRUE(all.equal(sigma_POI, c(sigma_Ixy = sawe_result$σ_Ixy, sigma_Ixz = sawe_result$σ_Ixz, sigma_Iyz = sawe_result$σ_Iyz))))` with the computed result.
 
 # References
