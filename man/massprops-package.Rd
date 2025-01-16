@@ -9,7 +9,7 @@
 `massProps` uses the `rollupTree` package to calculate mass properties and uncertainties for tree structures (e.g., assembly bill of materials).
 }
 \author{
-\strong{Maintainer}: Steven Jenkins \email{sjenkins@studioj.us} (\href{https://orcid.org/0000-0002-0725-0884}{ORCID})
+\strong{Maintainer}: James Steven Jenkins \email{sjenkins@studioj.us} (\href{https://orcid.org/0000-0002-0725-0884}{ORCID}) [copyright holder]
 
 }
 \keyword{internal}
