@@ -20,6 +20,24 @@ library(rollupTree)
 library(massProps)
 ```
 
+
+\newcommand{\sumwi}{\sum_{i=1}^{n}w_i}
+\newcommand{\sumwivi}[1]{\sum_{i=1}^{n}{w_i}{{#1}_i}}
+\newcommand{\moia}[3]{
+\sum_{i=1}^{n} \left[ {I_{#1}}_i
+  + w_i \left( {#2}_i^2 + {#3}_i^2 \right)
+  - w_i \left( \bar{#2}^2 + \bar{#3}^2 \right)
+\right]
+}
+\newcommand{\moib}[3]{
+\sum_{i=1}^{n} \left\{ {I_{#1}}_i
+  + w_i \left[ \left( {#2}_i - \bar{#2} \right)^2 + \left( {#3}_i - \bar{#3} \right)^2 \right]
+\right\}
+}
+\newcommand{\di}[1]{({#1}_i - \bar{#1})}
+\newcommand{\poia}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i {{#2}_i}{{#3}_i} -w_i (\bar{#2}\bar{#3})\right]}
+\newcommand{\poib}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i \di{#2}\di{#3}\right]}
+
 # Overview
 
 The `massProps` package extends `rollupTree` with functions to recursively calculate mass properties (and optionally, their uncertainties). Formulas implemented are described in a technical paper published by the Society of Allied Weight Engineers.[@zimmerman:05:sawe]
@@ -188,8 +206,7 @@ The mass equation is suitable as is.
 
 $$
 \boxed{
-\newcommand{\sumwi}{\sum_{i=1}^{n}w_i}
-w = \sumwi
+w = \sum_{i=1}^{n}w_i
 }
 $$
 
@@ -202,11 +219,10 @@ The corresponding `R` code is
 ### Center of Mass
 
 $$
-\newcommand{\sumwivi}[1]{\sum_{i=1}^{n}{w_i}{{#1}_i}}
 \begin{align}
-\bar{x} & = \sumwivi{x} \bigg/ \sumwi \\
-\bar{y} & = \sumwivi{y} \bigg/ \sumwi \\
-\bar{z} & = \sumwivi{z} \bigg/ \sumwi \\
+\bar{x} & = \sumwivi{x} \bigg/ \sum_{i=1}^{n}w_i\\
+\bar{y} & = \sumwivi{y} \bigg/ \sum_{i=1}^{n}w_i\\
+\bar{z} & = \sumwivi{z} \bigg/ \sum_{i=1}^{n}w_i\\
 \end{align}
 $$
 
@@ -240,17 +256,6 @@ The corresponding `R` code is
 #### Moments of Inertia
 
 $$
-\newcommand{\moia}[3]{
-\sum_{i=1}^{n} \left[ {I_{#1}}_i
-  + w_i \left( {#2}_i^2 + {#3}_i^2 \right)
-  - w_i \left( \bar{#2}^2 + \bar{#3}^2 \right)
-\right]
-}
-\newcommand{\moib}[3]{
-\sum_{i=1}^{n} \left\{ {I_{#1}}_i
-  + w_i \left[ \left( {#2}_i - \bar{#2} \right)^2 + \left( {#3}_i - \bar{#3} \right)^2 \right]
-\right\}
-}
 \begin{align}
 I_{XX} & = \moia{XX}{y}{z} & = \moib{XX}{y}{z} \\
 I_{YY} & = \moia{YY}{x}{z} & = \moib{YY}{x}{z} \\
@@ -261,9 +266,6 @@ $$
 #### Products of Inertia
 
 $$
-\newcommand{\di}[1]{({#1}_i - \bar{#1})}
-\newcommand{\poia}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i {{#2}_i}{{#3}_i} -w_i (\bar{#2}\bar{#3})\right]}
-\newcommand{\poib}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i \di{#2}\di{#3}\right]}
 \begin{align}
 I_{XY} & = \poia{XY}{x}{y} & = \poib{XY}{x}{y} \\
 I_{XZ} & = \poia{XZ}{x}{z} & = \poib{XZ}{x}{z} \\
@@ -389,14 +391,14 @@ The corresponding `R` code is
 ### Center of Mass Uncertainty
 
 $$
-\newcommand{\sumwi}{\sum_{i=1}^n w_i}
+\newcommand{\sum_{i=1}^{n}w_i}{\sum_{i=1}^n w_i}
 \newcommand{\sigmacm}[2]{
 \sqrt{ \sum_{i=1}^n \big\{ (w_i {{#1}}_i)^2 + [{\sigma_w}_i \di{#2}]^2 \big\}}
 }
 \begin{align}
-\sigma_x & = \sigmacm{\sigma_x}{x} \bigg/ \sumwi \\
-\sigma_y & = \sigmacm{\sigma_y}{y} \bigg/ \sumwi \\
-\sigma_z & = \sigmacm{\sigma_z}{z} \bigg/ \sumwi \\
+\sigma_x & = \sigmacm{\sigma_x}{x} \bigg/ \sum_{i=1}^{n}w_i\\
+\sigma_y & = \sigmacm{\sigma_y}{y} \bigg/ \sum_{i=1}^{n}w_i\\
+\sigma_z & = \sigmacm{\sigma_z}{z} \bigg/ \sum_{i=1}^{n}w_i\\
 \end{align}
 $$
 
