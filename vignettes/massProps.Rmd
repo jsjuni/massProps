@@ -522,17 +522,17 @@ Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $
 & + w_i^2 \left(
 \boldsymbol{P}_i -
 \begin{bmatrix}
-(x_i - \bar{x})\sigma_{x_i} + 2 \di{y}\sigma_{y_i} & 0 & 0 \\
-0 & \di{y}\sigma_{y_i} + 2\di{x}\sigma_{x_i} & 0 \\
-0 & 0 & \di{z}\sigma_{y_i} + 2\di{x}\sigma_{x_i} \\
+(x_i - \bar{x})\sigma_{x_i} - 2 \di{y}\sigma_{y_i} & 0 & 0 \\
+0 & \di{y}\sigma_{y_i} - 2\di{x}\sigma_{x_i} & 0 \\
+0 & 0 & \di{z}\sigma_{y_i} - 2\di{x}\sigma_{x_i} \\
 \end{bmatrix}
 \right) ^2 \\
 & + w_i^2 \left(
 \boldsymbol{P}_i^T -
 \begin{bmatrix}
-(x_i - \bar{x})\sigma_{x_i} + 2 \di{z}\sigma_{y_i} & 0 & 0 \\
-0 & \di{y}\sigma_{y_i} + 2 \di{z}\sigma_{z_i} & 0 \\
-0 & 0 & \di{z}\sigma_{y_i} + 2 \di{y}\sigma_{y_i} \\
+(x_i - \bar{x})\sigma_{x_i} - 2 \di{z}\sigma_{y_i} & 0 & 0 \\
+0 & \di{y}\sigma_{y_i} - 2 \di{z}\sigma_{z_i} & 0 \\
+0 & 0 & \di{z}\sigma_{y_i} - 2 \di{y}\sigma_{y_i} \\
 \end{bmatrix}
 \right) ^2 \\
 & + \sigma_{w_i}^2 \left(
@@ -542,17 +542,17 @@ Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $
 & + w_i^2 \left(
 \boldsymbol{P}_i -
 \begin{bmatrix}
- {p_X}_i + 2 {p_Y}_i & 0 & 0 \\
-0 & {p_Y}_i + 2 {p_X}_i & 0 \\
-0 & 0 & {p_Z}_i + 2  {p_X}_i \\
+ {p_X}_i - 2 {p_Y}_i & 0 & 0 \\
+0 & {p_Y}_i - 2 {p_X}_i & 0 \\
+0 & 0 & {p_Z}_i - 2  {p_X}_i \\
 \end{bmatrix}
 \right) ^2 \\
 & + w_i^2 \left(
 \boldsymbol{P}_i^T -
 \begin{bmatrix}
- {p_X}_i + 2{p_Z}_i & 0 & 0 \\
-0 & {p_Y}_i + 2 {p_Z}_i & 0 \\
-0 & 0 & {p_Z}_i + 2 {p_Y}_i \\
+ {p_X}_i - 2{p_Z}_i & 0 & 0 \\
+0 & {p_Y}_i - 2 {p_Z}_i & 0 \\
+0 & 0 & {p_Z}_i - 2 {p_Y}_i \\
 \end{bmatrix}
 \right) ^2 \\
 & + \sigma_{w_i}^2 \left(
@@ -616,5 +616,7 @@ r$sigma_inertia = sqrt(Reduce(`+`, Map(
   vl
 )))
 ```
+
+# Testing and Validation
 
 # References
