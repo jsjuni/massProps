@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   massProps: massProps.html
-last_built: 2025-01-17T02:51Z
+last_built: 2025-01-17T13:28Z
 urls:
   reference: https://jsjuni.github.io/massProps/reference
   article: https://jsjuni.github.io/massProps/articles
