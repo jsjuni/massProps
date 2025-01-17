@@ -59,7 +59,7 @@ The Mass Property Table must contain the following columns. Other columns may ex
 
 [^1]: In the negative convention, for example, $I_{XY} \equiv -\int xy \rho \thinspace dV$. In the positive convention, $I_{XY} \equiv \int xy \rho \thinspace dV$.
 
-[^2]: The same algebraic result can be achieved by setting all moments and products of inertia to zero, but `rollup_mass_props()` by default ensures that all leaf items in the tree have mass properties that correspond to physically-realizable objects. A zero inertia tensor will fail this check. Rather than relax the check (which is essential for trustworthy results), a `TRUE` value for `Ipoint` indicates that the inertia tensor should be excluded from computations. \`\`
+[^2]: The same algebraic result can be achieved by setting all moments and products of inertia to zero, but `rollup_mass_props()` by default ensures that all leaf items in the tree have mass properties that correspond to physically-realizable objects. A zero inertia tensor will fail this check. Rather than relax the check (which is essential for trustworthy results), a `TRUE` value for `Ipoint` indicates that the inertia tensor should be excluded from computations.
 
 #### Required Columns for Mass Properties Uncertainty
 
