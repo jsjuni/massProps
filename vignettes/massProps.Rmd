@@ -793,4 +793,8 @@ sigma_POI
 ```
 This `r agree(isTRUE(all.equal(sigma_POI, c(sigma_Ixy = sawe_result$σ_Ixy, sigma_Ixz = sawe_result$σ_Ixz, sigma_Iyz = sawe_result$σ_Iyz))))` with the computed result.
 
+# Comparison With Published Results
+
+The SAWE reference provides computed results for their example. These results match those within a tolerance of 0.2%. The small differences are likely because their input values were not identical to the truncated values that were published.
+
 # References
