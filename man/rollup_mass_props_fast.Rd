@@ -4,14 +4,12 @@
 \alias{rollup_mass_props_fast}
 \title{Roll Up Mass Properties Without Input Validation}
 \usage{
-rollup_mass_props_fast(tree, df, root)
+rollup_mass_props_fast(tree, df)
 }
 \arguments{
 \item{tree}{tree passed to \code{rollup()}}
 
 \item{df}{mass properties and uncertainties table passed to \code{rollup()}}
-
-\item{root}{identifier of the root vertex in the tree}
 }
 \value{
 The updated data frame
@@ -23,5 +21,5 @@ be used with caution and only under circumstances in which the caller assumes
 responsibility for validity of input. Its behavior when passed ill-formed input is unspecified.
 }
 \examples{
-rollup_mass_props_fast(test_tree, test_table, "A.1")
+rollup_mass_props_fast(test_tree, test_table)
 }

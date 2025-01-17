@@ -613,13 +613,12 @@ rollup_mass_props_and_unc <- function(tree, df, validate_df = validate_mass_prop
 #'
 #' @param tree tree passed to `rollup()`
 #' @param df mass properties and uncertainties table passed to `rollup()`
-#' @param root identifier of the root vertex in the tree
 #'
 #' @returns The updated data frame
 #' @export
 #'
 #' @examples
-#' rollup_mass_props_fast(test_tree, test_table, "A.1")
+#' rollup_mass_props_fast(test_tree, test_table)
 rollup_mass_props_fast <- function(tree, df) {
   rollup(tree, df, update_mass_props, validate_ds = function(t, d) TRUE, validate_tree = function(t) NA)
 }
@@ -634,13 +633,12 @@ rollup_mass_props_fast <- function(tree, df) {
 #'
 #' @param tree tree passed to `rollup()`
 #' @param df mass properties and uncertainties table passed to `rollup()`
-#' @param root identifier of the root vertex in the tree
 #'
 #' @returns The updated data frame
 #' @export
 #'
 #' @examples
-#' rollup_mass_props_and_unc_fast(sawe_tree, sawe_table, "Combined")
+#' rollup_mass_props_and_unc_fast(sawe_tree, sawe_table)
 rollup_mass_props_and_unc_fast <- function(tree, df) {
   rollup(tree, df, update_mass_props_and_unc, validate_ds = function(t, d) TRUE, validate_tree = function(t) NA)
 }
