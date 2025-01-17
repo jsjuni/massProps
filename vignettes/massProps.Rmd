@@ -177,7 +177,7 @@ Strategies for achieving the objective include
 
 -   covering the entire code base with unit tests.
 
-The author has intentionally made no effort to optimize for performance. That said, in its current form it handles computations on the scale encountered in the design of interplanetary spacecraft in a few seconds.
+The author has intentionally made no effort to optimize for performance. In particular, the author is aware that representing the inertia and its uncertainty as 3 ⨉ 3 matrices is "inefficient" to the degree that it independently calculates values that are redundant by symmetry. "Inefficient", however, does not mean "slow". See [Performance Evaluation] below.
 
 # Theory
 
@@ -391,7 +391,7 @@ w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{1}_3 \ri
 \end{align}
 $$
 
-where $\boldsymbol{1}_3$ is the $3x3$ identity matrix. Therefore
+where $\boldsymbol{1}_3$ is the 3 ⨉ 3 identity matrix. Therefore
 
 $$
 \boxed{
@@ -556,7 +556,7 @@ $$
 \boldsymbol{\sigma_I}^2 = \sum_{i=1}^{} \boldsymbol{s}_i^2
 $$
 
-Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $P_i$. Let $\boldsymbol{1}_3$ be the $3x3$ identity matrix. If we interpret squaring a matrix as the Hadamard (element-wise) product with itself, then $$
+Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $P_i$. Let $\boldsymbol{1}_3$ be the 3 ⨉ 3 identity matrix. If we interpret squaring a matrix as the Hadamard (element-wise) product with itself, then $$
 \begin{align}
 \boldsymbol{s}_i^2 & = {\boldsymbol{\sigma_I}}_i^2 \\
 & + 
@@ -662,9 +662,9 @@ The corresponding `R` code is
       d <- r$center_mass - v$center_mass
 
       P <- outer(d, v$sigma_center_mass)
-      p <- diag(P)
-      diag_1 <- diag(c(p['x'] - 2 * p['y'], p['y'] - 2 * p['x'], p['z'] - 2 * p['x']))
-      diag_2 <- diag(c(p['x'] - 2 * p['z'], p['y'] - 2 * p['z'], p['z'] - 2 * p['y']))
+      p <- as.list(diag(P))
+      diag_1 <- diag(c(p$x - 2 * p$y, p$y - 2 * p$x, p$z - 2 * p$x))
+      diag_2 <- diag(c(p$x - 2 * p$z, p$y - 2 * p$z, p$z - 2 * p$y))
 
       Q <- outer(d, d)
       diag_3 <- sum(diag(Q)) * diag(3)
@@ -679,7 +679,9 @@ The corresponding `R` code is
 
 # Testing and Validation
 
-In this section we will calculate the answers for the SAWE step by step and compare them with the package results. The inputs are:
+## Comparison With Independently-Calculated Results
+
+In this section we will calculate the results for the SAWE example step by step and compare them with the package results. The inputs are:
 
 ```{r echo = FALSE}
 sawe_input <- sawe_table[which(sawe_table$id != "Combined"), ]
@@ -693,7 +695,7 @@ sawe_result <- rollup_mass_props_and_unc(sawe_tree, sawe_table)[3, ]
 sawe_result
 ```
 
-## Mass
+### Mass
 
 ```{r echo = FALSE}
 agree <- function(l) if (l) "agrees" else "does not agree"
@@ -711,7 +713,7 @@ mass
 
 This `r agree(isTRUE(all.equal(mass, sawe_result$mass)))` with the computed result.
 
-## Center of Mass
+### Center of Mass
 
 ```{r}
 C <- apply(sawe_input$mass /mass * sawe_input[, c("Cx", "Cy", "Cz")], 2, sum)
@@ -725,7 +727,7 @@ C
 
 This `r agree(isTRUE(all.equal(unname(C), c(sawe_result$Cx, sawe_result$Cy, sawe_result$Cz))))` with the computed result.
 
-## Moments of Inertia
+### Moments of Inertia
 
 ```{r}
 moi <- function(I, v1, v2, m, c1, c2) {
@@ -746,7 +748,7 @@ MOI
 
 This `r agree(isTRUE(all.equal(MOI, c(Ixx = sawe_result$Ixx, Iyy = sawe_result$Iyy, Izz = sawe_result$Izz))))` with the computed result.
 
-## Products of Inertia
+### Products of Inertia
 
 ```{r}
 poi <- function(I, v1, v2, m, c1, c2) {
@@ -767,7 +769,7 @@ POI
 
 This `r agree(isTRUE(all.equal(POI, c(Ixy = sawe_result$Ixy, Ixz = sawe_result$Ixz, Iyz = sawe_result$Iyz))))` with the computed result.
 
-## Mass Uncertainty
+### Mass Uncertainty
 
 ```{r}
 sigma_mass <- sqrt(sum(sawe_input$`σ_mass`^2))
@@ -781,7 +783,7 @@ sigma_mass
 
 This `r agree(isTRUE(all.equal(sigma_mass, sawe_result$σ_mass)))` with the computed result.
 
-## Center of Mass Uncertainty
+### Center of Mass Uncertainty
 
 ```{r}
 sigma_cm <- function(m, sigma_v, sigma_m, v, c) {
@@ -802,7 +804,7 @@ sigma_C
 
 This `r agree(isTRUE(all.equal(sigma_C, c(sigma_Cx = sawe_result$σ_Cx, sigma_Cy = sawe_result$σ_Cy, sigma_Cz = sawe_result$σ_Cz))))` with the computed result.
 
-## Moments of Inertia Uncertainty
+### Moments of Inertia Uncertainty
 
 ```{r}
 sigma_moi <- function(sigma_I, mass, sigma_mass, v1, v2, c1, c2, sigma_v1, sigma_v2) {
@@ -829,7 +831,7 @@ sigma_MOI
 
 This `r agree(isTRUE(all.equal(sigma_MOI, c(sigma_Ixx = sawe_result$σ_Ixx, sigma_Iyy = sawe_result$σ_Iyy, sigma_Izz = sawe_result$σ_Izz))))` with the computed result.
 
-## Products of Inertia Uncertainty
+### Products of Inertia Uncertainty
 
 ```{r}
 sigma_poi <- function(sigma_I, mass, sigma_mass, v1, v2, c1, c2, sigma_v1, sigma_v2) {
@@ -856,8 +858,72 @@ sigma_POI
 
 This `r agree(isTRUE(all.equal(sigma_POI, c(sigma_Ixy = sawe_result$σ_Ixy, sigma_Ixz = sawe_result$σ_Ixz, sigma_Iyz = sawe_result$σ_Iyz))))` with the computed result.
 
-# Comparison With Published Results
+## Comparison With Published Results
 
 The SAWE reference provides computed results for their example. These results match those within a tolerance of 0.2%. The small differences are likely because their actual input values were not identical to the truncated values published in the article.
+
+# Performance Evaluation
+
+```{r echo = FALSE}
+mp_tree_depth <- max(dfs(mp_tree, 2, mode = "in", order=FALSE, dist=TRUE)$dist) + 1
+nv <- length(igraph::V(mp_tree))
+ne <- length(igraph::E(mp_tree))
+nl <- length(which(igraph::degree(mp_tree, mode="in") == 0))
+ni <- (nv - 1) * 20
+no <- (nv - nl) * 20
+```
+
+`mp_table` and `mp_tree` are a synthesized data set representing a tree of depth `r mp_tree_depth` with `r nv` vertices and `r ne` edges. `r nl` vertices are leaves, the remaining `r nv - nl` are non-leaves. Rolling up mass properties and uncertainties for this data set combines `r paste(ni)` input values to produce `r no` output values. Mass properties alone halves those values.
+
+Benchmarks were taken on a platform with these CPU characteristics:
+
+```         
+Python Version: 3.12.7.final.0 (64 bit)
+Cpuinfo Version: 9.0.0
+Vendor ID Raw: 
+Hardware Raw: 
+Brand Raw: Apple M3
+Hz Advertised Friendly: 
+Hz Actual Friendly: 2.4000 GHz
+Hz Advertised: 
+Hz Actual: (2400000000, 0)
+Arch: ARM_8
+Bits: 64
+Count: 8
+Arch String Raw: arm64
+L1 Data Cache Size: 
+L1 Instruction Cache Size: 
+L2 Cache Size: 
+L2 Cache Line Size: 
+L2 Cache Associativity: 
+L3 Cache Size: 
+Stepping: 
+Model: 
+Family: 6
+Processor Type: 
+Flags: acpi, aes, apic, clfsh, cmov, cx16, cx8, de, ds, dscpl, dtse64, est, fpu, fxsr, htt, mca, mce, mmx, mon, msr, mtrr, pae, pat, pbe, pclmulqdq, pdcm, pge, pse, pse36, seglim64, sep, ss, sse, sse2, sse3, sse4.1, sse4.2, ssse3, tm, tm2, tpr, tsc, vme, vmx
+```
+
+Benchmark results for rollup of mass properties and uncertainties were taken with and without input validation:
+
+```{r eval=FALSE}
+benchmark('mp + unc no validation' = rollup_mass_props_and_unc_fast(mp_tree, mp_table),
+          'mp + unc    validation' = rollup_mass_props_and_unc(mp_tree, mp_table),
+          'mp       no validation' = rollup_mass_props_fast(mp_tree, mp_table),
+          'mp          validation' = rollup_mass_props(mp_tree, mp_table),
+          replications = 1,
+          columns = c("test", "replications", "elapsed", "user.self", "sys.self")
+)
+```
+
+Times reported are in seconds.
+
+```         
+                    test replications elapsed user.self sys.self
+4 mp          validation            1   0.954     0.936    0.019
+3 mp       no validation            1   0.724     0.710    0.014
+2 mp + unc    validation            1   1.621     1.596    0.025
+1 mp + unc no validation            1   1.121     1.098    0.023
+```
 
 # References
