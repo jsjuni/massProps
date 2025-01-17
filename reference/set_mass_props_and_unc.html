@@ -79,19 +79,37 @@ specified row in a data frame with an <code>id</code> column.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C.1.2.2.3.1.2.3"</span>, <span class="st">"C.1.2.2.3.2.1.1"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mass_props_and_unc.html">get_mass_props_and_unc</a></span><span class="op">(</span><span class="va">mp_table</span>, <span class="st">"C.1.2.2.3.2.1.1"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">v</span><span class="op">$</span><span class="va">poi_conv</span> <span class="op">=</span> <span class="st">"+"</span></span></span>
-<span class="r-in"><span><span class="fu">set_mass_props_and_unc</span><span class="op">(</span><span class="va">df</span>, <span class="st">"C.1.2.2.3.2.1.1"</span>, <span class="va">v</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                id      mass       Cx        Cy       Cz       Ixx       Iyy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 C.1.2.2.3.1.2.3        NA       NA        NA       NA        NA        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 C.1.2.2.3.2.1.1 0.3413137 34.27446 -44.98207 5.211377 0.4986894 0.4528114</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         Izz        Ixy          Ixz          Iyz POIconv Ipoint    σ_mass</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        NA         NA           NA           NA    &lt;NA&gt;     NA        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.4583186 0.04436985 4.096337e-05 4.510443e-06       +  FALSE 0.2892205</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       σ_Cx     σ_Cy     σ_Cz     σ_Ixx     σ_Iyy     σ_Izz      σ_Ixy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       NA       NA       NA        NA        NA        NA         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 28.83321 29.16371 29.59459 0.3722294 0.3694228 0.3741648 0.02191471</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        σ_Ixz      σ_Iyz</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         NA         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.02146982 0.02242524</span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">set_mass_props_and_unc</span><span class="op">(</span><span class="va">df</span>, <span class="st">"C.1.2.2.3.2.1.1"</span>, <span class="va">v</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="get_mass_props_and_unc.html">get_mass_props_and_unc</a></span><span class="op">(</span><span class="va">df</span>, <span class="st">"C.1.2.2.3.2.1.1"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3413137</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $center_mass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          x          y          z </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  34.274465 -44.982071   5.211377 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $inertia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               x             y             z</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> x  4.986894e-01 -4.436985e-02 -4.096337e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> y -4.436985e-02  4.528114e-01 -4.510443e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> z -4.096337e-05 -4.510443e-06  4.583186e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $point</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $sigma_mass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2892205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $sigma_center_mass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        x        y        z </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28.83321 29.16371 29.59459 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $sigma_inertia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            x          y          z</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> x 0.37222944 0.02191471 0.02146982</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> y 0.02191471 0.36942277 0.02242524</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> z 0.02146982 0.02242524 0.37416478</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

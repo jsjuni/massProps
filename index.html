@@ -46,8 +46,77 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9">
-`massProps` uses the `rollupTree` package to calculate mass properties and uncertainties for tree structures (e.g., assembly bill of materials).
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header"><h1 id="massprops">massProps<a class="anchor" aria-label="anchor" href="#massprops"></a>
+</h1></div>
+<!-- badges: start -->
+<!-- badges: end -->
+<p>The <code>massProps</code> package extends <code>rollupTree</code> with functions to recursively calculate mass properties (and optionally, their uncertainties) for arbitrary composition trees. Formulas implemented are described in a technical paper published by the Society of Allied Weight Engineers.(Zimmerman and Nakai 2005)</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"massProps"</span><span class="op">)</span></span></code></pre></div>
+<p>You can install the development version of massProps from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"jsjuni/massProps"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
+<p>Suppose we have the following mass properties table:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jsjuni.github.io/massProps/">massProps</a></span><span class="op">)</span></span>
+<span><span class="va">test_table</span></span>
+<span><span class="co">#&gt;     id parent mass Cx Cy Cz Ixx  Ixy   Ixz Iyy   Iyz Izz POIconv Ipoint</span></span>
+<span><span class="co">#&gt; 1  A.1          NA NA NA NA  NA   NA    NA  NA    NA  NA       -  FALSE</span></span>
+<span><span class="co">#&gt; 2  A.2    A.1   NA NA NA NA  NA   NA    NA  NA    NA  NA       -  FALSE</span></span>
+<span><span class="co">#&gt; 3  A.3    A.1   NA NA NA NA  NA   NA    NA  NA    NA  NA       -  FALSE</span></span>
+<span><span class="co">#&gt; 4  C.1    A.1    5  0  0  0  80 -4.0 -24.0  80 -24.0  75       -  FALSE</span></span>
+<span><span class="co">#&gt; 5  P.1    A.2    2  1  1  1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
+<span><span class="co">#&gt; 6  P.2    A.2    2  1  1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
+<span><span class="co">#&gt; 7  P.3    A.2    2  1 -1  1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
+<span><span class="co">#&gt; 8  P.4    A.2    2  1 -1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
+<span><span class="co">#&gt; 9  P.5    A.3    2 -1  1  1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
+<span><span class="co">#&gt; 10 P.6    A.3    2 -1  1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
+<span><span class="co">#&gt; 11 P.7    A.3    2 -1 -1  1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
+<span><span class="co">#&gt; 12 P.8    A.3    2 -1 -1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span></code></pre></div>
+<p>and this graph with edges representing child-parent relations:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/" class="external-link">igraph</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/E.html" class="external-link">E</a></span><span class="op">(</span><span class="va">test_tree</span><span class="op">)</span></span>
+<span><span class="co">#&gt; + 11/11 edges from d76039e (vertex names):</span></span>
+<span><span class="co">#&gt;  [1] A.2-&gt;A.1 A.3-&gt;A.1 C.1-&gt;A.1 P.1-&gt;A.2 P.2-&gt;A.2 P.3-&gt;A.2 P.4-&gt;A.2 P.5-&gt;A.3</span></span>
+<span><span class="co">#&gt;  [9] P.6-&gt;A.3 P.7-&gt;A.3 P.8-&gt;A.3</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
+<p>We can roll up mass properties to non-leaf elements as follows:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/rollup_mass_props.html">rollup_mass_props</a></span><span class="op">(</span><span class="va">test_tree</span>, <span class="va">test_table</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     id parent mass Cx Cy Cz Ixx  Ixy   Ixz Iyy   Iyz Izz POIconv Ipoint</span></span>
+<span><span class="co">#&gt; 1  A.1          21  0  0  0 144 -4.8 -24.8 144 -23.2 139       -  FALSE</span></span>
+<span><span class="co">#&gt; 2  A.2    A.1    8  1  0  0  32 -0.4  -0.4  24   0.4  24       -  FALSE</span></span>
+<span><span class="co">#&gt; 3  A.3    A.1    8 -1  0  0  32 -0.4  -0.4  24   0.4  24       -  FALSE</span></span>
+<span><span class="co">#&gt; 4  C.1    A.1    5  0  0  0  80 -4.0 -24.0  80 -24.0  75       -  FALSE</span></span>
+<span><span class="co">#&gt; 5  P.1    A.2    2  1  1  1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
+<span><span class="co">#&gt; 6  P.2    A.2    2  1  1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
+<span><span class="co">#&gt; 7  P.3    A.2    2  1 -1  1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
+<span><span class="co">#&gt; 8  P.4    A.2    2  1 -1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
+<span><span class="co">#&gt; 9  P.5    A.3    2 -1  1  1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
+<span><span class="co">#&gt; 10 P.6    A.3    2 -1  1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
+<span><span class="co">#&gt; 11 P.7    A.3    2 -1 -1  1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
+<span><span class="co">#&gt; 12 P.8    A.3    2 -1 -1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-zimmerman:05:sawe" class="csl-entry">
+Zimmerman, Robert L., and John H. Nakai. 2005. “Are You Sure? Uncertainty in Mass Properties Engineering.” In <em>64th Annual International Conference on Mass Properties Engineering</em>, 123–60. Society of Allied Weight Engineers.
+</div>
+</div>
+</div>
+</div>
   </main><aside class="col-md-3"><div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
