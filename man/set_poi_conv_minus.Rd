@@ -18,7 +18,7 @@ The mass properties object with the POI convention set to "-"
 }
 \description{
 \code{set_poi_conv_minus()} sets the products of inertia convention for a
-mass properties object to "+". This does not affect the values of
+mass properties object to "+". This does not affect the values of the
 object, but it determines how products of inertia are saved to a
 data set.
 

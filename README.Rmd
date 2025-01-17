@@ -53,6 +53,10 @@ and this graph with edges representing child-parent relations:
 library(igraph)
 E(test_tree)
 ```
+```{r echo = FALSE}
+plot(test_tree,layout=layout_as_tree(test_tree, 2, mode="in"), vertex.shape = 'none', edge.arrow.mode = 0)
+```
+
 We can roll up mass properties to non-leaf elements as follows:
 
 ```{r}

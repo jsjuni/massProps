@@ -58,6 +58,8 @@ E(test_tree)
 #>  [9] P.6->A.3 P.7->A.3 P.8->A.3
 ```
 
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+
 We can roll up mass properties to non-leaf elements as follows:
 
 ``` r

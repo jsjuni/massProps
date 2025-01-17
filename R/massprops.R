@@ -100,7 +100,8 @@ get_mass_props_and_unc <- function(df, id) {
 #' df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
 #' v <- get_mass_props(mp_table, "C.1.2.2.3.2.1.1")
 #' v$poi_conv = "+"
-#' set_mass_props(df, "C.1.2.2.3.2.1.1", v)
+#' df <- set_mass_props(df, "C.1.2.2.3.2.1.1", v)
+#' get_mass_props(df, "C.1.2.2.3.2.1.1")
 set_mass_props <- function(df, id, v) {
   m <- v$inertia
   poi_factor <- if (v$poi_conv == "-") 1 else -1
@@ -146,7 +147,8 @@ set_mass_props <- function(df, id, v) {
 #' df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
 #' v <- get_mass_props_and_unc(mp_table, "C.1.2.2.3.2.1.1")
 #' v$poi_conv = "+"
-#' set_mass_props_and_unc(df, "C.1.2.2.3.2.1.1", v)
+#' df <- set_mass_props_and_unc(df, "C.1.2.2.3.2.1.1", v)
+#' get_mass_props_and_unc(df, "C.1.2.2.3.2.1.1")
 set_mass_props_and_unc <- function(df, id, v) {
   df |> set_mass_props(id, v) |>
 
@@ -268,7 +270,7 @@ combine_mass_props_and_unc <- function(vl) {
 #'
 #' @description
 #' `set_poi_conv_plus()` sets the products of inertia convention for a
-#' mass properties object to "+". This does not affect the values of
+#' mass properties object to "+". This does not affect the values of the
 #' object, but it determines how products of inertia are saved to a
 #' data set.
 #'
@@ -294,7 +296,7 @@ set_poi_conv_plus <- function(ds, target, v) {
 #'
 #' @description
 #' `set_poi_conv_minus()` sets the products of inertia convention for a
-#' mass properties object to "+". This does not affect the values of
+#' mass properties object to "+". This does not affect the values of the
 #' object, but it determines how products of inertia are saved to a
 #' data set.
 #'
@@ -360,6 +362,7 @@ set_poi_conv_from_target <- function(df, target, v) {
 #' @examples
 #' leaves <- test_table[which(!is.na(test_table$mass)), "id"]
 #' df <- update_mass_props(test_table, "A.1", leaves)
+#' get_mass_props(df, "A.1")
 update_mass_props <- function(df, target, sources, override = set_poi_conv_from_target) {
   update_prop(
     df,
@@ -391,6 +394,7 @@ update_mass_props <- function(df, target, sources, override = set_poi_conv_from_
 #' @examples
 #' leaves <- list("Widget", "2nd Part")
 #' df <- update_mass_props_and_unc(sawe_table, "Combined", leaves)
+#' get_mass_props_and_unc(sawe_table, "Combined")
 update_mass_props_and_unc <- function(df, target, sources, override = set_poi_conv_from_target) {
   update_prop(
     df,

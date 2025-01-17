@@ -33,4 +33,5 @@ with (at least) these columns: \code{id}, \code{mass}, \code{Cx}, \code{Cy}, \co
 \examples{
 leaves <- list("Widget", "2nd Part")
 df <- update_mass_props_and_unc(sawe_table, "Combined", leaves)
+get_mass_props_and_unc(sawe_table, "Combined")
 }

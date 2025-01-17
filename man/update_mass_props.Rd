@@ -27,4 +27,5 @@ with (at least) these columns: \code{id}, \code{mass}, \code{Cx}, \code{Cy}, \co
 \examples{
 leaves <- test_table[which(!is.na(test_table$mass)), "id"]
 df <- update_mass_props(test_table, "A.1", leaves)
+get_mass_props(df, "A.1")
 }

@@ -89,8 +89,7 @@ It is the caller's responsibility to ensure that all values are expressed in app
 
 #### Tree
 
-The tree is an `igraph::graph` with vertices named by identifiers in the mass properties table. 
-It can be of arbitrary depth and shape as long as it satisfies certain well-formedness properties:
+The tree is an `igraph::graph` with vertices named by identifiers in the mass properties table. It can be of arbitrary depth and shape as long as it satisfies certain well-formedness properties:
 
 -   it is connected and acyclic (as an undirected graph), i.e., it is a tree
 
@@ -192,13 +191,11 @@ The author has intentionally made no effort to optimize for performance. That sa
   - w_i \left( \bar{#2}^2 + \bar{#3}^2 \right)
   \right]
 }
-
 \newcommand{\moib}[3]{
 \sum_{i=1}^{n} \left\{ {I_{#1}}_i
   + w_i \left[ \left( {#2}_i - \bar{#2} \right)^2 + \left( {#3}_i - \bar{#3} \right)^2 \right]
   \right\}
 }
-
 \newcommand{\di}[1]{({#1}_i - \bar{#1})}
 \newcommand{\poia}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i {{#2}_i}{{#3}_i} -w_i (\bar{#2}\bar{#3})\right]}
 \newcommand{\poib}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i \di{#2}\di{#3}\right]}
@@ -214,7 +211,7 @@ The author has intentionally made no effort to optimize for performance. That sa
 
 In this section, we state the reference equations [@zimmerman:05:sawe] and show, where applicable, how those equations can be rewritten in more concise form. The form of the equations actually implemented is displayed within a box, e.g. $\boxed{F = ma}$.
 
-The reference uses the word *weight* and the symbol $w$ in equations. We interpret weight as mass. The reference refers to center of mass by its $x$, $y$, and $z$ components. Symbols for moments ($I_{XX}$) and products ($I_{XY}$) of inertia are conventional. Variables with subscripts designate properties of parts; those without designate properties of aggregates. The letter $\sigma$ denotes uncertainty. $\sigma_w$, for example, is the mass uncertainty
+The reference uses the word *weight* and the symbol $w$ in equations. We interpret weight as mass. The reference refers to center of mass by its $x$, $y$, and $z$ components. Symbols for moments ($I_{XX}$) and products ($I_{XY}$) of inertia are conventional. Variables with subscripts designate properties of parts; those without designate properties of aggregates. The letter $\sigma$ denotes uncertainty. $\sigma_w$, for example, is the mass uncertainty.
 
 ## Mass Properties
 
@@ -234,18 +231,15 @@ The corresponding `R` code is
   r$mass <- Reduce(`+`, Map(f = function(v) v$mass, vl))
 ```
 
-In this and the following code snippets, the variable `vl` is a list of input mass property sets, the variable `v`
-is a formal parameter of an anonymous function applied to each member of `vl`, and `r` is the resulting mass
-properties. The line above is an `R` functional programming idiom for "set the mass value of the result to the sum
-of the mass values of the inputs".
+In this and the following code snippets, the variable `vl` is a list of input mass property sets, the variable `v` is a formal parameter of an anonymous function applied to each member of `vl`, and `r` is the resulting mass property set. The line above is an `R` functional programming idiom for "set the mass value of the result to the sum of the mass values of the inputs".
 
 ### Center of Mass
 
 $$
 \begin{align}
-\bar{x} & = \sumwivi{x} \bigg/ \sum_{i=1}^{n}w_i\\
-\bar{y} & = \sumwivi{y} \bigg/ \sum_{i=1}^{n}w_i\\
-\bar{z} & = \sumwivi{z} \bigg/ \sum_{i=1}^{n}w_i\\
+\bar{x} & = \sum_{i=1}^{n}{w_i}{{x}_i} \bigg/ \sum_{i=1}^{n}w_i\\
+\bar{y} & = \sum_{i=1}^{n}{w_i}{{y}_i} \bigg/ \sum_{i=1}^{n}w_i\\
+\bar{z} & = \sum_{i=1}^{n}{w_i}{{z}_i} \bigg/ \sum_{i=1}^{n}w_i\\
 \end{align}
 $$
 
@@ -264,7 +258,7 @@ Then
 
 $$
 \boxed{
-\boldsymbol{\bar{c}} = \frac{1}{w} \sumwivi{\boldsymbol{c}}
+\boldsymbol{\bar{c}} = \frac{1}{w} \sum_{i=1}^{n}{w_i}{{\boldsymbol{c}}_i}
 }
 $$
 
@@ -280,9 +274,36 @@ The corresponding `R` code is
 
 $$
 \begin{align}
-I_{XX} & = \moia{XX}{y}{z} & = \moib{XX}{y}{z} \\
-I_{YY} & = \moia{YY}{x}{z} & = \moib{YY}{x}{z} \\
-I_{ZZ} & = \moia{ZZ}{x}{y} & = \moib{ZZ}{x}{y} \\
+I_{XX} & = 
+  \sum_{i=1}^{n} \left[ {I_{XX}}_i
+    + w_i \left( {y}_i^2 + {z}_i^2 \right)
+  - w_i \left( \bar{y}^2 + \bar{z}^2 \right)
+  \right]
+ & = 
+\sum_{i=1}^{n} \left\{ {I_{XX}}_i
+  + w_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right]
+  \right\}
+ \\
+I_{YY} & = 
+  \sum_{i=1}^{n} \left[ {I_{YY}}_i
+    + w_i \left( {x}_i^2 + {z}_i^2 \right)
+  - w_i \left( \bar{x}^2 + \bar{z}^2 \right)
+  \right]
+ & = 
+\sum_{i=1}^{n} \left\{ {I_{YY}}_i
+  + w_i \left[ \left( {x}_i - \bar{x} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right]
+  \right\}
+ \\
+I_{ZZ} & = 
+  \sum_{i=1}^{n} \left[ {I_{ZZ}}_i
+    + w_i \left( {x}_i^2 + {y}_i^2 \right)
+  - w_i \left( \bar{x}^2 + \bar{y}^2 \right)
+  \right]
+ & = 
+\sum_{i=1}^{n} \left\{ {I_{ZZ}}_i
+  + w_i \left[ \left( {x}_i - \bar{x} \right)^2 + \left( {y}_i - \bar{y} \right)^2 \right]
+  \right\}
+ \\
 \end{align}
 $$
 
@@ -290,9 +311,9 @@ $$
 
 $$
 \begin{align}
-I_{XY} & = \poia{XY}{x}{y} & = \poib{XY}{x}{y} \\
-I_{XZ} & = \poia{XZ}{x}{z} & = \poib{XZ}{x}{z} \\
-I_{YZ} & = \poia{YZ}{y}{z} & = \poib{YZ}{y}{z} \\
+I_{XY} & = \sum_{i=1}^{n} \left[ {I_{XY}}_i + w_i {{x}_i}{{y}_i} -w_i (\bar{x}\bar{y})\right] & = \sum_{i=1}^{n} \left[ {I_{XY}}_i + w_i ({x}_i - \bar{x})({y}_i - \bar{y})\right] \\
+I_{XZ} & = \sum_{i=1}^{n} \left[ {I_{XZ}}_i + w_i {{x}_i}{{z}_i} -w_i (\bar{x}\bar{z})\right] & = \sum_{i=1}^{n} \left[ {I_{XZ}}_i + w_i ({x}_i - \bar{x})({z}_i - \bar{z})\right] \\
+I_{YZ} & = \sum_{i=1}^{n} \left[ {I_{YZ}}_i + w_i {{y}_i}{{z}_i} -w_i (\bar{y}\bar{z})\right] & = \sum_{i=1}^{n} \left[ {I_{YZ}}_i + w_i ({y}_i - \bar{y})({z}_i - \bar{z})\right] \\
 \end{align}
 $$
 
@@ -312,12 +333,12 @@ $$
 
 and similarly for $I_i$.
 
-Noting the repeated appearance of terms of the form $\di{x}$, we form the outer product
+Noting the repeated appearance of terms of the form $({x}_i - \bar{x})$, we form the outer product
 
 $$
 \boxed{
 \begin{align}
-\boldsymbol{d}_i & = (\di{x} \quad \di{y} \quad \di{z})^T \\
+\boldsymbol{d}_i & = (({x}_i - \bar{x}) \quad ({y}_i - \bar{y}) \quad ({z}_i - \bar{z}))^T \\
 \boldsymbol{Q}_i & = \boldsymbol{d}_i {\boldsymbol{d}_i}^T
 \end{align}
 }
@@ -327,9 +348,9 @@ $$
 \begin{align}
 \boldsymbol{Q}_i & =
 \begin{bmatrix}
-\di{x}^2     & \di{x}\di{y} & \di{x}\di{z} \\
-\di{y}\di{x} & \di{y}^2     & \di{y}\di{z} \\
-\di{z}\di{x} & \di{z}\di{y} & \di{z}^2     \\
+({x}_i - \bar{x})^2     & ({x}_i - \bar{x})({y}_i - \bar{y}) & ({x}_i - \bar{x})({z}_i - \bar{z}) \\
+({y}_i - \bar{y})({x}_i - \bar{x}) & ({y}_i - \bar{y})^2     & ({y}_i - \bar{y})({z}_i - \bar{z}) \\
+({z}_i - \bar{z})({x}_i - \bar{x}) & ({z}_i - \bar{z})({y}_i - \bar{y}) & ({z}_i - \bar{z})^2     \\
 \end{bmatrix}
 \end{align}
 $$
@@ -345,23 +366,23 @@ where $$
 \boldsymbol{s}_i & = \boldsymbol{I}_i \\
 & -
 w_i \begin{bmatrix}
--\di{y}^2 - \di{z}^2 & \di{x}\di{y}         & \di{x}\di{z}         \\
-\di{x}\di{y}         & -\di{x}^2 - \di{z}^2 &  \di{y}\di{z}        \\
-\di{x}\di{z}         & \di{y}\di{z}         & -\di{x}^2 - \di{y}^2 \\
+-({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 & ({x}_i - \bar{x})({y}_i - \bar{y})         & ({x}_i - \bar{x})({z}_i - \bar{z})         \\
+({x}_i - \bar{x})({y}_i - \bar{y})         & -({x}_i - \bar{x})^2 - ({z}_i - \bar{z})^2 &  ({y}_i - \bar{y})({z}_i - \bar{z})        \\
+({x}_i - \bar{x})({z}_i - \bar{z})         & ({y}_i - \bar{y})({z}_i - \bar{z})         & -({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 \\
 \end{bmatrix} \\
 & =
 \boldsymbol{I}_i \\
 & -
 w_i \begin{bmatrix}
-\di{x}^2     & \di{x}\di{y} & \di{x}\di{z} \\
-\di{x}\di{y} & \di{y}^2     & \di{y}\di{z} \\
-\di{x}\di{z} & \di{y}\di{z} & \di{z}^2     \\
+({x}_i - \bar{x})^2     & ({x}_i - \bar{x})({y}_i - \bar{y}) & ({x}_i - \bar{x})({z}_i - \bar{z}) \\
+({x}_i - \bar{x})({y}_i - \bar{y}) & ({y}_i - \bar{y})^2     & ({y}_i - \bar{y})({z}_i - \bar{z}) \\
+({x}_i - \bar{x})({z}_i - \bar{z}) & ({y}_i - \bar{y})({z}_i - \bar{z}) & ({z}_i - \bar{z})^2     \\
 \end{bmatrix} \\
 & -
 w_i \begin{bmatrix}
--\di{x}^2 - \di{y}^2 - \di{z}^2 & 0                               & 0                              \\
-0                               & -\di{x}^2 - \di{y}^2 - \di{z}^2 & 0                              \\
-0                               & 0                               &-\di{x}^2 - \di{y}^2 - \di{z}^2 \\
+-({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 & 0                               & 0                              \\
+0                               & -({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 & 0                              \\
+0                               & 0                               &-({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 \\
 \end{bmatrix} \\
 & = 
 \boldsymbol{I}_i
@@ -415,9 +436,15 @@ The corresponding `R` code is
 
 $$
 \begin{align}
-\sigma_x & = \sigmacm{\sigma_x}{x} \bigg/ \sum_{i=1}^{n}w_i\\
-\sigma_y & = \sigmacm{\sigma_y}{y} \bigg/ \sum_{i=1}^{n}w_i\\
-\sigma_z & = \sigmacm{\sigma_z}{z} \bigg/ \sum_{i=1}^{n}w_i\\
+\sigma_x & = 
+  \sqrt{ \sum_{i=1}^n \big\{ (w_i {{\sigma_x}}_i)^2 + [{\sigma_w}_i ({x}_i - \bar{x})]^2 \big\}}
+ \bigg/ \sum_{i=1}^{n}w_i\\
+\sigma_y & = 
+  \sqrt{ \sum_{i=1}^n \big\{ (w_i {{\sigma_y}}_i)^2 + [{\sigma_w}_i ({y}_i - \bar{y})]^2 \big\}}
+ \bigg/ \sum_{i=1}^{n}w_i\\
+\sigma_z & = 
+  \sqrt{ \sum_{i=1}^n \big\{ (w_i {{\sigma_z}}_i)^2 + [{\sigma_w}_i ({z}_i - \bar{z})]^2 \big\}}
+ \bigg/ \sum_{i=1}^{n}w_i\\
 \end{align}
 $$
 
@@ -436,7 +463,8 @@ If we construe (as `R` does) squaring and taking square roots of vectors element
 
 $$
 \boxed{
-\boldsymbol{\sigma_c} = \frac{1}{w} \sigmacm{\boldsymbol{\sigma_c}}{\boldsymbol{c}}
+\boldsymbol{\sigma_c} = \frac{1}{w} 
+  \sqrt{ \sum_{i=1}^n \big\{ (w_i {{\boldsymbol{\sigma_c}}}_i)^2 + [{\sigma_w}_i ({\boldsymbol{c}}_i - \bar{\boldsymbol{c}})]^2 \big\}}
 }
 $$
 
@@ -458,9 +486,15 @@ The corresponding `R` code is
 
 $$
 \begin{align}
-\sigma_{I_{XX}} & = \sigmamoi{XX}{y}{z} \\
-\sigma_{I_{YY}} & = \sigmamoi{YY}{x}{z} \\
-\sigma_{I_{ZZ}} & = \sigmamoi{ZZ}{x}{y} \\
+\sigma_{I_{XX}} & = \sqrt{ \sum_{i=1}^n \big\{
+  \sigma_{{I_{XX}}_i}^2 + \big[ 2 w_i ({y}_i - \bar{y}) \sigma_{{y}_i} \big]^2 + \big[ 2 w_i ({z}_i - \bar{z}) \sigma_{{z}_i} \big]^2 + \big[ \big(({y}_i - \bar{y})^2 + ({z}_i - \bar{z})^2 \big)\sigma_{w_i}\big]^2 \big\} }
+ \\
+\sigma_{I_{YY}} & = \sqrt{ \sum_{i=1}^n \big\{
+  \sigma_{{I_{YY}}_i}^2 + \big[ 2 w_i ({x}_i - \bar{x}) \sigma_{{x}_i} \big]^2 + \big[ 2 w_i ({z}_i - \bar{z}) \sigma_{{z}_i} \big]^2 + \big[ \big(({x}_i - \bar{x})^2 + ({z}_i - \bar{z})^2 \big)\sigma_{w_i}\big]^2 \big\} }
+ \\
+\sigma_{I_{ZZ}} & = \sqrt{ \sum_{i=1}^n \big\{
+  \sigma_{{I_{ZZ}}_i}^2 + \big[ 2 w_i ({x}_i - \bar{x}) \sigma_{{x}_i} \big]^2 + \big[ 2 w_i ({y}_i - \bar{y}) \sigma_{{y}_i} \big]^2 + \big[ \big(({x}_i - \bar{x})^2 + ({y}_i - \bar{y})^2 \big)\sigma_{w_i}\big]^2 \big\} }
+ \\
 \end{align}
 $$
 
@@ -468,9 +502,15 @@ $$
 
 $$
 \begin{align}
-\sigma_{I_{XY}} & = \sigmapoi{XY}{x}{y} \\
-\sigma_{I_{XZ}} & = \sigmapoi{XZ}{x}{z} \\
-\sigma_{I_{YZ}} & = \sigmapoi{YZ}{y}{z} \\
+\sigma_{I_{XY}} & = \sqrt{ \sum_{i=1}^n \big\{
+  \sigma_{{I_{XY}}_i}^2 + \big[ ({x}_i - \bar{x}) w_i \sigma_{{y}_i}\big]^2 + \big[  ({x}_i - \bar{x})({y}_i - \bar{y})\sigma_{w_i} \big]^2 + \big[ ({y}_i - \bar{y})  w_i \sigma_{{x}_i} \big]^2 \big\} }
+ \\
+\sigma_{I_{XZ}} & = \sqrt{ \sum_{i=1}^n \big\{
+  \sigma_{{I_{XZ}}_i}^2 + \big[ ({x}_i - \bar{x}) w_i \sigma_{{z}_i}\big]^2 + \big[  ({x}_i - \bar{x})({z}_i - \bar{z})\sigma_{w_i} \big]^2 + \big[ ({z}_i - \bar{z})  w_i \sigma_{{x}_i} \big]^2 \big\} }
+ \\
+\sigma_{I_{YZ}} & = \sqrt{ \sum_{i=1}^n \big\{
+  \sigma_{{I_{YZ}}_i}^2 + \big[ ({y}_i - \bar{y}) w_i \sigma_{{z}_i}\big]^2 + \big[  ({y}_i - \bar{y})({z}_i - \bar{z})\sigma_{w_i} \big]^2 + \big[ ({z}_i - \bar{z})  w_i \sigma_{{y}_i} \big]^2 \big\} }
+ \\
 \end{align}
 $$
 
@@ -481,7 +521,7 @@ Let
 $$
 \boxed{
 \begin{align}
-\boldsymbol{d}_i & = (\di{x} \quad \di{y} \quad \di{z})^T \\
+\boldsymbol{d}_i & = (({x}_i - \bar{x}) \quad ({y}_i - \bar{y}) \quad ({z}_i - \bar{z}))^T \\
 {\boldsymbol{\sigma_c}}_i & = ({\sigma_x}_i \quad {\sigma_y}_i \quad {\sigma_z}_i)^T \\
 \boldsymbol{P}_i & = \boldsymbol{d}_i {\boldsymbol{\sigma_c}}_i^T \\
 \boldsymbol{Q}_i & = \boldsymbol{d}_i {\boldsymbol{d}_i}^T
@@ -495,17 +535,17 @@ $$
 \begin{align}
 \boldsymbol{P}_i & = 
 \begin{bmatrix}
-(x_i - \bar{x})\sigma_{x_i} &\di{x}\sigma_{y_i} &\di{x}\sigma_{z_i} \\
-\di{y}\sigma_{x_i} & \di{y}\sigma_{y_i} & \di{y}\sigma_{z_i} \\
-\di{z}\sigma_{x_i} & \di{z}\sigma_{y_i} & \di{z}\sigma_{z_i} \\
+(x_i - \bar{x})\sigma_{x_i} &({x}_i - \bar{x})\sigma_{y_i} &({x}_i - \bar{x})\sigma_{z_i} \\
+({y}_i - \bar{y})\sigma_{x_i} & ({y}_i - \bar{y})\sigma_{y_i} & ({y}_i - \bar{y})\sigma_{z_i} \\
+({z}_i - \bar{z})\sigma_{x_i} & ({z}_i - \bar{z})\sigma_{y_i} & ({z}_i - \bar{z})\sigma_{z_i} \\
 \end{bmatrix}
 \\
 \\
 \boldsymbol{Q}_i & =
 \begin{bmatrix}
-(x_i - \bar{x})^2 &\di{x}\di{y} &\di{x}\di{z} \\
-\di{y}(x_i - \bar{x}) & \di{y}^2 & \di{y}\di{z} \\
-\di{z}(x_i - \bar{x}) & \di{z}\di{y} & \di{z}^2 \\
+(x_i - \bar{x})^2 &({x}_i - \bar{x})({y}_i - \bar{y}) &({x}_i - \bar{x})({z}_i - \bar{z}) \\
+({y}_i - \bar{y})(x_i - \bar{x}) & ({y}_i - \bar{y})^2 & ({y}_i - \bar{y})({z}_i - \bar{z}) \\
+({z}_i - \bar{z})(x_i - \bar{x}) & ({z}_i - \bar{z})({y}_i - \bar{y}) & ({z}_i - \bar{z})^2 \\
 \end{bmatrix}
 \end{align}
 $$
@@ -516,46 +556,46 @@ $$
 \boldsymbol{\sigma_I}^2 = \sum_{i=1}^{} \boldsymbol{s}_i^2
 $$
 
-Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $P_i$. If we interpret squaring a matrix as the Hadamard (element-wise) product with itself, then $$
+Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $P_i$. Let $\boldsymbol{1}_3$ be the $3x3$ identity matrix. If we interpret squaring a matrix as the Hadamard (element-wise) product with itself, then $$
 \begin{align}
 \boldsymbol{s}_i^2 & = {\boldsymbol{\sigma_I}}_i^2 \\
 & + 
 \begin{bmatrix}
-2 w_i \di{y} \sigma_{y_i} &   w_i\di{x} \sigma_{y_i} &   w_i\di{x} \sigma_{z_i} \\
-  w_i\di{x} \sigma_{y_i} & 2 w_i\di{x} \sigma_{x_i} &   w_i \di{y} \sigma_{z_i} \\
-  w_i\di{x} \sigma_{z_i} &   w_i \di{y} \sigma_{z_i} & 2 w_i\di{x} \sigma_{x_i}
+2 w_i ({y}_i - \bar{y}) \sigma_{y_i} &   w_i({x}_i - \bar{x}) \sigma_{y_i} &   w_i({x}_i - \bar{x}) \sigma_{z_i} \\
+  w_i({x}_i - \bar{x}) \sigma_{y_i} & 2 w_i({x}_i - \bar{x}) \sigma_{x_i} &   w_i ({y}_i - \bar{y}) \sigma_{z_i} \\
+  w_i({x}_i - \bar{x}) \sigma_{z_i} &   w_i ({y}_i - \bar{y}) \sigma_{z_i} & 2 w_i({x}_i - \bar{x}) \sigma_{x_i}
 \end{bmatrix}^2 \\
 & +
 \begin{bmatrix}
-2 w_i \di{z} \sigma_{z_i} &   w_i \di{y} \sigma_{x_i} &   w_i \di{z} \sigma_{x_i} \\
-  w_i \di{y} \sigma_{x_i} & 2 w_i \di{z} \sigma_{z_i} &   w_i \di{z} \sigma_{y_i} \\
-  w_i \di{z} \sigma_{x_i} &   w_i \di{z} \sigma_{y_i} & 2 w_i \di{y} \sigma_{y_i}
+2 w_i ({z}_i - \bar{z}) \sigma_{z_i} &   w_i ({y}_i - \bar{y}) \sigma_{x_i} &   w_i ({z}_i - \bar{z}) \sigma_{x_i} \\
+  w_i ({y}_i - \bar{y}) \sigma_{x_i} & 2 w_i ({z}_i - \bar{z}) \sigma_{z_i} &   w_i ({z}_i - \bar{z}) \sigma_{y_i} \\
+  w_i ({z}_i - \bar{z}) \sigma_{x_i} &   w_i ({z}_i - \bar{z}) \sigma_{y_i} & 2 w_i ({y}_i - \bar{y}) \sigma_{y_i}
 \end{bmatrix}^2 \\
 & +
 \begin{bmatrix}
-(\di{y}^2 + \di{z}^2)\sigma_{w_i} &\di{x}\di{y}\sigma_{w_i} &\di{x}\di{z}\sigma_{w_i} \\
-\di{y}(x_i - \bar{x})\sigma_{w_i} & ((x_i - \bar{x})^2 + \di{z}^2)\sigma_{w_i} & \di{y}\di{z}\sigma_{w_i} \\
-\di{z}(x_i - \bar{x})\sigma_{w_i} & \di{z}\di{y}\sigma_{w_i} & ((x_i - \bar{x})^2 + \di{y}^2)\sigma_{w_i} \\
+(({y}_i - \bar{y})^2 + ({z}_i - \bar{z})^2)\sigma_{w_i} &({x}_i - \bar{x})({y}_i - \bar{y})\sigma_{w_i} &({x}_i - \bar{x})({z}_i - \bar{z})\sigma_{w_i} \\
+({y}_i - \bar{y})(x_i - \bar{x})\sigma_{w_i} & ((x_i - \bar{x})^2 + ({z}_i - \bar{z})^2)\sigma_{w_i} & ({y}_i - \bar{y})({z}_i - \bar{z})\sigma_{w_i} \\
+({z}_i - \bar{z})(x_i - \bar{x})\sigma_{w_i} & ({z}_i - \bar{z})({y}_i - \bar{y})\sigma_{w_i} & ((x_i - \bar{x})^2 + ({y}_i - \bar{y})^2)\sigma_{w_i} \\
 \end{bmatrix}^2 \\ \\
 & = {\boldsymbol{\sigma_I}}_i^2 \\
 & + w_i^2 \left(
 \boldsymbol{P}_i -
 \begin{bmatrix}
-(x_i - \bar{x})\sigma_{x_i} - 2 \di{y}\sigma_{y_i} & 0 & 0 \\
-0 & \di{y}\sigma_{y_i} - 2\di{x}\sigma_{x_i} & 0 \\
-0 & 0 & \di{z}\sigma_{y_i} - 2\di{x}\sigma_{x_i} \\
+(x_i - \bar{x})\sigma_{x_i} - 2 ({y}_i - \bar{y})\sigma_{y_i} & 0 & 0 \\
+0 & ({y}_i - \bar{y})\sigma_{y_i} - 2({x}_i - \bar{x})\sigma_{x_i} & 0 \\
+0 & 0 & ({z}_i - \bar{z})\sigma_{y_i} - 2({x}_i - \bar{x})\sigma_{x_i} \\
 \end{bmatrix}
 \right) ^2 \\
 & + w_i^2 \left(
 \boldsymbol{P}_i^T -
 \begin{bmatrix}
-(x_i - \bar{x})\sigma_{x_i} - 2 \di{z}\sigma_{y_i} & 0 & 0 \\
-0 & \di{y}\sigma_{y_i} - 2 \di{z}\sigma_{z_i} & 0 \\
-0 & 0 & \di{z}\sigma_{y_i} - 2 \di{y}\sigma_{y_i} \\
+(x_i - \bar{x})\sigma_{x_i} - 2 ({z}_i - \bar{z})\sigma_{y_i} & 0 & 0 \\
+0 & ({y}_i - \bar{y})\sigma_{y_i} - 2 ({z}_i - \bar{z})\sigma_{z_i} & 0 \\
+0 & 0 & ({z}_i - \bar{z})\sigma_{y_i} - 2 ({y}_i - \bar{y})\sigma_{y_i} \\
 \end{bmatrix}
 \right) ^2 \\
 & + \sigma_{w_i}^2 \left(
-\boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{I}_3
+\boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3
 \right)^2 \\ \\
 & = {\boldsymbol{\sigma_I}}_i^2 \\
 & + w_i^2 \left(
@@ -575,7 +615,7 @@ Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $
 \end{bmatrix}
 \right) ^2 \\
 & + \sigma_{w_i}^2 \left(
-\boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{I}_3
+\boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3
 \right)^2
 \end{align}
 $$
@@ -605,7 +645,7 @@ $$
 \end{bmatrix}
 \right) ^2 \\
 & + \sigma_{w_i}^2 \left(
-\boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{I}_3
+\boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3
 \right)^2
 \end{align}
 \right\}}
@@ -645,7 +685,9 @@ In this section we will calculate the answers for the SAWE step by step and comp
 sawe_input <- sawe_table[which(sawe_table$id != "Combined"), ]
 sawe_input
 ```
+
 Our computed result is
+
 ```{r}
 sawe_result <- rollup_mass_props_and_unc(sawe_tree, sawe_table)[3, ]
 sawe_result
@@ -660,10 +702,13 @@ agree <- function(l) if (l) "agrees" else "does not agree"
 ```{r}
 mass <- sum(sawe_input$mass)
 ```
+
 The independently-calculated mass is
+
 ```{r echo = FALSE}
 mass
 ```
+
 This `r agree(isTRUE(all.equal(mass, sawe_result$mass)))` with the computed result.
 
 ## Center of Mass
@@ -671,10 +716,13 @@ This `r agree(isTRUE(all.equal(mass, sawe_result$mass)))` with the computed resu
 ```{r}
 C <- apply(sawe_input$mass /mass * sawe_input[, c("Cx", "Cy", "Cz")], 2, sum)
 ```
+
 The independently-calculated center of mass is
+
 ```{r echo = FALSE}
 C
 ```
+
 This `r agree(isTRUE(all.equal(unname(C), c(sawe_result$Cx, sawe_result$Cy, sawe_result$Cz))))` with the computed result.
 
 ## Moments of Inertia
@@ -691,9 +739,11 @@ MOI <- c(
 ```
 
 The independently-calculated moments of inertia are
+
 ```{r echo = FALSE}
 MOI
 ```
+
 This `r agree(isTRUE(all.equal(MOI, c(Ixx = sawe_result$Ixx, Iyy = sawe_result$Iyy, Izz = sawe_result$Izz))))` with the computed result.
 
 ## Products of Inertia
@@ -710,9 +760,11 @@ POI <- c(
 ```
 
 The independently-calculated products of inertia are
+
 ```{r echo = FALSE}
 POI
 ```
+
 This `r agree(isTRUE(all.equal(POI, c(Ixy = sawe_result$Ixy, Ixz = sawe_result$Ixz, Iyz = sawe_result$Iyz))))` with the computed result.
 
 ## Mass Uncertainty
@@ -720,7 +772,9 @@ This `r agree(isTRUE(all.equal(POI, c(Ixy = sawe_result$Ixy, Ixz = sawe_result$I
 ```{r}
 sigma_mass <- sqrt(sum(sawe_input$`σ_mass`^2))
 ```
+
 The independently-calculated mass uncertainty is
+
 ```{r echo = FALSE}
 sigma_mass
 ```
@@ -739,10 +793,13 @@ sigma_C <- c(
   sigma_Cz = sqrt(sum(sigma_cm(sawe_input$mass, sawe_input$`σ_Cz`, sawe_input$`σ_mass`, sawe_input$Cz, C["Cz"]))) / mass
 )
 ```
+
 The independently-calculated center of mass uncertainties are
+
 ```{r echo = FALSE}
 sigma_C
 ```
+
 This `r agree(isTRUE(all.equal(sigma_C, c(sigma_Cx = sawe_result$σ_Cx, sigma_Cy = sawe_result$σ_Cy, sigma_Cz = sawe_result$σ_Cz))))` with the computed result.
 
 ## Moments of Inertia Uncertainty
@@ -763,10 +820,13 @@ sigma_MOI <- c(
                                   sawe_input$Cy, C["Cx"], C["Cy"], sawe_input$σ_Cx, sawe_input$σ_Cy)))
 )
 ```
+
 The independently-calculated moments of inertia uncertainties are
+
 ```{r echo = FALSE}
 sigma_MOI
 ```
+
 This `r agree(isTRUE(all.equal(sigma_MOI, c(sigma_Ixx = sawe_result$σ_Ixx, sigma_Iyy = sawe_result$σ_Iyy, sigma_Izz = sawe_result$σ_Izz))))` with the computed result.
 
 ## Products of Inertia Uncertainty
@@ -787,10 +847,13 @@ sigma_POI <- c(
                                   sawe_input$Cz, C["Cy"], C["Cz"], sawe_input$σ_Cy, sawe_input$σ_Cz)))
 )
 ```
+
 The independently-calculated products of inertia uncertainties are
+
 ```{r echo = FALSE}
 sigma_POI
 ```
+
 This `r agree(isTRUE(all.equal(sigma_POI, c(sigma_Ixy = sawe_result$σ_Ixy, sigma_Ixz = sawe_result$σ_Ixz, sigma_Iyz = sawe_result$σ_Iyz))))` with the computed result.
 
 # Comparison With Published Results

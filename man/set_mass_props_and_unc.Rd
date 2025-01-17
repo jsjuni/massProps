@@ -34,5 +34,6 @@ specified row in a data frame with an \code{id} column.
 df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
 v <- get_mass_props_and_unc(mp_table, "C.1.2.2.3.2.1.1")
 v$poi_conv = "+"
-set_mass_props_and_unc(df, "C.1.2.2.3.2.1.1", v)
+df <- set_mass_props_and_unc(df, "C.1.2.2.3.2.1.1", v)
+get_mass_props_and_unc(df, "C.1.2.2.3.2.1.1")
 }

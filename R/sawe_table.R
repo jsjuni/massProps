@@ -1,10 +1,11 @@
 #' Mass Properties and Uncertainties Table from SAWE Paper No. 3360
-#' @source
-#' Zimmerman, Robert L., and John H. Nakai. 2005. “Are You Sure? Uncertainty in Mass Properties Engineering.”
-#' In 64th Annual International Conference on Mass Properties Engineering, 123–60. Society of Allied Weight Engineers.
+#' @source Zimmerman, Robert L., and John H. Nakai. 2005. “Are You Sure?
+#'   Uncertainty in Mass Properties Engineering.” In 64th Annual International
+#'   Conference on Mass Properties Engineering, 123–60. Society of Allied Weight
+#'   Engineers.
 #'
-#' Note: the results for combined mass properties and uncertainties in the published example are accurate
-#' only within approximately 0.2%.
+#'   Note: the results for combined mass properties and uncertainties in the
+#'   published example are accurate only within approximately 0.2%.
 #' @format A data frame with columns:
 #' \describe{
 #' \item{id}{unique key}
