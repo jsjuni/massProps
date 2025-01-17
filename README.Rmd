@@ -1,5 +1,6 @@
 ---
 output: github_document
+bibliography: vignettes/references.bib
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -18,9 +19,13 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of massProps is to ...
+The `massProps` package extends `rollupTree` with functions to recursively calculate mass properties (and optionally, their uncertainties) for arbitrary composition trees. Formulas implemented are described in a technical paper published by the Society of Allied Weight Engineers.[@zimmerman:05:sawe]
 
 ## Installation
+
+```{r eval = FALSE}
+install.packages("massProps")
+```
 
 You can install the development version of massProps from [GitHub](https://github.com/) with:
 
@@ -31,25 +36,27 @@ pak::pak("jsjuni/massProps")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+```{r echo = FALSE}
+suppressPackageStartupMessages({library(igraph)})
+```
 
-```{r example}
+Suppose we have the following mass properties table:
+
+```{r}
 library(massProps)
-## basic example code
+test_table
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+and this graph with edges representing child-parent relations:
 
-```{r cars}
-summary(cars)
+```{r}
+library(igraph)
+E(test_tree)
+```
+We can roll up mass properties to non-leaf elements as follows:
+
+```{r}
+rollup_mass_props(test_tree, test_table)
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+## References
