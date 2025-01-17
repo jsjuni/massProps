@@ -484,18 +484,18 @@ test_that("rollup_mass_props_and_unc() works", {
 })
 
 test_that("rollup_mass_props_fast() works", {
-  df <- rollup_mass_props_fast(test_tree, test_table, "A.1")
+  df <- rollup_mass_props_fast(test_tree, test_table)
   result <- df[which(df$id == "A.1"), ]
 
   expect_equal(result$mass, 21)
 
   invalid_table <- test_table
   invalid_table$mass <- NA
-  expect_no_error(rollup_mass_props_fast(test_tree, invalid_table, "A.1"))
+  expect_no_error(rollup_mass_props_fast(test_tree, invalid_table))
 })
 
 test_that("rollup_mass_props_and_unc_fast() works", {
-  df <- rollup_mass_props_and_unc_fast(sawe_tree, sawe_table, "Combined")
+  df <- rollup_mass_props_and_unc_fast(sawe_tree, sawe_table)
   result <- df[which(df$id == "Combined"), ]
 
   expect_equal(result$mass, 74.63, tolerance = .002)
@@ -503,7 +503,7 @@ test_that("rollup_mass_props_and_unc_fast() works", {
 
   invalid_table <- sawe_table
   invalid_table$"\u03c3_mass" <- NA
-  expect_no_error(rollup_mass_props_and_unc_fast(sawe_tree, invalid_table, "Combined"))
+  expect_no_error(rollup_mass_props_and_unc_fast(sawe_tree, invalid_table))
 
 })
 

@@ -620,8 +620,8 @@ rollup_mass_props_and_unc <- function(tree, df, validate_df = validate_mass_prop
 #'
 #' @examples
 #' rollup_mass_props_fast(test_tree, test_table, "A.1")
-rollup_mass_props_fast <- function(tree, df, root) {
-  rollup(tree, df, update_mass_props, validate_ds = function(t, d) TRUE, validate_tree = function(t) root)
+rollup_mass_props_fast <- function(tree, df) {
+  rollup(tree, df, update_mass_props, validate_ds = function(t, d) TRUE, validate_tree = function(t) NA)
 }
 
 #' Roll Up Mass Properties And Uncertainties Without Input Validation
@@ -641,6 +641,6 @@ rollup_mass_props_fast <- function(tree, df, root) {
 #'
 #' @examples
 #' rollup_mass_props_and_unc_fast(sawe_tree, sawe_table, "Combined")
-rollup_mass_props_and_unc_fast <- function(tree, df, root) {
-  rollup(tree, df, update_mass_props_and_unc, validate_ds = function(t, d) TRUE, validate_tree = function(t) root)
+rollup_mass_props_and_unc_fast <- function(tree, df) {
+  rollup(tree, df, update_mass_props_and_unc, validate_ds = function(t, d) TRUE, validate_tree = function(t) NA)
 }
