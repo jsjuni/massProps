@@ -1,13 +1,13 @@
 Package: massProps
 Title: Computing Mass Properties of Aggregates
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person(given=c("James", "Steven"), family="Jenkins",
       email = "sjenkins@studioj.us",
       role = c("aut", "cre", "cph"),
       comment = c(ORCID = "0000-0002-0725-0884")
     )
-Description: `massProps` uses the `rollupTree` package to calculate mass properties and uncertainties
+Description: The 'massProps' package calculates mass properties and uncertainties
   for tree structures (e.g., assembly bill of materials).
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -25,6 +25,7 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://jsjuni.github.io/massProps/
-Remotes:  
+URL: https://jsjuni.github.io/massProps/, https://github.com/jsjuni/massProps
+Remotes: 
     jsjuni/rollupTree
+BugReports: https://github.com/jsjuni/massProps/issues
