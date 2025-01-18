@@ -646,3 +646,33 @@ rollup_mass_props_fast <- function(tree, df) {
 rollup_mass_props_and_unc_fast <- function(tree, df) {
   rollup(tree, df, update_mass_props_and_unc, validate_ds = function(t, d) TRUE, validate_tree = function(t) NA)
 }
+
+#' Add Radii of Gyration to a Mass Properties Dataframe
+#'
+#' @description
+#' `add_radii_of_gyration()` adds radii of gyration columns to a dataframe with mass
+#' and moments of inertia columns.
+#'
+#' @param df data frame including columns `mass`, `Ixx`, `Iyy`, `Izz`
+#'
+#' @returns input data frame with added (or overwritten) columns `Kx`, `Ky`, `Kz`.
+#' @export
+#'
+#' @examples
+#' add_radii_of_gyration(rollup_mass_props(test_tree, test_table))
+add_radii_of_gyration <- function(df) {
+  input <- list(Kx = "Ixx", Ky = "Iyy", Kz = "Izz")
+  Reduce(
+    f = function(d, i) {
+      Reduce(
+        f = function(d, output) {
+          df_set_by_id(d, i, output, sqrt(df_get_by_id(d, i, input[[output]]) / df_get_by_id(d, i, "mass")))
+        },
+        x = names(input),
+        init = d
+      )
+    },
+    x = df_get_ids(df),
+    init = df
+  )
+}

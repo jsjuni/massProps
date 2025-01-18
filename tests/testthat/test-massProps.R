@@ -504,6 +504,14 @@ test_that("rollup_mass_props_and_unc_fast() works", {
   invalid_table <- sawe_table
   invalid_table$"\u03c3_mass" <- NA
   expect_no_error(rollup_mass_props_and_unc_fast(sawe_tree, invalid_table))
-
 })
 
+test_that("add_radii_of_gyration() wors", {
+  in_df <- mp_table[which(!is.na(mp_table$mass))[1:20], ]
+  out_df <- add_radii_of_gyration(in_df)
+  in_df$Kx <- sqrt(in_df$Ixx / in_df$mass)
+  in_df$Ky <- sqrt(in_df$Iyy / in_df$mass)
+  in_df$Kz <- sqrt(in_df$Izz / in_df$mass)
+
+  expect_true(all.equal(in_df, out_df))
+})

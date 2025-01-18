@@ -772,7 +772,7 @@ This `r agree(isTRUE(all.equal(POI, c(Ixy = sawe_result$Ixy, Ixz = sawe_result$I
 ### Mass Uncertainty
 
 ```{r}
-sigma_mass <- sqrt(sum(sawe_input$σ_mass^2))
+sigma_mass <- sqrt(sum(sawe_input$σ_masslib^2))
 ```
 
 The independently-calculated mass uncertainty is
