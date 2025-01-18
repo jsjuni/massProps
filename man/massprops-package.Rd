@@ -6,12 +6,14 @@
 \alias{massProps-package}
 \title{massProps: Computing Mass Properties of Aggregates}
 \description{
-`massProps` uses the `rollupTree` package to calculate mass properties and uncertainties for tree structures (e.g., assembly bill of materials).
+The 'massProps' package calculates mass properties and uncertainties for tree structures (e.g., assembly bill of materials).
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://jsjuni.github.io/massProps/}
+  \item \url{https://github.com/jsjuni/massProps}
+  \item Report bugs at \url{https://github.com/jsjuni/massProps/issues}
 }
 
 }
