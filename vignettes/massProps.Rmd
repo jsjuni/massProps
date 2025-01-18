@@ -716,7 +716,7 @@ This `r agree(isTRUE(all.equal(mass, sawe_result$mass)))` with the computed resu
 ### Center of Mass
 
 ```{r}
-C <- apply(sawe_input$mass /mass * sawe_input[, c("Cx", "Cy", "Cz")], 2, sum)
+C <- apply(sawe_input$mass / mass * sawe_input[, c("Cx", "Cy", "Cz")], 2, sum)
 ```
 
 The independently-calculated center of mass is
@@ -772,7 +772,7 @@ This `r agree(isTRUE(all.equal(POI, c(Ixy = sawe_result$Ixy, Ixz = sawe_result$I
 ### Mass Uncertainty
 
 ```{r}
-sigma_mass <- sqrt(sum(sawe_input$`σ_mass`^2))
+sigma_mass <- sqrt(sum(sawe_input$σ_mass^2))
 ```
 
 The independently-calculated mass uncertainty is
@@ -790,9 +790,9 @@ sigma_cm <- function(m, sigma_v, sigma_m, v, c) {
   (m * sigma_v)^2 + (sigma_m * (v - c))^2
 }
 sigma_C <- c(
-  sigma_Cx = sqrt(sum(sigma_cm(sawe_input$mass, sawe_input$`σ_Cx`, sawe_input$`σ_mass`, sawe_input$Cx, C["Cx"]))) / mass,
-  sigma_Cy = sqrt(sum(sigma_cm(sawe_input$mass, sawe_input$`σ_Cy`, sawe_input$`σ_mass`, sawe_input$Cy, C["Cy"]))) / mass,
-  sigma_Cz = sqrt(sum(sigma_cm(sawe_input$mass, sawe_input$`σ_Cz`, sawe_input$`σ_mass`, sawe_input$Cz, C["Cz"]))) / mass
+  sigma_Cx = sqrt(sum(sigma_cm(sawe_input$mass, sawe_input$σ_Cx, sawe_input$σ_mass, sawe_input$Cx, C["Cx"]))) / mass,
+  sigma_Cy = sqrt(sum(sigma_cm(sawe_input$mass, sawe_input$σ_Cy, sawe_input$σ_mass, sawe_input$Cy, C["Cy"]))) / mass,
+  sigma_Cz = sqrt(sum(sigma_cm(sawe_input$mass, sawe_input$σ_Cz, sawe_input$σ_mass, sawe_input$Cz, C["Cz"]))) / mass
 )
 ```
 
