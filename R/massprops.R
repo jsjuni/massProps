@@ -695,9 +695,10 @@ add_radii_of_gyration_unc <- function(df) {
       mass <- df_get_by_id(d, i, "mass")
       sigma_mass <- df_get_by_id(d, i, "\u03c3_mass")
       sigma_k <- sqrt(sigma_I^2 / (4 * mass * I) + (I * sigma_mass^2) / (4 * mass^3))
-      df_set_by_id(df = d, i, "\u03c3_Kx", sigma_k$"\u03c3_Ixx") |>
-        df_set_by_id(i, "\u03c3_Ky", sigma_k$"\u03c3_Iyy") |>
-        df_set_by_id(i, "\u03c3_Kz", sigma_k$"\u03c3_Izz")
+      names(sigma_k) <- c("x", "y", "z")
+      df_set_by_id(df = d, i, "\u03c3_Kx", sigma_k$x) |>
+        df_set_by_id(i, "\u03c3_Ky", sigma_k$y) |>
+        df_set_by_id(i, "\u03c3_Kz", sigma_k$z)
     },
     x = df_get_ids(df),
     init = df
