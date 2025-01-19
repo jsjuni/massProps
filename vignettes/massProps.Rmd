@@ -676,6 +676,58 @@ The corresponding `R` code is
   )))
 ```
 
+## Radii of Gyration and Their Uncertainties
+
+$$
+\begin{align}
+k_x = \sqrt{I_{xx} / m} \\
+k_y = \sqrt{I_{yy} / m} \\
+k_z = \sqrt{I_{yy} / m} \\
+\end{align}
+$$
+Let
+
+$$
+\boxed{
+\begin{align}
+\boldsymbol{k} & = (k_x \quad k_y \quad k_z)^T \\
+\boldsymbol{I} & = (I_{XX} \quad I_{YY} \quad I_{ZZ})^T
+\end{align}
+}
+$$
+$$
+\boxed{
+\boldsymbol{k} = \sqrt{ \boldsymbol{I} / m }
+}
+$$
+
+$$
+\begin{align}
+{\sigma_k}^2 & = \left( \frac{\partial k}{\partial I} \right)^2 {\sigma_I}^2 + \left( \frac{\partial k}{\partial m} \right)^2 {\sigma_m}^2 \\
+  & = \left( \frac{1}{2 \sqrt{m I}} \right)^2 {\sigma_I}^2 + \left(\frac{- \sqrt{I}}{2 m^{3/2}}\right)^2 {\sigma_m}^2 \\
+  & = \frac{1}{4 m I} {\sigma_I}^2 + \frac{I}{4 m^3} {\sigma_m}^2 \\
+\end{align}
+$$
+Let
+
+$$
+\boxed{
+\begin{align}
+\sigma_\boldsymbol{k} & = (\sigma_{k_x} \quad \sigma_{k_y} \quad \sigma_{k_z})^T \\
+\sigma_\boldsymbol{I} & = (\sigma_{I_{XX}} \quad \sigma_{I_{YY}} \quad \sigma_{I_{ZZ}})^T
+\end{align}
+}
+$$
+Recalling that arithmetic operations on vectors are element-wise, we can write the expression for radii of gyration uncertainty in vector form:
+
+$$
+\boxed{
+\begin{align}
+{\sigma_\boldsymbol{k}} & = \frac{1}{2} \sqrt{ \frac{1}{m \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{m^3} {\sigma_m}^2 }
+\end{align}
+}
+$$
+
 # Testing and Validation
 
 ## Comparison With Independently-Calculated Results
