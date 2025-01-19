@@ -682,7 +682,7 @@ $$
 \begin{align}
 k_x = \sqrt{I_{xx} / m} \\
 k_y = \sqrt{I_{yy} / m} \\
-k_z = \sqrt{I_{yy} / m} \\
+k_z = \sqrt{I_{zz} / m} \\
 \end{align}
 $$
 Let
