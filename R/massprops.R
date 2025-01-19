@@ -649,8 +649,8 @@ rollup_mass_props_and_unc_fast <- function(tree, df) {
 #' Add Radii of Gyration to a Mass Properties Dataframe
 #'
 #' @description
-#' `add_radii_of_gyration()` adds radii of gyration columns to a dataframe with mass
-#' and moments of inertia columns.
+#' `add_radii_of_gyration()` adds radii of gyration to a dataframe with mass
+#' and moments of inertia columns. This computation is not recursive.
 #'
 #' @param df data frame including columns `mass`, `Ixx`, `Iyy`, `Izz`
 #'
@@ -660,16 +660,44 @@ rollup_mass_props_and_unc_fast <- function(tree, df) {
 #' @examples
 #' add_radii_of_gyration(rollup_mass_props(test_tree, test_table))
 add_radii_of_gyration <- function(df) {
-  input <- list(Kx = "Ixx", Ky = "Iyy", Kz = "Izz")
   Reduce(
     f = function(d, i) {
-      Reduce(
-        f = function(d, output) {
-          df_set_by_id(d, i, output, sqrt(df_get_by_id(d, i, input[[output]]) / df_get_by_id(d, i, "mass")))
-        },
-        x = names(input),
-        init = d
-      )
+      I <- df_get_by_id(d, i, c("Ixx", "Iyy", "Izz"))
+      mass <- df_get_by_id(d, i, "mass")
+      k <- sqrt(I / mass)
+      df_set_by_id(d, i, "Kx", k$Ixx) |>
+        df_set_by_id(i, "Ky", k$Iyy) |>
+        df_set_by_id(i, "Kz", k$Izz)
+    },
+    x = df_get_ids(df),
+    init = df
+  )
+}
+
+#' Add Radii of Gyration Uncertainties
+#'
+#' @param df a data frame including columns `mass`, 'σ_mass`, `Ixx`, `σ_Ixx`, `Iyy`, `σ_Iyy`, `Izz`, and `σ_Izz`.
+#'
+#' @description
+#' `add_radii_of_gyration_unc()` adds radii of gyration uncertainties to a dataframe with mass
+#' and moments of inertia and their uncertainties columns. This computation is not recursive.
+#'
+#' @returns input data frame with added (or overwritten) columns `σ_Kx`, `σ_Ky`, `σ_Kz`.
+#' @export
+#'
+#' @examples
+#' add_radii_of_gyration_unc(rollup_mass_props_and_unc(sawe_tree, sawe_table))
+add_radii_of_gyration_unc <- function(df) {
+  Reduce(
+    f = function(d, i) {
+      I <- df_get_by_id(d, i, c("Ixx", "Iyy", "Izz"))
+      sigma_I <- df_get_by_id(d, i, c("\u03c3_Ixx", "\u03c3_Iyy", "\u03c3_Izz"))
+      mass <- df_get_by_id(d, i, "mass")
+      sigma_mass <- df_get_by_id(d, i, "\u03c3_mass")
+      sigma_k <- sqrt(sigma_I^2 / (4 * mass * I) + (I * sigma_mass^2) / (4 * mass^3))
+      df_set_by_id(df = d, i, "\u03c3_Kx", sigma_k$"\u03c3_Ixx") |>
+        df_set_by_id(i, "\u03c3_Ky", sigma_k$"\u03c3_Iyy") |>
+        df_set_by_id(i, "\u03c3_Kz", sigma_k$"\u03c3_Izz")
     },
     x = df_get_ids(df),
     init = df

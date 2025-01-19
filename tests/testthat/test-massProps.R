@@ -506,12 +506,22 @@ test_that("rollup_mass_props_and_unc_fast() works", {
   expect_no_error(rollup_mass_props_and_unc_fast(sawe_tree, invalid_table))
 })
 
-test_that("add_radii_of_gyration() wors", {
+test_that("add_radii_of_gyration() works", {
   in_df <- mp_table[which(!is.na(mp_table$mass))[1:20], ]
   out_df <- add_radii_of_gyration(in_df)
   in_df$Kx <- sqrt(in_df$Ixx / in_df$mass)
   in_df$Ky <- sqrt(in_df$Iyy / in_df$mass)
   in_df$Kz <- sqrt(in_df$Izz / in_df$mass)
+
+  expect_true(all.equal(in_df, out_df))
+})
+
+test_that("add_radii_of_gyration_unc() works", {
+  in_df <- rollup_mass_props_and_unc(mp_tree, mp_table)[which(!is.na(mp_table$mass))[1:20], ]
+  out_df <- add_radii_of_gyration_unc(in_df)
+  in_df$"\u03c3_Kx" <- sqrt(in_df$"\u03c3_Ixx"^2 / (4 * in_df$mass * in_df$Ixx) + (in_df$Ixx * in_df$"\u03c3_mass"^2) / (4 * in_df$mass^3))
+  in_df$"\u03c3_Ky" <- sqrt(in_df$"\u03c3_Iyy"^2 / (4 * in_df$mass * in_df$Iyy) + (in_df$Iyy * in_df$"\u03c3_mass"^2) / (4 * in_df$mass^3))
+  in_df$"\u03c3_Kz" <- sqrt(in_df$"\u03c3_Izz"^2 / (4 * in_df$mass * in_df$Izz) + (in_df$Izz * in_df$"\u03c3_mass"^2) / (4 * in_df$mass^3))
 
   expect_true(all.equal(in_df, out_df))
 })
