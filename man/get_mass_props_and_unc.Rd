@@ -7,12 +7,12 @@
 get_mass_props_and_unc(df, id)
 }
 \arguments{
-\item{df}{A data frame}
+\item{df}{data frame}
 
-\item{id}{ID value of the desired row}
+\item{id}{id value of the desired row}
 }
 \value{
-A list with the following named elements:
+list with the following named elements:
 \itemize{
 \item \code{mass} mass (numeric)
 \item \code{center_mass} center of mass (3-dimensional numeric)
@@ -24,10 +24,8 @@ A list with the following named elements:
 }
 }
 \description{
-\code{get_mass_props_and_unc()} gets mass properties with uncertainties for a specified row in a data frame
-with (at least) these columns: \code{id}, \code{mass}, \code{Cx}, \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy},
-\code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}, \code{sigma_mass}, \code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz},
-\code{sigma_Ixx}, \code{sigma_Iyy}, \code{sigma_Izz}, \code{sigma_Ixy}, \code{sigma_Ixz}, \code{sigma_Iyz}.
+\code{get_mass_props_and_unc()} is a convenience wrapper that combines the results of
+\code{get_mass_props()} and \code{get_mass_props_unc()}.
 }
 \examples{
 get_mass_props_and_unc(mp_table, "C.1.2.2.3.1.2.3")

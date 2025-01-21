@@ -4,24 +4,19 @@
 \alias{validate_mass_props_and_unc}
 \title{Validate mass properties and uncertainties}
 \usage{
-validate_mass_props_and_unc(mp)
+validate_mass_props_and_unc(mpu)
 }
 \arguments{
-\item{mp}{Mass properties and uncertainties object}
+\item{mpu}{mass properties and uncertainty object}
 }
 \value{
 TRUE if valid, stops otherwise
 }
 \description{
-\code{validate_mass_props_and_unc()} performs the checks of \code{validate_mass_props()} and
-ensures the following are true:
-\itemize{
-\item mass uncertainty is non-missing and non-negative
-\item center of mass uncertainty is a 3-vector of non-missing non-negative values
-\item for non-point masses, the inertia tensor uncertainty is a 3x3 matrix of non-missing non-negative values
-}
+\code{validate_mass_props_and_unc()} is a convenience wrapper that calculates the logical
+conjunction of \code{validate_mass_props()} and \code{validate_mass_props_unc()}.
 }
 \examples{
-mp <- get_mass_props_and_unc(sawe_table, "Widget")
-validate_mass_props_and_unc(mp)
+mpu <- get_mass_props_and_unc(sawe_table, "Widget")
+validate_mass_props_and_unc(mpu)
 }

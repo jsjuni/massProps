@@ -7,33 +7,30 @@
 set_mass_props_and_unc(df, id, v)
 }
 \arguments{
-\item{df}{A data frame}
+\item{df}{data frame}
 
-\item{id}{ID value of the desired row}
+\item{id}{id value of the desired row}
 
-\item{v}{#' A list with the following named elements:
+\item{v}{list containing the following named elements:
 \itemize{
 \item \code{mass} mass (numeric)
 \item \code{center_mass} center of mass (3-dimensional numeric)
 \item \code{inertia} Inertia tensor (3x3 numeric matrix)
 \item \code{point} Logical indicating point mass, i.e., negligible inertia
 \item \code{poi_conv} Enumeration c("+", "-") indicating sign convention for products of inertia
-\item \code{sigma_mass} mass uncertainty (numeric)
+\item \code{sigma_mass} mass uncertainty
 \item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
 \item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
 }}
 }
 \value{
-The updated data frame
+updated data frame
 }
 \description{
-\code{set_mass_props_and_unc()} sets mass properties and uncertainties for a
-specified row in a data frame with an \code{id} column.
+\code{set_mass_props_and_unc()} is a convenience wrapper that combines the results of
+\code{set_mass_props()} and \code{set_mass_props_unc()}.
 }
 \examples{
-df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
-v <- get_mass_props_and_unc(mp_table, "C.1.2.2.3.2.1.1")
-v$poi_conv = "+"
-df <- set_mass_props_and_unc(df, "C.1.2.2.3.2.1.1", v)
-get_mass_props_and_unc(df, "C.1.2.2.3.2.1.1")
+mpu <- c(get_mass_props_and_unc(sawe_table, "Widget"), poi_conv = "+")
+set_mass_props_and_unc(sawe_table, "Combined", mpu)
 }

@@ -16,7 +16,7 @@ The updated data frame
 }
 \description{
 \code{rollup_mass_props_fast()} performs the same operation as \code{rollup_mass_props()}
-but omits input validation. It is roughly 30\% faster than  \code{rollup_mass_props()} but should
+but omits input validation. It is somewhat faster than  \code{rollup_mass_props()} but should
 be used with caution and only under circumstances in which the caller assumes
 responsibility for validity of input. Its behavior when passed ill-formed input is unspecified.
 }

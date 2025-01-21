@@ -7,16 +7,16 @@
 update_mass_props(df, target, sources, override = set_poi_conv_from_target)
 }
 \arguments{
-\item{df}{A data frame}
+\item{df}{data frame}
 
-\item{target}{ID of the target row}
+\item{target}{id of the target row}
 
-\item{sources}{IDs of the source rows}
+\item{sources}{ids of the source rows}
 
-\item{override}{An override function, called as override(df, target, value)}
+\item{override}{override function, called as override(df, target, value)}
 }
 \value{
-The updated data fram
+updated data frame
 }
 \description{
 \code{update_mass_props()} updates mass properties for a specified target row from
@@ -25,7 +25,7 @@ with (at least) these columns: \code{id}, \code{mass}, \code{Cx}, \code{Cy}, \co
 \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.
 }
 \examples{
-leaves <- test_table[which(!is.na(test_table$mass)), "id"]
-df <- update_mass_props(test_table, "A.1", leaves)
-get_mass_props(df, "A.1")
+leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))
+df <- update_mass_props(test_table, "A.3", leaves)
+get_mass_props(df, "A.3")
 }

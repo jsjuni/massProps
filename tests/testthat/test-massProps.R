@@ -291,6 +291,16 @@ test_that("update_mass_props() works", {
   expect_false(result$Ipoint)
 })
 
+test_that("update_mass_props_unc() works", {
+  leaves <- list("Widget", "2nd Part")
+  # Overwrite with wrong answers first
+  df <-  update_mass_props_unc(sawe_table, "Combined", leaves[1]) |>
+    update_mass_props_unc("Combined", leaves)
+  combined <- which(df$id == "Combined")
+
+  expect_true(isTRUE(all.equal(sawe_table[combined, ], df[combined, ], tolerance = .003)))
+})
+
 test_that("update_mass_props_and_unc() works", {
   leaves <- list("Widget", "2nd Part")
   # Overwrite with wrong answers first
@@ -460,7 +470,7 @@ test_that("validate_mass_props_and_unc_table() works", {
 })
 
 test_that("rollup_mass_props() works", {
-  df <- rollup_mass_props(test_tree, test_table)
+  df <- rollup_mass_props(test_tree, test_table |> df_set_by_id("A.1", "mass", NA))
   result <- df[which(df$id == "A.1"), ]
 
   expect_equal(result$mass, 21)
@@ -470,8 +480,21 @@ test_that("rollup_mass_props() works", {
   expect_error(rollup_mass_props(test_tree, invalid_table), "mass missing")
 })
 
+test_that("rollup_mass_props_unc() works", {
+  df <- rollup_mass_props_unc(sawe_tree, sawe_table |> df_set_by_id("Combined", "sigma_mass", NA))
+  result <- df[which(df$id == "Combined"), ]
+
+  expect_equal(result$mass, 74.63, tolerance = .002)
+  expect_equal(result$"sigma_mass", 2.1301, tolerance = .002)
+
+  invalid_table <- sawe_table
+  invalid_table$"sigma_mass" <- NA
+  expect_error(rollup_mass_props_unc(sawe_tree, invalid_table), "mass uncertainty missing")
+})
+
 test_that("rollup_mass_props_and_unc() works", {
-  df <- rollup_mass_props_and_unc(sawe_tree, sawe_table)
+  df <-  rollup_mass_props_and_unc(sawe_tree, sawe_table |> df_set_by_id("Combined", "mass", NA) |>
+    df_set_by_id("Combined", "sigma_mass", NA))
   result <- df[which(df$id == "Combined"), ]
 
   expect_equal(result$mass, 74.63, tolerance = .002)
@@ -480,22 +503,21 @@ test_that("rollup_mass_props_and_unc() works", {
   invalid_table <- sawe_table
   invalid_table$"sigma_mass" <- NA
   expect_error(rollup_mass_props_and_unc(sawe_tree, invalid_table), "mass uncertainty missing")
-
 })
 
 test_that("rollup_mass_props_fast() works", {
-  df <- rollup_mass_props_fast(test_tree, test_table)
+  df <- rollup_mass_props_fast(test_tree, test_table |> df_set_by_id("A.1", "mass", NA))
   result <- df[which(df$id == "A.1"), ]
 
   expect_equal(result$mass, 21)
 
   invalid_table <- test_table
   invalid_table$mass <- NA
-  expect_no_error(rollup_mass_props_fast(test_tree, invalid_table))
+  expect_error(rollup_mass_props(test_tree, invalid_table), "mass missing")
 })
 
-test_that("rollup_mass_props_and_unc_fast() works", {
-  df <- rollup_mass_props_and_unc_fast(sawe_tree, sawe_table)
+test_that("rollup_mass_props_unc_fast() works", {
+  df <- rollup_mass_props_unc_fast(sawe_tree, sawe_table |> df_set_by_id("Combined", "sigma_mass", NA))
   result <- df[which(df$id == "Combined"), ]
 
   expect_equal(result$mass, 74.63, tolerance = .002)
@@ -503,7 +525,19 @@ test_that("rollup_mass_props_and_unc_fast() works", {
 
   invalid_table <- sawe_table
   invalid_table$"sigma_mass" <- NA
-  expect_no_error(rollup_mass_props_and_unc_fast(sawe_tree, invalid_table))
+  expect_error(rollup_mass_props_unc(sawe_tree, invalid_table), "mass uncertainty missing")
+})
 
+test_that("rollup_mass_props_and_unc_fast() works", {
+  df <-  rollup_mass_props_and_unc_fast(sawe_tree, sawe_table |> df_set_by_id("Combined", "mass", NA) |>
+                                     df_set_by_id("Combined", "sigma_mass", NA))
+  result <- df[which(df$id == "Combined"), ]
+
+  expect_equal(result$mass, 74.63, tolerance = .002)
+  expect_equal(result$"sigma_mass", 2.1301, tolerance = .002)
+
+  invalid_table <- sawe_table
+  invalid_table$"sigma_mass" <- NA
+  expect_error(rollup_mass_props_and_unc(sawe_tree, invalid_table), "mass uncertainty missing")
 })
 

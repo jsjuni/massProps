@@ -7,12 +7,12 @@
 get_mass_props(df, id)
 }
 \arguments{
-\item{df}{A data frame}
+\item{df}{data frame}
 
-\item{id}{ID value of the desired row}
+\item{id}{id value of the desired row}
 }
 \value{
-A list with the following named elements:
+list with the following named elements:
 \itemize{
 \item \code{mass} mass (numeric)
 \item \code{center_mass} center of mass (3-dimensional numeric)

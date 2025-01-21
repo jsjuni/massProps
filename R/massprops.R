@@ -4,11 +4,11 @@
 #' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
 #' `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
 #'
-#' @param df A data frame
-#' @param id ID value of the desired row
+#' @param df  data frame
+#' @param id id value of the desired row
 #'
-#' @return
-#' A list with the following named elements:
+#' @returns
+#' list with the following named elements:
 #' - `mass` mass (numeric)
 #' - `center_mass` center of mass (3-dimensional numeric)
 #' - `inertia` Inertia tensor (3x3 numeric matrix)
@@ -38,18 +38,55 @@ get_mass_props <- function(df, id) {
   )
 }
 
-#' Get mass properties and uncertainties for a row in a data frame
+#' Get mass properties uncertainties for a row in a data frame
 #'
-#' `get_mass_props_and_unc()` gets mass properties with uncertainties for a specified row in a data frame
-#' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
-#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
+#' `get_mass_props_unc()` gets mass properties uncertainties for a specified row in a data frame
+#' with (at least) these columns: `id`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
 #' `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
 #'
-#' @param df A data frame
-#' @param id ID value of the desired row
+#' @param df data frame
+#' @param id id value of the desired row
 #'
-#' @return
-#' A list with the following named elements:
+#' @returns
+#' list with the following named elements:
+#' - `sigma_mass` mass uncertainty
+#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
+#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
+#' - `point` Logical indicating point mass, i.e., negligible inertia
+#' @export
+#'
+#' @examples
+#' get_mass_props_unc(mp_table, "C.1.2.2.3.1.2.3")
+get_mass_props_unc <- function(df, id) {
+  list(
+    sigma_mass = df_get_by_id(df, id, "sigma_mass"),
+    sigma_center_mass = sapply(c(x = "sigma_Cx", y = "sigma_Cy", z = "sigma_Cz"), FUN=function(p) df_get_by_id(df, id, p)),
+    sigma_inertia = {
+      xyz <- list("x", "y", "z")
+      sit <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
+      sit["x", "x"] <- df_get_by_id(df, id, "sigma_Ixx")
+      sit["y", "y"] <- df_get_by_id(df, id, "sigma_Iyy")
+      sit["z", "z"] <- df_get_by_id(df, id, "sigma_Izz")
+      sit["x", "y"] <- sit["y", "x"] <- df_get_by_id(df, id, "sigma_Ixy")
+      sit["x", "z"] <- sit["z", "x"] <- df_get_by_id(df, id, "sigma_Ixz")
+      sit["y", "z"] <- sit["z", "y"] <- df_get_by_id(df, id, "sigma_Iyz")
+      sit
+    },
+    point = df_get_by_id(df, id, "Ipoint")
+  )
+}
+
+#' Get mass properties and uncertainties for a row in a data frame
+#'
+#' @description
+#' `get_mass_props_and_unc()` is a convenience wrapper that combines the results of
+#' `get_mass_props()` and `get_mass_props_unc()`.
+#'
+#' @param df data frame
+#' @param id id value of the desired row
+#'
+#' @returns
+#' list with the following named elements:
 #' - `mass` mass (numeric)
 #' - `center_mass` center of mass (3-dimensional numeric)
 #' - `inertia` Inertia tensor (3x3 numeric matrix)
@@ -57,26 +94,13 @@ get_mass_props <- function(df, id) {
 #' - `sigma_mass` mass uncertainty
 #' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
 #' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
+#'
 #' @export
 #'
 #' @examples
 #' get_mass_props_and_unc(mp_table, "C.1.2.2.3.1.2.3")
 get_mass_props_and_unc <- function(df, id) {
-  r <- get_mass_props(df, id)
-  r$sigma_mass <- df_get_by_id(df, id, "sigma_mass")
-  r$sigma_center_mass <- sapply(c(x = "sigma_Cx", y = "sigma_Cy", z = "sigma_Cz"), FUN=function(p) df_get_by_id(df, id, p))
-  r$sigma_inertia <- {
-    xyz <- list("x", "y", "z")
-    sigma_inertia <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
-    sigma_inertia["x", "x"] <- df_get_by_id(df, id, "sigma_Ixx")
-    sigma_inertia["y", "y"] <- df_get_by_id(df, id, "sigma_Iyy")
-    sigma_inertia["z", "z"] <- df_get_by_id(df, id, "sigma_Izz")
-    sigma_inertia["x", "y"] <- sigma_inertia["y", "x"] <- df_get_by_id(df, id, "sigma_Ixy")
-    sigma_inertia["x", "z"] <- sigma_inertia["z", "x"] <- df_get_by_id(df, id, "sigma_Ixz")
-    sigma_inertia["y", "z"] <- sigma_inertia["z", "y"] <- df_get_by_id(df, id, "sigma_Iyz")
-    sigma_inertia
-  }
-  r
+  c(get_mass_props(df, id), get_mass_props_unc(df, id))
 }
 
 #' Set mass properties for a row in a data frame
@@ -123,20 +147,15 @@ set_mass_props <- function(df, id, v) {
     df_set_by_id(id, "Ipoint", v$point)
 }
 
-#' Set mass properties and uncertainties for a row in a data frame
+#' Set mass properties uncertainties for a row in a data frame
 #'
-#' `set_mass_props_and_unc()` sets mass properties and uncertainties for a
+#' `set_mass_props_unc()` sets mass properties and uncertainties for a
 #' specified row in a data frame with an `id` column.
 #'
 #' @param df A data frame
 #' @param id ID value of the desired row
 #' @param v
 #' #' A list with the following named elements:
-#' - `mass` mass (numeric)
-#' - `center_mass` center of mass (3-dimensional numeric)
-#' - `inertia` Inertia tensor (3x3 numeric matrix)
-#' - `point` Logical indicating point mass, i.e., negligible inertia
-#' - `poi_conv` Enumeration c("+", "-") indicating sign convention for products of inertia
 #' - `sigma_mass` mass uncertainty (numeric)
 #' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
 #' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
@@ -145,13 +164,9 @@ set_mass_props <- function(df, id, v) {
 #' @export
 #'
 #' @examples
-#' df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
-#' v <- get_mass_props_and_unc(mp_table, "C.1.2.2.3.2.1.1")
-#' v$poi_conv = "+"
-#' df <- set_mass_props_and_unc(df, "C.1.2.2.3.2.1.1", v)
-#' get_mass_props_and_unc(df, "C.1.2.2.3.2.1.1")
-set_mass_props_and_unc <- function(df, id, v) {
-  df |> set_mass_props(id, v) |>
+#' set_mass_props_unc(sawe_table, "Combined", get_mass_props_unc(sawe_table, "Widget"))
+set_mass_props_unc <- function(df, id, v) {
+  df |>
 
     df_set_by_id(id, "sigma_mass", v$sigma_mass) |>
 
@@ -167,18 +182,46 @@ set_mass_props_and_unc <- function(df, id, v) {
     df_set_by_id(id, "sigma_Iyz", v$sigma_inertia["y", "z"])
 }
 
+#' Set mass properties and uncertainties for a row in a data frame
+#'
+#' @description
+#' `set_mass_props_and_unc()` is a convenience wrapper that combines the results of
+#' `set_mass_props()` and `set_mass_props_unc()`.
+#'
+#'
+#' @param df data frame
+#' @param id id value of the desired row
+#' @param v list containing the following named elements:
+#' - `mass` mass (numeric)
+#' - `center_mass` center of mass (3-dimensional numeric)
+#' - `inertia` Inertia tensor (3x3 numeric matrix)
+#' - `point` Logical indicating point mass, i.e., negligible inertia
+#' - `poi_conv` Enumeration c("+", "-") indicating sign convention for products of inertia
+#' - `sigma_mass` mass uncertainty
+#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
+#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
+#'
+#' @returns updated data frame
+#' @export
+#'
+#' @examples
+#' mpu <- c(get_mass_props_and_unc(sawe_table, "Widget"), poi_conv = "+")
+#' set_mass_props_and_unc(sawe_table, "Combined", mpu)
+set_mass_props_and_unc <- function(df, id, v) {
+  set_mass_props(df, id, v) |> set_mass_props_unc(id, v)
+}
+
 #' Combine mass properties
 #'
-#' @param vl List of mass properties lists
+#' @param vl list of mass properties lists
 #'
 #' @return Combined mass properties list
 #' @export
 #'
 #' @examples
-#' leaves <- test_table[which(!is.na(test_table$mass)), "id"]
+#' leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))
 #' vl <- Map(f = function(id) get_mass_props(test_table, id), leaves)
 #' combine_mass_props(vl)
-
 combine_mass_props <- function(vl) {
 
   r <- list()
@@ -212,19 +255,19 @@ combine_mass_props <- function(vl) {
   r
 }
 
-#' Combine mass properties and uncertainties
+#' Combine mass properties uncertainties
 #'
-#' @param vl List of mass properties and uncertainties lists
+#' @param vl list of mass properties and uncertainties lists
+#' @param r mass properties previously combined
 #'
-#' @return Combined mass properties and uncertainties
+#' @return combined mass properties and uncertainties
 #' @export
 #'
 #' @examples
-#' vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), list("Widget", "2nd Part"))
-#' combine_mass_props_and_unc(vl)
-combine_mass_props_and_unc <- function(vl) {
-
-  r <- combine_mass_props(vl)
+#' leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
+#' vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
+#' combine_mass_props_unc(vl, r = get_mass_props(sawe_table, "Combined"))
+combine_mass_props_unc <- function(vl, r) {
 
   # mass uncertainty
 
@@ -262,6 +305,25 @@ combine_mass_props_and_unc <- function(vl) {
   # result
 
   r
+}
+
+#' Combine mass properties and uncertainties
+#'
+#' @description
+#' `combine_mass_props_and_unc()` is a convenience wrapper that concatentates the
+#' results of `combine_mass_props()` and `combine_mass_props_unc()`.
+#'
+#' @param vl list of mass properties and uncertainties lists
+#'
+#' @returns combined mass properties and uncertainties
+#' @export
+#'
+#' @examples
+#' leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
+#' vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
+#' combine_mass_props_and_unc(vl)
+combine_mass_props_and_unc <- function(vl) {
+  combine_mass_props(vl) |> combine_mass_props_unc(vl, r = _)
 }
 
 #' Set POI convention for mass properties object to "+"
@@ -349,18 +411,18 @@ set_poi_conv_from_target <- function(df, target, v) {
 #' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
 #' `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
 #'
-#' @param df A data frame
-#' @param target ID of the target row
-#' @param sources IDs of the source rows
-#' @param override An override function, called as override(df, target, value)
+#' @param df data frame
+#' @param target id of the target row
+#' @param sources ids of the source rows
+#' @param override override function, called as override(df, target, value)
 #'
-#' @return The updated data fram
+#' @return updated data frame
 #' @export
 #'
 #' @examples
-#' leaves <- test_table[which(!is.na(test_table$mass)), "id"]
-#' df <- update_mass_props(test_table, "A.1", leaves)
-#' get_mass_props(df, "A.1")
+#' leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))
+#' df <- update_mass_props(test_table, "A.3", leaves)
+#' get_mass_props(df, "A.3")
 update_mass_props <- function(df, target, sources, override = set_poi_conv_from_target) {
   update_prop(
     df,
@@ -373,8 +435,42 @@ update_mass_props <- function(df, target, sources, override = set_poi_conv_from_
   )
 }
 
+#'  Update mass properties
+#'
+#' @description
+#' `update_mass_props_unc()` updates mass properties uncertainties
+#' for a specified target row from
+#' specified source rows in a data frame
+#' with (at least) these columns: `id`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
+#' `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
+#'
+#' @param df data frame
+#' @param target id of the target row
+#' @param sources ids of the source rows
+#' @param override override function, called as override(df, target, value)
+#'
+#' @returns updated data frame
+#' @export
+#'
+#' @examples
+#' leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
+#' df <- update_mass_props_unc(sawe_table, "Combined", leaves)
+#' get_mass_props_unc(df, "Combined")
+update_mass_props_unc <- function(df, target, sources, override = set_poi_conv_from_target) {
+  update_prop(
+    df,
+    target = target,
+    sources = sources,
+    set = set_mass_props_unc,
+    get = get_mass_props_and_unc,
+    combine = function(l) { combine_mass_props_unc(l, r = get_mass_props(df, target))},
+    override = override
+  )
+}
+
 #' Update mass properties and uncertainties
 #'
+#' @description
 #' `update_mass_props_and_unc()` updates mass properties and uncertainties
 #' for a specified target row from
 #' specified source rows in a data frame
@@ -476,26 +572,24 @@ validate_mass_props <- function(mp) {
   TRUE
 }
 
-#' Validate mass properties and uncertainties
+#' Validate mass properties uncertainties
 #'
 #' @description
-#' `validate_mass_props_and_unc()` performs the checks of `validate_mass_props()` and
-#' ensures the following are true:
+#' `validate_mass_props_and_unc()`
+#' ensures that the following are true:
 #' - mass uncertainty is non-missing and non-negative
 #' - center of mass uncertainty is a 3-vector of non-missing non-negative values
 #' - for non-point masses, the inertia tensor uncertainty is a 3x3 matrix of non-missing non-negative values
 #'
-#' @param mp Mass properties and uncertainties object
+#' @param mp mass properties uncertainties object
 #'
 #' @return TRUE if valid, stops otherwise
 #' @export
 #'
 #' @examples
-#' mp <- get_mass_props_and_unc(sawe_table, "Widget")
-#' validate_mass_props_and_unc(mp)
-validate_mass_props_and_unc <- function(mp) {
-
-  validate_mass_props(mp)
+#' mp <- get_mass_props_unc(sawe_table, "Widget")
+#' validate_mass_props_unc(mp)
+validate_mass_props_unc <- function(mp) {
 
   # ensure mass uncertainty is numeric and positive.
 
@@ -524,6 +618,24 @@ validate_mass_props_and_unc <- function(mp) {
   }
 
   TRUE
+}
+
+#' Validate mass properties and uncertainties
+#'
+#' @description
+#' `validate_mass_props_and_unc()` is a convenience wrapper that calculates the logical
+#' conjunction of `validate_mass_props()` and `validate_mass_props_unc()`.
+#'
+#' @param mpu mass properties and uncertainty object
+#'
+#' @returns TRUE if valid, stops otherwise
+#' @export
+#'
+#' @examples
+#' mpu <- get_mass_props_and_unc(sawe_table, "Widget")
+#' validate_mass_props_and_unc(mpu)
+validate_mass_props_and_unc <- function(mpu) {
+  validate_mass_props(mpu) && validate_mass_props_unc(mpu)
 }
 
 #' Validate a mass properties table
@@ -585,13 +697,47 @@ rollup_mass_props <- function(tree, df, validate_df = validate_mass_props_table,
   rollup(tree, df, update_mass_props, validate_df, ...)
 }
 
-#' Roll Up Mass Properties and Uncertainties
+rollup_mass_props_unc <- function(tree, df, validate_df = validate_mass_props_table, ...) {
+  rollup(tree, df, update_mass_props_unc, validate_df, ...)
+}
+
+#' Roll Up Mass Properties Uncertainties
 #'
 #' @description
-#' 'rollup_mass_props()' rolls up mass properties in a data frame
+#' 'rollup_mass_props_unc()' rolls up mass properties in a data frame
 #' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
 #' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
 #' `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
+#'
+#' The difference between `rollup_mass_props_unc()` and `rollup_mass_props_and_unc()` is that `rollup_mass_props_unc()`
+#' expects the mass properties in its input to have been rolled up, whereas `rollup_mass_props_and_unc()` performs
+#' the mass properties rollup itself.
+#'
+#' @param tree 'igraph' directed graph that is a valid single-rooted in-tree with edges from child vertex to parent vertex.
+#' @param df mass properties and uncertainties table
+#' @param validate_df validator for the tree and table, default `validate_mass_props_and_unc_table()`
+#' @param ... other parameters passed `rollup()`
+#'
+#' @returns The updated data frame
+#' @export
+#'
+#' @examples
+#' rollup_mass_props_and_unc(sawe_tree, sawe_table)
+rollup_mass_props_unc <- function(tree, df, validate_df = validate_mass_props_and_unc_table, ...) {
+  rollup(tree, df, update_mass_props_unc, validate_df, ...)
+}
+
+#' Roll Up Mass Properties and Uncertainties
+#'
+#' @description
+#' 'rollup_mass_props_and_unc()' rolls up mass properties in a data frame
+#' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
+#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
+#' `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
+#'
+#' The difference between `rollup_mass_props_unc()` and `rollup_mass_props_and_unc()` is that `rollup_mass_props_unc()`
+#' expects the mass properties in its input to have been rolled up, whereas `rollup_mass_props_and_unc()` performs
+#' the mass properties rollup itself.
 #'
 #' @param tree An igraph directed graph that is a valid single-rooted in-tree with edges from child vertex to parent vertex.
 #' @param df A mass properties and uncertainties table
@@ -611,7 +757,7 @@ rollup_mass_props_and_unc <- function(tree, df, validate_df = validate_mass_prop
 #'
 #' @description
 #' `rollup_mass_props_fast()` performs the same operation as `rollup_mass_props()`
-#' but omits input validation. It is roughly 30% faster than  `rollup_mass_props()` but should
+#' but omits input validation. It is somewhat faster than  `rollup_mass_props()` but should
 #' be used with caution and only under circumstances in which the caller assumes
 #' responsibility for validity of input. Its behavior when passed ill-formed input is unspecified.
 #'
@@ -624,14 +770,35 @@ rollup_mass_props_and_unc <- function(tree, df, validate_df = validate_mass_prop
 #' @examples
 #' rollup_mass_props_fast(test_tree, test_table)
 rollup_mass_props_fast <- function(tree, df) {
-  rollup(tree, df, update_mass_props, validate_ds = function(t, d) TRUE, validate_tree = function(t) NA)
+  rollup_mass_props(tree, df, validate_df = function(t, d) TRUE, validate_tree = function(t) NA)
+}
+
+
+#' Roll Up Mass Properties Uncertainties Without Input Validation
+#'
+#' @description
+#' `rollup_mass_props_unc_fast()` performs the same operation as `rollup_mass_props_unc()`
+#' but omits input validation. It is somewhat faster than  `rollup_mass_props_unc()` but should
+#' be used with caution and only under circumstances in which the caller assumes
+#' responsibility for validity of input. Its behavior when passed ill-formed input is unspecified.
+#'
+#' @param tree tree passed to `rollup()`
+#' @param df mass properties and uncertainties table passed to `rollup()`
+#'
+#' @returns The updated data frame
+#' @export
+#'
+#' @examples
+#' rollup_mass_props_unc_fast(sawe_tree, sawe_table)
+rollup_mass_props_unc_fast <- function(tree, df) {
+  rollup_mass_props_unc(tree, df, validate_df = function(t, d) TRUE, validate_tree = function(t) NA)
 }
 
 #' Roll Up Mass Properties And Uncertainties Without Input Validation
 #'
 #' @description
 #' `rollup_mass_props_and_unc_fast()` performs the same operation as `rollup_mass_props_and_unc()`
-#' but omits input validation. It is roughly 30% faster than  `rollup_mass_propss_and_unc()` but should
+#' but omits input validation. It is somewhat faster than  `rollup_mass_propss_and_unc()` but should
 #' be used with caution and only under circumstances in which the caller assumes
 #' responsibility for validity of input. Its behavior when passed ill-formed input is unspecified.
 #'
@@ -644,5 +811,5 @@ rollup_mass_props_fast <- function(tree, df) {
 #' @examples
 #' rollup_mass_props_and_unc_fast(sawe_tree, sawe_table)
 rollup_mass_props_and_unc_fast <- function(tree, df) {
-  rollup(tree, df, update_mass_props_and_unc, validate_ds = function(t, d) TRUE, validate_tree = function(t) NA)
+  rollup_mass_props_and_unc(tree, df, validate_df = function(t, d) TRUE, validate_tree = function(t) NA)
 }

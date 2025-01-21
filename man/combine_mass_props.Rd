@@ -7,7 +7,7 @@
 combine_mass_props(vl)
 }
 \arguments{
-\item{vl}{List of mass properties lists}
+\item{vl}{list of mass properties lists}
 }
 \value{
 Combined mass properties list
@@ -16,7 +16,7 @@ Combined mass properties list
 Combine mass properties
 }
 \examples{
-leaves <- test_table[which(!is.na(test_table$mass)), "id"]
+leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))
 vl <- Map(f = function(id) get_mass_props(test_table, id), leaves)
 combine_mass_props(vl)
 }
