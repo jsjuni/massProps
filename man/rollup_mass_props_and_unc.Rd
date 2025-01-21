@@ -24,10 +24,14 @@ rollup_mass_props_and_unc(
 The updated data frame
 }
 \description{
-'rollup_mass_props()' rolls up mass properties in a data frame
+'rollup_mass_props_and_unc()' rolls up mass properties in a data frame
 with (at least) these columns: \code{id}, \code{mass}, \code{Cx}, \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy},
 \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}, \code{sigma_mass}, \code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz},
 \code{sigma_Ixx}, \code{sigma_Iyy}, \code{sigma_Izz}, \code{sigma_Ixy}, \code{sigma_Ixz}, \code{sigma_Iyz}.
+
+The difference between \code{rollup_mass_props_unc()} and \code{rollup_mass_props_and_unc()} is that \code{rollup_mass_props_unc()}
+expects the mass properties in its input to have been rolled up, whereas \code{rollup_mass_props_and_unc()} performs
+the mass properties rollup itself.
 }
 \examples{
 rollup_mass_props_and_unc(sawe_tree, sawe_table)
