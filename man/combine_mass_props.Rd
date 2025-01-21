@@ -7,7 +7,7 @@
 combine_mass_props(vl)
 }
 \arguments{
-\item{vl}{List of mass properties lists}
+\item{vl}{list of mass properties lists}
 }
 \value{
 Combined mass properties list
