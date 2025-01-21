@@ -42,7 +42,8 @@ get_mass_props <- function(df, id) {
 #'
 #' `get_mass_props_and_unc()` gets mass properties with uncertainties for a specified row in a data frame
 #' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
-#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `σ_mass`, `σ_Cx`, `σ_Cy`, `σ_Cz`, `σ_Ixx`, `σ_Iyy`, `σ_Izz`, `σ_Ixy`, `σ_Ixz`, `σ_Iyz`.
+#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
+#' `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
 #'
 #' @param df A data frame
 #' @param id ID value of the desired row
@@ -62,17 +63,17 @@ get_mass_props <- function(df, id) {
 #' get_mass_props_and_unc(mp_table, "C.1.2.2.3.1.2.3")
 get_mass_props_and_unc <- function(df, id) {
   r <- get_mass_props(df, id)
-  r$sigma_mass <- df_get_by_id(df, id, "\u03c3_mass")
-  r$sigma_center_mass <- sapply(c(x = "\u03c3_Cx", y = "\u03c3_Cy", z = "\u03c3_Cz"), FUN=function(p) df_get_by_id(df, id, p))
+  r$sigma_mass <- df_get_by_id(df, id, "sigma_mass")
+  r$sigma_center_mass <- sapply(c(x = "sigma_Cx", y = "sigma_Cy", z = "sigma_Cz"), FUN=function(p) df_get_by_id(df, id, p))
   r$sigma_inertia <- {
     xyz <- list("x", "y", "z")
     sigma_inertia <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
-    sigma_inertia["x", "x"] <- df_get_by_id(df, id, "\u03c3_Ixx")
-    sigma_inertia["y", "y"] <- df_get_by_id(df, id, "\u03c3_Iyy")
-    sigma_inertia["z", "z"] <- df_get_by_id(df, id, "\u03c3_Izz")
-    sigma_inertia["x", "y"] <- sigma_inertia["y", "x"] <- df_get_by_id(df, id, "\u03c3_Ixy")
-    sigma_inertia["x", "z"] <- sigma_inertia["z", "x"] <- df_get_by_id(df, id, "\u03c3_Ixz")
-    sigma_inertia["y", "z"] <- sigma_inertia["z", "y"] <- df_get_by_id(df, id, "\u03c3_Iyz")
+    sigma_inertia["x", "x"] <- df_get_by_id(df, id, "sigma_Ixx")
+    sigma_inertia["y", "y"] <- df_get_by_id(df, id, "sigma_Iyy")
+    sigma_inertia["z", "z"] <- df_get_by_id(df, id, "sigma_Izz")
+    sigma_inertia["x", "y"] <- sigma_inertia["y", "x"] <- df_get_by_id(df, id, "sigma_Ixy")
+    sigma_inertia["x", "z"] <- sigma_inertia["z", "x"] <- df_get_by_id(df, id, "sigma_Ixz")
+    sigma_inertia["y", "z"] <- sigma_inertia["z", "y"] <- df_get_by_id(df, id, "sigma_Iyz")
     sigma_inertia
   }
   r
@@ -152,18 +153,18 @@ set_mass_props <- function(df, id, v) {
 set_mass_props_and_unc <- function(df, id, v) {
   df |> set_mass_props(id, v) |>
 
-    df_set_by_id(id, "\u03c3_mass", v$sigma_mass) |>
+    df_set_by_id(id, "sigma_mass", v$sigma_mass) |>
 
-    df_set_by_id(id, "\u03c3_Cx", v$sigma_center_mass[1]) |>
-    df_set_by_id(id, "\u03c3_Cy", v$sigma_center_mass[2]) |>
-    df_set_by_id(id, "\u03c3_Cz", v$sigma_center_mass[3]) |>
+    df_set_by_id(id, "sigma_Cx", v$sigma_center_mass[1]) |>
+    df_set_by_id(id, "sigma_Cy", v$sigma_center_mass[2]) |>
+    df_set_by_id(id, "sigma_Cz", v$sigma_center_mass[3]) |>
 
-    df_set_by_id(id, "\u03c3_Ixx", v$sigma_inertia["x", "x"]) |>
-    df_set_by_id(id, "\u03c3_Iyy", v$sigma_inertia["y", "y"]) |>
-    df_set_by_id(id, "\u03c3_Izz", v$sigma_inertia["z", "z"]) |>
-    df_set_by_id(id, "\u03c3_Ixy", v$sigma_inertia["x", "y"]) |>
-    df_set_by_id(id, "\u03c3_Ixz", v$sigma_inertia["x", "z"]) |>
-    df_set_by_id(id, "\u03c3_Iyz", v$sigma_inertia["y", "z"])
+    df_set_by_id(id, "sigma_Ixx", v$sigma_inertia["x", "x"]) |>
+    df_set_by_id(id, "sigma_Iyy", v$sigma_inertia["y", "y"]) |>
+    df_set_by_id(id, "sigma_Izz", v$sigma_inertia["z", "z"]) |>
+    df_set_by_id(id, "sigma_Ixy", v$sigma_inertia["x", "y"]) |>
+    df_set_by_id(id, "sigma_Ixz", v$sigma_inertia["x", "z"]) |>
+    df_set_by_id(id, "sigma_Iyz", v$sigma_inertia["y", "z"])
 }
 
 #' Combine mass properties
@@ -378,7 +379,8 @@ update_mass_props <- function(df, target, sources, override = set_poi_conv_from_
 #' for a specified target row from
 #' specified source rows in a data frame
 #' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
-#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `σ_mass`, `σ_Cx`, `σ_Cy`, `σ_Cz`, `σ_Ixx`, `σ_Iyy`, `σ_Izz`, `σ_Ixy`, `σ_Ixz`, `σ_Iyz`.
+#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
+#' `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
 #'
 #' @param df A data frame
 #' @param target ID of the target row
@@ -588,7 +590,8 @@ rollup_mass_props <- function(tree, df, validate_df = validate_mass_props_table,
 #' @description
 #' 'rollup_mass_props()' rolls up mass properties in a data frame
 #' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
-#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `σ_mass`, `σ_Cx`, `σ_Cy`, `σ_Cz`, `σ_Ixx`, `σ_Iyy`, `σ_Izz`, `σ_Ixy`, `σ_Ixz`, `σ_Iyz`.
+#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
+#' `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
 #'
 #' @param tree An igraph directed graph that is a valid single-rooted in-tree with edges from child vertex to parent vertex.
 #' @param df A mass properties and uncertainties table

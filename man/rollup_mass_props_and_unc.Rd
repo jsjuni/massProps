@@ -26,7 +26,8 @@ The updated data frame
 \description{
 'rollup_mass_props()' rolls up mass properties in a data frame
 with (at least) these columns: \code{id}, \code{mass}, \code{Cx}, \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy},
-\code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}, \code{σ_mass}, \code{σ_Cx}, \code{σ_Cy}, \code{σ_Cz}, \code{σ_Ixx}, \code{σ_Iyy}, \code{σ_Izz}, \code{σ_Ixy}, \code{σ_Ixz}, \code{σ_Iyz}.
+\code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}, \code{sigma_mass}, \code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz},
+\code{sigma_Ixx}, \code{sigma_Iyy}, \code{sigma_Izz}, \code{sigma_Ixy}, \code{sigma_Ixz}, \code{sigma_Iyz}.
 }
 \examples{
 rollup_mass_props_and_unc(sawe_tree, sawe_table)
