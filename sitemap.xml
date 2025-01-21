@@ -9,8 +9,10 @@
 <url><loc>https://jsjuni.github.io/massProps/news/index.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/combine_mass_props.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/combine_mass_props_and_unc.html</loc></url>
+<url><loc>https://jsjuni.github.io/massProps/reference/combine_mass_props_unc.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/get_mass_props.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/get_mass_props_and_unc.html</loc></url>
+<url><loc>https://jsjuni.github.io/massProps/reference/get_mass_props_unc.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/index.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/massprops-package.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/mp_table.html</loc></url>
@@ -19,10 +21,13 @@
 <url><loc>https://jsjuni.github.io/massProps/reference/rollup_mass_props_and_unc.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/rollup_mass_props_and_unc_fast.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/rollup_mass_props_fast.html</loc></url>
+<url><loc>https://jsjuni.github.io/massProps/reference/rollup_mass_props_unc.html</loc></url>
+<url><loc>https://jsjuni.github.io/massProps/reference/rollup_mass_props_unc_fast.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/sawe_table.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/sawe_tree.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/set_mass_props.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/set_mass_props_and_unc.html</loc></url>
+<url><loc>https://jsjuni.github.io/massProps/reference/set_mass_props_unc.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/set_poi_conv_from_target.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/set_poi_conv_minus.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/set_poi_conv_plus.html</loc></url>
@@ -30,9 +35,11 @@
 <url><loc>https://jsjuni.github.io/massProps/reference/test_tree.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/update_mass_props.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/update_mass_props_and_unc.html</loc></url>
+<url><loc>https://jsjuni.github.io/massProps/reference/update_mass_props_unc.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/validate_mass_props.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/validate_mass_props_and_unc.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/validate_mass_props_and_unc_table.html</loc></url>
 <url><loc>https://jsjuni.github.io/massProps/reference/validate_mass_props_table.html</loc></url>
+<url><loc>https://jsjuni.github.io/massProps/reference/validate_mass_props_unc.html</loc></url>
 </urlset>
 
