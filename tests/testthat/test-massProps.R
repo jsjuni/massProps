@@ -225,6 +225,24 @@ test_that("combine_mass_props() works for point masses at the origin", {
   expect_true(result$point)
 })
 
+test_that("combine_mass_props_unc() works for point masses", {
+  leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
+
+  # non point masses
+
+  np_vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
+  np_sisq <- Reduce(`+`, Map(f = function(x) x$sigma_inertia^2, np_vl))
+  np_sigma_inertia <- combine_mass_props_unc(np_vl, r = get_mass_props_and_unc(sawe_table, "Combined"))$sigma_inertia
+
+  # point masses
+
+  pm_vl <- Map(f = function(v) { v$point = TRUE; v },
+            Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves))
+  pm_sigma_inertia <- combine_mass_props_unc(pm_vl, r = get_mass_props_and_unc(sawe_table, "Combined"))$sigma_inertia
+
+  expect_equal(np_sigma_inertia, sqrt(pm_sigma_inertia^2 + np_sisq))
+})
+
 test_that("combine_mass_props_and_unc() works", {
   expected = sawe_table[3, ]
   tol <- .002 # published numbers are not precise

@@ -7,13 +7,13 @@
 validate_mass_props_unc(mp)
 }
 \arguments{
-\item{mp}{mass properties uncertainties object}
+\item{mp}{mass properties and uncertainties object}
 }
 \value{
 TRUE if valid, stops otherwise
 }
 \description{
-\code{validate_mass_props_and_unc()}
+\code{validate_mass_props_unc()}
 ensures that the following are true:
 \itemize{
 \item mass uncertainty is non-missing and non-negative
@@ -22,6 +22,6 @@ ensures that the following are true:
 }
 }
 \examples{
-mp <- get_mass_props_unc(sawe_table, "Widget")
+mp <- get_mass_props_and_unc(sawe_table, "Widget")
 validate_mass_props_unc(mp)
 }

@@ -71,8 +71,8 @@ get_mass_props_unc <- function(df, id) {
       sit["x", "z"] <- sit["z", "x"] <- df_get_by_id(df, id, "sigma_Ixz")
       sit["y", "z"] <- sit["z", "y"] <- df_get_by_id(df, id, "sigma_Iyz")
       sit
-    },
-    point = df_get_by_id(df, id, "Ipoint")
+    }#,
+    # point = df_get_by_id(df, id, "Ipoint")
   )
 }
 
@@ -297,7 +297,8 @@ combine_mass_props_unc <- function(vl, r) {
       M2 <- t(P) - diag(c(p$x - 2 * p$z, p$y - 2 * p$z, p$z - 2 * p$y))
       M3 <- outer(d, d) - sum(diag(d^2)) * diag(3)
 
-      v$sigma_inertia^2 + v$mass^2 * (M1^2 + M2^2) + (v$sigma_mass * M3)^2
+      M4 <- v$mass^2 * (M1^2 + M2^2) + (v$sigma_mass * M3)^2
+      if (v$point) M4 else v$sigma_inertia^2 + M4
     },
     vl
   )))
@@ -581,13 +582,13 @@ validate_mass_props <- function(mp) {
 #' - center of mass uncertainty is a 3-vector of non-missing non-negative values
 #' - for non-point masses, the inertia tensor uncertainty is a 3x3 matrix of non-missing non-negative values
 #'
-#' @param mp mass properties uncertainties object
+#' @param mp mass properties and uncertainties object
 #'
 #' @return TRUE if valid, stops otherwise
 #' @export
 #'
 #' @examples
-#' mp <- get_mass_props_unc(sawe_table, "Widget")
+#' mp <- get_mass_props_and_unc(sawe_table, "Widget")
 #' validate_mass_props_unc(mp)
 validate_mass_props_unc <- function(mp) {
 
