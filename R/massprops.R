@@ -192,12 +192,12 @@ combine_mass_props <- function(vl) {
 
   # parallel axis theorem
   # https://en.wikipedia.org/wiki/Parallel_axis_theorem#Moment_of_inertia_matrix
-  # d_ss2 is [d]^2 computed using the identities given
+  # M is [d]^2 computed using the identities given
   r$inertia <- Reduce(`+`, Map(
     f  = function(v) {
       d <- r$center_mass - v$center_mass
-      d_ss2 <- outer(d, d) - sum(d^2) * diag(3)
-      if (v$point) -v$mass * d_ss2 else v$inertia - v$mass * d_ss2
+      M <- outer(d, d) - sum(d^2) * diag(3)
+      if (v$point) -v$mass * M else v$inertia - v$mass * M
     },
     vl
   ))
@@ -248,15 +248,13 @@ combine_mass_props_and_unc <- function(vl) {
 
       P <- outer(d, v$sigma_center_mass)
       p <- as.list(diag(P))
-      diag_1 <- diag(c(p$x - 2 * p$y, p$y - 2 * p$x, p$z - 2 * p$x))
-      diag_2 <- diag(c(p$x - 2 * p$z, p$y - 2 * p$z, p$z - 2 * p$y))
+      M1 <-   P  - diag(c(p$x - 2 * p$y, p$y - 2 * p$x, p$z - 2 * p$x))
+      M2 <- t(P) - diag(c(p$x - 2 * p$z, p$y - 2 * p$z, p$z - 2 * p$y))
 
       Q <- outer(d, d)
-      diag_3 <- sum(diag(Q)) * diag(3)
+      M3 <- Q - sum(diag(d^2)) * diag(3)
 
-      v$sigma_inertia^2 +
-        v$mass^2 * ((P - diag_1)^2 + (t(P) - diag_2)^2) +
-        (v$sigma_mass * (Q - diag_3))^2
+      v$sigma_inertia^2 + v$mass^2 * (M1^2 + M2^2) + (v$sigma_mass * M3)^2
     },
     vl
   )))

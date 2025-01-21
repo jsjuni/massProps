@@ -395,20 +395,27 @@ where $\boldsymbol{1}_3$ is the 3 ⨉ 3 identity matrix. Therefore
 
 $$
 \boxed{
-\boldsymbol{I} = \sum_{i=1}^{n} \left\{ \boldsymbol{I}_i
+\boldsymbol{I} = \sum_{i=1}^{n} \left( \boldsymbol{I}_i
 - 
-w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{1}_3 \right) \right\}
+w_i \boldsymbol{M}_i \right)
+}
+$$
+where
+
+$$
+\boxed{
+\boldsymbol{M}_i = \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{1}_3
 }
 $$
 
 The corresponding `R` code is
 
-``` {.R .R}
+``` r
   r$inertia <- Reduce(`+`, Map(
     f  = function(v) {
       d <- r$center_mass - v$center_mass
-      d_ss2 <- outer(d, d) - sum(d^2) * diag(3)
-      if (v$point) -v$mass * d_ss2 else v$inertia - v$mass * d_ss2
+      M <- outer(d, d) - sum(d^2) * diag(3)
+      if (v$point) -v$mass * M else v$inertia - v$mass * M
     },
     vl
   ))
@@ -623,33 +630,37 @@ $$
 Finally,
 
 $$
-\boxed{
-\boldsymbol{\sigma_I} = \left(
+\boldsymbol{\sigma_I} = \sqrt{
 \sum_{i=1}^{n} {\left\{
+{\boldsymbol{\sigma_I}}_i^2 
++ w_i^2 \left(
+{{\boldsymbol{M}_1}_i}^2 + {{\boldsymbol{M}_2}_i}^2
+\right) 
++ \left( \sigma_{w_i} {\boldsymbol{M}_3}_i
+\right)^2
+\right\}}
+}
+$$
+
+where
+
+$$
+\boxed{
 \begin{align}
-{\boldsymbol{\sigma_I}}_i^2 \\
-& + w_i^2 \left(
-\boldsymbol{P}_i -
+{\boldsymbol{M}_1}_i & = \boldsymbol{P}_i -
 \begin{bmatrix}
 {p_X}_i - 2 {p_Y}_i & 0 & 0 \\
 0 & {p_Y}_i - 2 {p_X}_i & 0 \\
 0 & 0 & {p_Z}_i - 2  {p_X}_i \\
-\end{bmatrix}
-\right) ^2 \\
-& + w_i^2 \left(
-\boldsymbol{P}_i^T -
+\end{bmatrix} \\
+{\boldsymbol{M}_2}_i & = \boldsymbol{P}_i^T -
 \begin{bmatrix}
  {p_X}_i - 2{p_Z}_i & 0 & 0 \\
 0 & {p_Y}_i - 2 {p_Z}_i & 0 \\
 0 & 0 & {p_Z}_i - 2 {p_Y}_i \\
-\end{bmatrix}
-\right) ^2 \\
-& + \sigma_{w_i}^2 \left(
-\boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3
-\right)^2
+\end{bmatrix} \\
+{\boldsymbol{M}_3}_i & = \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3
 \end{align}
-\right\}}
-\right)^\frac{1}{2}
 }
 $$
 
@@ -663,15 +674,13 @@ The corresponding `R` code is
 
       P <- outer(d, v$sigma_center_mass)
       p <- as.list(diag(P))
-      diag_1 <- diag(c(p$x - 2 * p$y, p$y - 2 * p$x, p$z - 2 * p$x))
-      diag_2 <- diag(c(p$x - 2 * p$z, p$y - 2 * p$z, p$z - 2 * p$y))
+      M1 <-   P  - diag(c(p$x - 2 * p$y, p$y - 2 * p$x, p$z - 2 * p$x))
+      M2 <- t(P) - diag(c(p$x - 2 * p$z, p$y - 2 * p$z, p$z - 2 * p$y))
 
       Q <- outer(d, d)
-      diag_3 <- sum(diag(Q)) * diag(3)
+      M3 <- Q - sum(diag(d^2)) * diag(3)
 
-      v$sigma_inertia^2 +
-        v$mass^2 * ((P - diag_1)^2 + (t(P) - diag_2)^2) +
-        (v$sigma_mass * (Q - diag_3))^2
+      v$sigma_inertia^2 + v$mass^2 * (M1^2 + M2^2) + (v$sigma_mass * M3)^2
     },
     vl
   )))
