@@ -437,14 +437,14 @@ The corresponding `R` code is
 $$
 \begin{align}
 \sigma_x & = 
-  \sqrt{ \sum_{i=1}^n \big\{ (w_i {{\sigma_x}}_i)^2 + [{\sigma_w}_i ({x}_i - \bar{x})]^2 \big\}}
- \bigg/ \sum_{i=1}^{n}w_i\\
+  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_y}}_i)^2 + [{\sigma_w}_i ({y}_i - \bar{y})]^2 \right\} } 
+  \bigg/ \sum_{i=1}^{n}w_i \\
 \sigma_y & = 
-  \sqrt{ \sum_{i=1}^n \big\{ (w_i {{\sigma_y}}_i)^2 + [{\sigma_w}_i ({y}_i - \bar{y})]^2 \big\}}
- \bigg/ \sum_{i=1}^{n}w_i\\
+  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_y}}_i)^2 + [{\sigma_w}_i ({y}_i - \bar{y})]^2 \right\} }
+ \bigg/ \sum_{i=1}^{n}w_i \\
 \sigma_z & = 
-  \sqrt{ \sum_{i=1}^n \big\{ (w_i {{\sigma_z}}_i)^2 + [{\sigma_w}_i ({z}_i - \bar{z})]^2 \big\}}
- \bigg/ \sum_{i=1}^{n}w_i\\
+  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_z}}_i)^2 + [{\sigma_w}_i ({z}_i - \bar{z})]^2 \right\} }
+ \bigg/ \sum_{i=1}^{n}w_i \\
 \end{align}
 $$
 
@@ -464,7 +464,7 @@ If we construe (as `R` does) squaring and taking square roots of vectors element
 $$
 \boxed{
 \boldsymbol{\sigma_c} = \frac{1}{w} 
-  \sqrt{ \sum_{i=1}^n \big\{ (w_i {{\boldsymbol{\sigma_c}}}_i)^2 + [{\sigma_w}_i ({\boldsymbol{c}}_i - \bar{\boldsymbol{c}})]^2 \big\}}
+  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\boldsymbol{\sigma_c}}}_i)^2 + [{\sigma_w}_i ({\boldsymbol{c}}_i - \bar{\boldsymbol{c}})]^2 \right\}}
 }
 $$
 
