@@ -136,17 +136,17 @@ test_that("set_mass_prop_and_unc() works for positive convention", {
   expect_equal(result$POIconv, input$poi_conv)
   expect_equal(result$Ipoint, input$point)
 
-  expect_equal(result$"\u03c3_mass", input$sigma_mass)
-  expect_equal(result$"\u03c3_Cx", input$sigma_center_mass[["x"]])
-  expect_equal(result$"\u03c3_Cy", input$sigma_center_mass[["y"]])
-  expect_equal(result$"\u03c3_Cz", input$sigma_center_mass[["z"]])
+  expect_equal(result$"sigma_mass", input$sigma_mass)
+  expect_equal(result$"sigma_Cx", input$sigma_center_mass[["x"]])
+  expect_equal(result$"sigma_Cy", input$sigma_center_mass[["y"]])
+  expect_equal(result$"sigma_Cz", input$sigma_center_mass[["z"]])
   sigma_it <- input$sigma_inertia
-  expect_equal(result$"\u03c3_Ixx", sigma_it["x", "x"])
-  expect_equal(result$"\u03c3_Iyy", sigma_it["y", "y"])
-  expect_equal(result$"\u03c3_Izz", sigma_it["z", "z"])
-  expect_equal(result$"\u03c3_Ixy", sigma_it["x", "y"])
-  expect_equal(result$"\u03c3_Ixz", sigma_it["x", "z"])
-  expect_equal(result$"\u03c3_Iyz", sigma_it["y", "z"])
+  expect_equal(result$"sigma_Ixx", sigma_it["x", "x"])
+  expect_equal(result$"sigma_Iyy", sigma_it["y", "y"])
+  expect_equal(result$"sigma_Izz", sigma_it["z", "z"])
+  expect_equal(result$"sigma_Ixy", sigma_it["x", "y"])
+  expect_equal(result$"sigma_Ixz", sigma_it["x", "z"])
+  expect_equal(result$"sigma_Iyz", sigma_it["y", "z"])
 
 })
 
@@ -170,17 +170,17 @@ test_that("set_mass_props_and_unc() works for negative convention", {
   expect_equal(result$POIconv, input$poi_conv)
   expect_equal(result$Ipoint, input$point)
 
-  expect_equal(result$"\u03c3_mass", input$sigma_mass)
-  expect_equal(result$"\u03c3_Cx", input$sigma_center_mass[["x"]])
-  expect_equal(result$"\u03c3_Cy", input$sigma_center_mass[["y"]])
-  expect_equal(result$"\u03c3_Cz", input$sigma_center_mass[["z"]])
+  expect_equal(result$"sigma_mass", input$sigma_mass)
+  expect_equal(result$"sigma_Cx", input$sigma_center_mass[["x"]])
+  expect_equal(result$"sigma_Cy", input$sigma_center_mass[["y"]])
+  expect_equal(result$"sigma_Cz", input$sigma_center_mass[["z"]])
   sigma_it <- input$sigma_inertia
-  expect_equal(result$"\u03c3_Ixx", sigma_it["x", "x"])
-  expect_equal(result$"\u03c3_Iyy", sigma_it["y", "y"])
-  expect_equal(result$"\u03c3_Izz", sigma_it["z", "z"])
-  expect_equal(result$"\u03c3_Ixy", sigma_it["x", "y"])
-  expect_equal(result$"\u03c3_Ixz", sigma_it["x", "z"])
-  expect_equal(result$"\u03c3_Iyz", sigma_it["y", "z"])
+  expect_equal(result$"sigma_Ixx", sigma_it["x", "x"])
+  expect_equal(result$"sigma_Iyy", sigma_it["y", "y"])
+  expect_equal(result$"sigma_Izz", sigma_it["z", "z"])
+  expect_equal(result$"sigma_Ixy", sigma_it["x", "y"])
+  expect_equal(result$"sigma_Ixz", sigma_it["x", "z"])
+  expect_equal(result$"sigma_Iyz", sigma_it["y", "z"])
 
 })
 
@@ -241,12 +241,12 @@ test_that("combine_mass_props_and_unc() works", {
                tolerance = tol
   )
 
-  expect_equal(result$sigma_mass, expected$"\u03c3_mass", tolerance = tol)
-  expect_equal(result$sigma_center_mass, c(x = expected$"\u03c3_Cx", y = expected$"\u03c3_Cy", z = expected$"\u03c3_Cz"), tolerance = tol)
+  expect_equal(result$sigma_mass, expected$"sigma_mass", tolerance = tol)
+  expect_equal(result$sigma_center_mass, c(x = expected$"sigma_Cx", y = expected$"sigma_Cy", z = expected$"sigma_Cz"), tolerance = tol)
   expect_equal(result$sigma_inertia,
-               matrix(data = c(expected$"\u03c3_Ixx", expected$"\u03c3_Ixy", expected$"\u03c3_Ixz",
-                               expected$"\u03c3_Ixy", expected$"\u03c3_Iyy", expected$"\u03c3_Iyz",
-                               expected$"\u03c3_Ixz", expected$"\u03c3_Iyz", expected$"\u03c3_Izz"), nrow = 3, byrow = TRUE, dimnames = list(xyz, xyz)),
+               matrix(data = c(expected$"sigma_Ixx", expected$"sigma_Ixy", expected$"sigma_Ixz",
+                               expected$"sigma_Ixy", expected$"sigma_Iyy", expected$"sigma_Iyz",
+                               expected$"sigma_Ixz", expected$"sigma_Iyz", expected$"sigma_Izz"), nrow = 3, byrow = TRUE, dimnames = list(xyz, xyz)),
                tolerance = tol
   )
 })
@@ -455,7 +455,7 @@ test_that("validate_mass_props_table() works", {
 test_that("validate_mass_props_and_unc_table() works", {
   expect_true(validate_mass_props_and_unc_table(sawe_tree, sawe_table))
 
-  invalid <- df_set_by_id(sawe_table, "Widget", "\u03c3_mass", -5)
+  invalid <- df_set_by_id(sawe_table, "Widget", "sigma_mass", -5)
   expect_error(validate_mass_props_and_unc_table(sawe_tree, invalid), "mass uncertainty negative")
 })
 
@@ -475,10 +475,10 @@ test_that("rollup_mass_props_and_unc() works", {
   result <- df[which(df$id == "Combined"), ]
 
   expect_equal(result$mass, 74.63, tolerance = .002)
-  expect_equal(result$"\u03c3_mass", 2.1301, tolerance = .002)
+  expect_equal(result$"sigma_mass", 2.1301, tolerance = .002)
 
   invalid_table <- sawe_table
-  invalid_table$"\u03c3_mass" <- NA
+  invalid_table$"sigma_mass" <- NA
   expect_error(rollup_mass_props_and_unc(sawe_tree, invalid_table), "mass uncertainty missing")
 
 })
@@ -499,10 +499,10 @@ test_that("rollup_mass_props_and_unc_fast() works", {
   result <- df[which(df$id == "Combined"), ]
 
   expect_equal(result$mass, 74.63, tolerance = .002)
-  expect_equal(result$"\u03c3_mass", 2.1301, tolerance = .002)
+  expect_equal(result$"sigma_mass", 2.1301, tolerance = .002)
 
   invalid_table <- sawe_table
-  invalid_table$"\u03c3_mass" <- NA
+  invalid_table$"sigma_mass" <- NA
   expect_no_error(rollup_mass_props_and_unc_fast(sawe_tree, invalid_table))
 
 })

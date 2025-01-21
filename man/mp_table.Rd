@@ -21,16 +21,16 @@ A data frame with columns:
 \item{Ixz}{Ixz product of inertia}
 \item{Iyz}{Iyz product of inertia}
 \item{Ipoint}{logical indicator to consider item a point mass}
-\item{σ_mass}{mass uncertainty}
-\item{σ_Cx}{x component of center of mass uncertainty}
-\item{σ_Cy}{y component of center of mass uncertainty}
-\item{σ_Cz}{z component of center of mass uncertainty}
-\item{σ_Ixx}{Ixx moment of inertia uncertainty}
-\item{σ_Iyy}{Iyy moment of inertia uncertainty}
-\item{σ_Izz}{Izz moment of inertia uncertainty}
-\item{σ_Ixy}{Ixy product of inertia uncertainty}
-\item{σ_Ixz}{Ixz product of inertia uncertainty}
-\item{σ_Iyz}{Iyz product of inertia uncertainty}
+\item{sigma_mass}{mass uncertainty}
+\item{sigma_Cx}{x component of center of mass uncertainty}
+\item{sigma_Cy}{y component of center of mass uncertainty}
+\item{sigma_Cz}{z component of center of mass uncertainty}
+\item{sigma_Ixx}{Ixx moment of inertia uncertainty}
+\item{sigma_Iyy}{Iyy moment of inertia uncertainty}
+\item{sigma_Izz}{Izz moment of inertia uncertainty}
+\item{sigma_Ixy}{Ixy product of inertia uncertainty}
+\item{sigma_Ixz}{Ixz product of inertia uncertainty}
+\item{sigma_Iyz}{Iyz product of inertia uncertainty}
 }
 }
 \usage{

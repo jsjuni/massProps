@@ -1,4 +1,4 @@
-"id"	"name"	"POIconv"	"mass"	"Cx"	"Cy"	"Cz"	"Ixx"	"Iyy"	"Izz"	"Ixy"	"Ixz"	"Iyz"	"Ipoint"	"σ_mass"	"σ_Cx"	"σ_Cy"	"σ_Cz"	"σ_Ixx"	"σ_Iyy"	"σ_Izz"	"σ_Ixy"	"σ_Ixz"	"σ_Iyz"
+"id"	"name"	"POIconv"	"mass"	"Cx"	"Cy"	"Cz"	"Ixx"	"Iyy"	"Izz"	"Ixy"	"Ixz"	"Iyz"	"Ipoint"	"sigma_mass"	"sigma_Cx"	"sigma_Cy"	"sigma_Cz"	"sigma_Ixx"	"sigma_Iyy"	"sigma_Izz"	"sigma_Ixy"	"sigma_Ixz"	"sigma_Iyz"
 "C.1"	"System 1"	"-"	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
 "C.1.1"	"Segment 1"	"-"	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
 "C.1.2"	"Segment 2"	"-"	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
