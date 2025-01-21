@@ -288,7 +288,7 @@ combine_mass_props_unc <- function(vl, r) {
   r$sigma_inertia = sqrt(Reduce(`+`, Map(
     f = function(v) {
 
-      d <- r$center_mass - v$center_mass
+      d <- v$center_mass - r$center_mass
 
       P <- outer(d, v$sigma_center_mass)
       p <- as.list(diag(P))
@@ -575,7 +575,7 @@ validate_mass_props <- function(mp) {
 #' Validate mass properties uncertainties
 #'
 #' @description
-#' `validate_mass_props_and_unc()`
+#' `validate_mass_props_unc()`
 #' ensures that the following are true:
 #' - mass uncertainty is non-missing and non-negative
 #' - center of mass uncertainty is a 3-vector of non-missing non-negative values
