@@ -40,9 +40,8 @@ get_mass_props <- function(df, id) {
 
 #' Get mass properties and uncertainties for a row in a data frame
 #'
-#' `get_mass_props_and_unc()` gets mass properties with uncertainties for a specified row in a data frame
-#' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
-#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
+#' `get_mass_props_unc()` gets mass properties uncertainties for a specified row in a data frame
+#' with (at least) these columns: `id`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
 #' `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
 #'
 #' @param df A data frame
@@ -50,33 +49,32 @@ get_mass_props <- function(df, id) {
 #'
 #' @return
 #' A list with the following named elements:
-#' - `mass` mass (numeric)
-#' - `center_mass` center of mass (3-dimensional numeric)
-#' - `inertia` Inertia tensor (3x3 numeric matrix)
-#' - `point` Logical indicating point mass, i.e., negligible inertia
 #' - `sigma_mass` mass uncertainty
 #' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
 #' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
 #' @export
 #'
 #' @examples
-#' get_mass_props_and_unc(mp_table, "C.1.2.2.3.1.2.3")
+get_mass_props_unc <- function(df, id) {
+  list(
+    sigma_mass = df_get_by_id(df, id, "sigma_mass"),
+    sigma_center_mass = sapply(c(x = "sigma_Cx", y = "sigma_Cy", z = "sigma_Cz"), FUN=function(p) df_get_by_id(df, id, p)),
+    sigma_inertia = {
+      xyz <- list("x", "y", "z")
+      sit <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
+      sit["x", "x"] <- df_get_by_id(df, id, "sigma_Ixx")
+      sit["y", "y"] <- df_get_by_id(df, id, "sigma_Iyy")
+      sit["z", "z"] <- df_get_by_id(df, id, "sigma_Izz")
+      sit["x", "y"] <- sit["y", "x"] <- df_get_by_id(df, id, "sigma_Ixy")
+      sit["x", "z"] <- sit["z", "x"] <- df_get_by_id(df, id, "sigma_Ixz")
+      sit["y", "z"] <- sit["z", "y"] <- df_get_by_id(df, id, "sigma_Iyz")
+      sit
+    }
+  )
+}
+
 get_mass_props_and_unc <- function(df, id) {
-  r <- get_mass_props(df, id)
-  r$sigma_mass <- df_get_by_id(df, id, "sigma_mass")
-  r$sigma_center_mass <- sapply(c(x = "sigma_Cx", y = "sigma_Cy", z = "sigma_Cz"), FUN=function(p) df_get_by_id(df, id, p))
-  r$sigma_inertia <- {
-    xyz <- list("x", "y", "z")
-    sigma_inertia <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
-    sigma_inertia["x", "x"] <- df_get_by_id(df, id, "sigma_Ixx")
-    sigma_inertia["y", "y"] <- df_get_by_id(df, id, "sigma_Iyy")
-    sigma_inertia["z", "z"] <- df_get_by_id(df, id, "sigma_Izz")
-    sigma_inertia["x", "y"] <- sigma_inertia["y", "x"] <- df_get_by_id(df, id, "sigma_Ixy")
-    sigma_inertia["x", "z"] <- sigma_inertia["z", "x"] <- df_get_by_id(df, id, "sigma_Ixz")
-    sigma_inertia["y", "z"] <- sigma_inertia["z", "y"] <- df_get_by_id(df, id, "sigma_Iyz")
-    sigma_inertia
-  }
-  r
+  c(get_mass_props(df, id), get_mass_props_unc(df, id))
 }
 
 #' Set mass properties for a row in a data frame
@@ -123,20 +121,15 @@ set_mass_props <- function(df, id, v) {
     df_set_by_id(id, "Ipoint", v$point)
 }
 
-#' Set mass properties and uncertainties for a row in a data frame
+#' Set mass properties uncertainties for a row in a data frame
 #'
-#' `set_mass_props_and_unc()` sets mass properties and uncertainties for a
+#' `set_mass_props_unc()` sets mass properties and uncertainties for a
 #' specified row in a data frame with an `id` column.
 #'
 #' @param df A data frame
 #' @param id ID value of the desired row
 #' @param v
 #' #' A list with the following named elements:
-#' - `mass` mass (numeric)
-#' - `center_mass` center of mass (3-dimensional numeric)
-#' - `inertia` Inertia tensor (3x3 numeric matrix)
-#' - `point` Logical indicating point mass, i.e., negligible inertia
-#' - `poi_conv` Enumeration c("+", "-") indicating sign convention for products of inertia
 #' - `sigma_mass` mass uncertainty (numeric)
 #' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
 #' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
@@ -145,13 +138,8 @@ set_mass_props <- function(df, id, v) {
 #' @export
 #'
 #' @examples
-#' df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
-#' v <- get_mass_props_and_unc(mp_table, "C.1.2.2.3.2.1.1")
-#' v$poi_conv = "+"
-#' df <- set_mass_props_and_unc(df, "C.1.2.2.3.2.1.1", v)
-#' get_mass_props_and_unc(df, "C.1.2.2.3.2.1.1")
-set_mass_props_and_unc <- function(df, id, v) {
-  df |> set_mass_props(id, v) |>
+set_mass_props_unc <- function(df, id, v) {
+  df |>
 
     df_set_by_id(id, "sigma_mass", v$sigma_mass) |>
 
@@ -165,6 +153,10 @@ set_mass_props_and_unc <- function(df, id, v) {
     df_set_by_id(id, "sigma_Ixy", v$sigma_inertia["x", "y"]) |>
     df_set_by_id(id, "sigma_Ixz", v$sigma_inertia["x", "z"]) |>
     df_set_by_id(id, "sigma_Iyz", v$sigma_inertia["y", "z"])
+}
+
+set_mass_props_and_unc <- function(df, id, v) {
+  set_mass_props(df, id, v) |> set_mass_props_unc(id, v)
 }
 
 #' Combine mass properties
@@ -220,11 +212,7 @@ combine_mass_props <- function(vl) {
 #' @export
 #'
 #' @examples
-#' vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), list("Widget", "2nd Part"))
-#' combine_mass_props_and_unc(vl)
-combine_mass_props_and_unc <- function(vl) {
-
-  r <- combine_mass_props(vl)
+combine_mass_props_unc <- function(vl, r) {
 
   # mass uncertainty
 
@@ -262,6 +250,10 @@ combine_mass_props_and_unc <- function(vl) {
   # result
 
   r
+}
+
+combine_mass_props_and_unc <- function(vl) {
+  combine_mass_props(vl) |> combine_mass_props_unc(vl, r = _)
 }
 
 #' Set POI convention for mass properties object to "+"
@@ -491,7 +483,7 @@ validate_mass_props <- function(mp) {
 #' @export
 #'
 #' @examples
-#' mp <- get_mass_props_and_unc(sawe_table, "Widget")
+#' mp <- c(get_mass_props(sawe_table, "Widget"), get_mass_props_unc(sawe_table, "Widget"))
 #' validate_mass_props_and_unc(mp)
 validate_mass_props_and_unc <- function(mp) {
 
