@@ -22,6 +22,6 @@ ensures the following are true:
 }
 }
 \examples{
-mp <- get_mass_props_and_unc(sawe_table, "Widget")
+mp <- c(get_mass_props(sawe_table, "Widget"), get_mass_props_unc(sawe_table, "Widget"))
 validate_mass_props_and_unc(mp)
 }

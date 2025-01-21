@@ -207,6 +207,7 @@ combine_mass_props <- function(vl) {
 #' Combine mass properties and uncertainties
 #'
 #' @param vl List of mass properties and uncertainties lists
+#' @param r mass properties previously computed
 #'
 #' @return Combined mass properties and uncertainties
 #' @export
@@ -361,6 +362,18 @@ update_mass_props <- function(df, target, sources, override = set_poi_conv_from_
     set = set_mass_props,
     get = get_mass_props,
     combine = combine_mass_props,
+    override = override
+  )
+}
+
+update_mass_props_unc <- function(df, target, sources, override = set_poi_conv_from_target) {
+  update_prop(
+    df,
+    target = target,
+    sources = sources,
+    set = set_mass_props_unc,
+    get = get_mass_props_and_unc,
+    combine = function(l) { combine_mass_props_unc(l, r = get_mass_props(df, target))},
     override = override
   )
 }
@@ -575,6 +588,10 @@ validate_mass_props_and_unc_table <- function(tree, df) {
 #' rollup_mass_props(test_tree, test_table)
 rollup_mass_props <- function(tree, df, validate_df = validate_mass_props_table, ...) {
   rollup(tree, df, update_mass_props, validate_df, ...)
+}
+
+rollup_mass_props_unc <- function(tree, df, validate_df = validate_mass_props_table, ...) {
+  rollup(tree, df, update_mass_props_unc, validate_df, ...)
 }
 
 #' Roll Up Mass Properties and Uncertainties
