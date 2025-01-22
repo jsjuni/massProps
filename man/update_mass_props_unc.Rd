@@ -2,21 +2,24 @@
 % Please edit documentation in R/massprops.R
 \name{update_mass_props_unc}
 \alias{update_mass_props_unc}
-\title{Update mass properties}
+\title{Update mass properties uncertainties}
 \usage{
 update_mass_props_unc(df, target, sources, override = set_poi_conv_from_target)
 }
 \arguments{
-\item{df}{data frame}
+\item{df}{A data frame  with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint},
+\code{sigma_mass}, \code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz}, \code{sigma_Ixx}, \code{sigma_Iyy},
+\code{sigma_Izz}, \code{sigma_Ixy}, \code{sigma_Ixz}, \code{sigma_Iyz}.}
 
-\item{target}{id of the target row}
+\item{target}{The \code{id} value of the target row.}
 
-\item{sources}{ids of the source rows}
+\item{sources}{List of \code{id} values of the of the source rows.}
 
-\item{override}{override function, called as override(df, target, value)}
+\item{override}{An override function, called as override(df, target, value)}
 }
 \value{
-updated data frame
+The updated data frame.
 }
 \description{
 \code{update_mass_props_unc()} updates mass properties uncertainties
@@ -29,4 +32,5 @@ with (at least) these columns: \code{id}, \code{sigma_mass}, \code{sigma_Cx}, \c
 leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
 df <- update_mass_props_unc(sawe_table, "Combined", leaves)
 get_mass_props_unc(df, "Combined")
+
 }

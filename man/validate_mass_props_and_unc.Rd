@@ -7,7 +7,16 @@
 validate_mass_props_and_unc(mpu)
 }
 \arguments{
-\item{mpu}{mass properties and uncertainty object}
+\item{mpu}{Mass properties and uncertainties list containing the following named elements
+\itemize{
+\item \code{mass} mass (numeric)
+\item \code{center_mass} center of mass (3-dimensional numeric)
+\item \code{inertia} Inertia tensor (3x3 numeric matrix)
+\item \code{point} Logical indicating point mass, i.e., negligible inertia
+\item \code{sigma_mass} mass uncertainty
+\item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
+\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
+}}
 }
 \value{
 TRUE if valid, stops otherwise
@@ -19,4 +28,5 @@ conjunction of \code{validate_mass_props()} and \code{validate_mass_props_unc()}
 \examples{
 mpu <- get_mass_props_and_unc(sawe_table, "Widget")
 validate_mass_props_and_unc(mpu)
+
 }

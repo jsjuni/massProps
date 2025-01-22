@@ -7,26 +7,32 @@
 validate_mass_props(mp)
 }
 \arguments{
-\item{mp}{Mass properties object}
+\item{mp}{Mass properties list containing the following named elements
+\itemize{
+\item \code{mass} mass (numeric)
+\item \code{center_mass} center of mass (3-dimensional numeric)
+\item \code{inertia} Inertia tensor (3x3 numeric matrix)
+\item \code{point} Logical indicating point mass, i.e., negligible inertia
+}}
 }
 \value{
 TRUE if valid, stops otherwise
 }
 \description{
-\code{validate_mass_props()} ensures that a mass properties object satisfies the following
+\code{validate_mass_props()} ensures that a mass properties list satisfies the following
 constraints:
 \itemize{
-\item mass is non-missing and positive
-\item center of mass is a 3-vector of non-missing numeric values
-\item point mass indicator is TRUE or FALSE
-\item for every non-point mass:
+\item \code{mass} is non-missing and positive
+\item \code{center_mass} is a 3-vector of non-missing numeric values
+\item \code{point} is TRUE or FALSE
+\item if \code{point} is FALSE:
 \itemize{
-\item the inertia tensor is positive definite
-\item eigenvalues of the inertia tensor satisfy the triangle inequalities:
+\item \code{inertia} is positive definite
+\item eigenvalues {\code{e1}, \code{e2}, \code{3}} of  \code{inertia} satisfy the triangle inequalities:
 \itemize{
-\item e1 < e2 + e3
-\item e2 < e1 + e3
-\item e3 < e1 + e2
+\item \code{e1} < \code{e2} + \code{e3}
+\item \code{e2} < \code{e1} + \code{e3}
+\item \code{e3} < \code{e1} + \code{e2}
 }
 }
 }
@@ -34,4 +40,5 @@ constraints:
 \examples{
 mp <- get_mass_props(test_table, "C.1")
 validate_mass_props(mp)
+
 }

@@ -7,14 +7,21 @@
 validate_mass_props_table(tree, df)
 }
 \arguments{
-\item{tree}{An \code{igraph} tree with edges from child to parent}
+\item{tree}{An \code{igraph} tree whose vertex names match the \code{id} column of a
+data frame and whose edges go from child to parent.}
 
-\item{df}{A data frame to validate}
+\item{df}{A data frame  with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
 }
 \value{
 TRUE if valid, stops with an error otherwise
 }
 \description{
+\code{validate_mass_props_table()} checks that the names of vertices
+in a tree and the \code{id} values of a data frame are identical. It further
+applies the checks of \code{validate_mass_props()} to every row of the data
+frame corresponding to a leaf vertex of the tree.
+
 \code{validate_mass_props_table()} ensures that the \code{id} column of the table and the vertices
 of the tree contain the same identifiers, and that the mass properties of every leaf element
 of the table are valid.

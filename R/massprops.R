@@ -464,22 +464,23 @@ set_poi_conv_from_target <- function(df, target, v) {
 #' Update mass properties
 #'
 #' `update_mass_props()` updates mass properties for a specified target row from
-#' specified source rows in a data frame
-#' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
-#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
+#' specified source rows in a data frame.
 #'
-#' @param df data frame
-#' @param target id of the target row
-#' @param sources ids of the source rows
-#' @param override override function, called as override(df, target, value)
+#' @param df A data frame  with (at least) these columns: `id`, `mass`, `Cx`,
+#'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
+#' @param target The `id` value of the target row.
+#' @param sources List of `id` values of the of the source rows.
+#' @param override An override function, called as override(df, target, value)
 #'
-#' @return updated data frame
+#' @return The updated data frame.
+#'
 #' @export
 #'
 #' @examples
 #' leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))
 #' df <- update_mass_props(test_table, "A.3", leaves)
 #' get_mass_props(df, "A.3")
+#'
 update_mass_props <- function(df, target, sources, override = set_poi_conv_from_target) {
   update_prop(
     df,
@@ -492,7 +493,7 @@ update_mass_props <- function(df, target, sources, override = set_poi_conv_from_
   )
 }
 
-#'  Update mass properties
+#'  Update mass properties uncertainties
 #'
 #' @description
 #' `update_mass_props_unc()` updates mass properties uncertainties
@@ -501,18 +502,21 @@ update_mass_props <- function(df, target, sources, override = set_poi_conv_from_
 #' with (at least) these columns: `id`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
 #' `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
 #'
-#' @param df data frame
-#' @param target id of the target row
-#' @param sources ids of the source rows
-#' @param override override function, called as override(df, target, value)
+#' @inheritParams update_mass_props
+#' @param df A data frame  with (at least) these columns: `id`, `mass`, `Cx`,
+#'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`,
+#'   `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`, `sigma_Ixx`, `sigma_Iyy`,
+#'   `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
 #'
-#' @returns updated data frame
+#' @returns The updated data frame.
+#'
 #' @export
 #'
 #' @examples
 #' leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
 #' df <- update_mass_props_unc(sawe_table, "Combined", leaves)
 #' get_mass_props_unc(df, "Combined")
+#'
 update_mass_props_unc <- function(df, target, sources, override = set_poi_conv_from_target) {
   update_prop(
     df,
@@ -530,23 +534,19 @@ update_mass_props_unc <- function(df, target, sources, override = set_poi_conv_f
 #' @description
 #' `update_mass_props_and_unc()` updates mass properties and uncertainties
 #' for a specified target row from
-#' specified source rows in a data frame
-#' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
-#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
-#' `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
+#' specified source rows in a data frame.
 #'
-#' @param df A data frame
-#' @param target ID of the target row
-#' @param sources IDs of the source rows
-#' @param override An override function, called as override(df, target, value)
+#' @inheritParams update_mass_props_unc
 #'
-#' @return The updated data frame
+#' @return The updated data frame.
+#'
 #' @export
 #'
 #' @examples
 #' leaves <- list("Widget", "2nd Part")
 #' df <- update_mass_props_and_unc(sawe_table, "Combined", leaves)
 #' get_mass_props_and_unc(sawe_table, "Combined")
+#'
 update_mass_props_and_unc <- function(df, target, sources, override = set_poi_conv_from_target) {
   update_prop(
     df,
@@ -562,26 +562,32 @@ update_mass_props_and_unc <- function(df, target, sources, override = set_poi_co
 #' Validate mass properties
 #'
 #' @description
-#' `validate_mass_props()` ensures that a mass properties object satisfies the following
+#' `validate_mass_props()` ensures that a mass properties list satisfies the following
 #' constraints:
-#' - mass is non-missing and positive
-#' - center of mass is a 3-vector of non-missing numeric values
-#' - point mass indicator is TRUE or FALSE
-#' - for every non-point mass:
-#'   - the inertia tensor is positive definite
-#'   - eigenvalues of the inertia tensor satisfy the triangle inequalities:
-#'     - e1 < e2 + e3
-#'     - e2 < e1 + e3
-#'     - e3 < e1 + e2
+#' - `mass` is non-missing and positive
+#' - `center_mass` is a 3-vector of non-missing numeric values
+#' - `point` is TRUE or FALSE
+#' - if `point` is FALSE:
+#'   - `inertia` is positive definite
+#'   - eigenvalues {`e1`, `e2`, `3`} of  `inertia` satisfy the triangle inequalities:
+#'     - `e1` < `e2` + `e3`
+#'     - `e2` < `e1` + `e3`
+#'     - `e3` < `e1` + `e2`
 #'
-#' @param mp Mass properties object
+#' @param mp Mass properties list containing the following named elements
+#' - `mass` mass (numeric)
+#' - `center_mass` center of mass (3-dimensional numeric)
+#' - `inertia` Inertia tensor (3x3 numeric matrix)
+#' - `point` Logical indicating point mass, i.e., negligible inertia
 #'
-#' @return TRUE if valid, stops otherwise
+#' @returns TRUE if valid, stops otherwise
+#'
 #' @export
 #'
 #' @examples
 #' mp <- get_mass_props(test_table, "C.1")
 #' validate_mass_props(mp)
+#'
 validate_mass_props <- function(mp) {
 
   # ensure mass is numeric and positive.
@@ -632,20 +638,26 @@ validate_mass_props <- function(mp) {
 #' Validate mass properties uncertainties
 #'
 #' @description
-#' `validate_mass_props_unc()`
-#' ensures that the following are true:
-#' - mass uncertainty is non-missing and non-negative
-#' - center of mass uncertainty is a 3-vector of non-missing non-negative values
-#' - for non-point masses, the inertia tensor uncertainty is a 3x3 matrix of non-missing non-negative values
+#' `validate_mass_props_unc()` ensures that a mass properties and uncertainties
+#' list satisfies the following constraints:
+#' - `sigma_mass` is non-missing and non-negative
+#' - `sigma_center_mass` is a 3-vector of non-missing non-negative values
+#' - if `point` is FALSE, the `sigma_inertia` contains no missing or negative values
 #'
-#' @param mp mass properties and uncertainties object
+#' @param mp Mass properties and uncertainties list containing the following named elements
+#' - `point` Logical indicating point mass, i.e., negligible inertia
+#' - `sigma_mass` mass uncertainty
+#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
+#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
 #'
-#' @return TRUE if valid, stops otherwise
+#' @returns TRUE if valid, stops otherwise
+#'
 #' @export
 #'
 #' @examples
 #' mp <- get_mass_props_and_unc(sawe_table, "Widget")
 #' validate_mass_props_unc(mp)
+#'
 validate_mass_props_unc <- function(mp) {
 
   # ensure mass uncertainty is numeric and positive.
@@ -683,22 +695,37 @@ validate_mass_props_unc <- function(mp) {
 #' `validate_mass_props_and_unc()` is a convenience wrapper that calculates the logical
 #' conjunction of `validate_mass_props()` and `validate_mass_props_unc()`.
 #'
-#' @param mpu mass properties and uncertainty object
+#' @param mpu Mass properties and uncertainties list containing the following named elements
+#' - `mass` mass (numeric)
+#' - `center_mass` center of mass (3-dimensional numeric)
+#' - `inertia` Inertia tensor (3x3 numeric matrix)
+#' - `point` Logical indicating point mass, i.e., negligible inertia
+#' - `sigma_mass` mass uncertainty
+#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
+#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
 #'
 #' @returns TRUE if valid, stops otherwise
+#'
 #' @export
 #'
 #' @examples
 #' mpu <- get_mass_props_and_unc(sawe_table, "Widget")
 #' validate_mass_props_and_unc(mpu)
+#'
 validate_mass_props_and_unc <- function(mpu) {
   validate_mass_props(mpu) && validate_mass_props_unc(mpu)
 }
 
 #' Validate a mass properties table
 #'
-#' @param tree An `igraph` tree with edges from child to parent
-#' @param df A data frame to validate
+#' @description `validate_mass_props_table()` checks that the names of vertices
+#'   in a tree and the `id` values of a data frame are identical. It further
+#'   applies the checks of `validate_mass_props()` to every row of the data
+#'   frame corresponding to a leaf vertex of the tree.
+#'
+#' @inheritParams update_mass_props
+#' @param tree An `igraph` tree whose vertex names match the `id` column of a
+#'   data frame and whose edges go from child to parent.
 #'
 #' @description
 #' `validate_mass_props_table()` ensures that the `id` column of the table and the vertices
@@ -716,13 +743,13 @@ validate_mass_props_table <- function(tree, df) {
 
 #' Validate a mass properties and uncertainties table
 #'
-#' @param tree An `igraph` tree with edges from child to parent
-#' @param df A data frame to validate
+#' @inheritParams update_mass_props_and_unc
+#' @inheritParams validate_mass_props_table
 #'
-#' @description
-#' `validate_mass_props_and_unc()` calls
-#' `validate_mass_props_table()` and further ensures that the mass properties uncertainties of every leaf element
-#' of the table are valid.
+#' @description `validate_mass_props_and_unc()` calls
+#' `validate_mass_props_table()` and further applies the checks of
+#' `validate_mass_props_and_unc()` to every row of the data frame corresponding
+#' to a leaf vertex of the tree.
 #'
 #' @return TRUE if valid, stops with an error otherwise
 #' @export
