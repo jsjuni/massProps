@@ -670,7 +670,7 @@ The corresponding `R` code is
   r$sigma_inertia = sqrt(Reduce(`+`, Map(
     f = function(v) {
 
-      d <- r$center_mass - v$center_mass
+      d <- v$center_mass - r$center_mass
 
       P <- outer(d, v$sigma_center_mass)
       p <- as.list(diag(P))
@@ -679,7 +679,8 @@ The corresponding `R` code is
       M2 <- t(P) - diag(c(p$x - 2 * p$z, p$y - 2 * p$z, p$z - 2 * p$y))
       M3 <- outer(d, d) - sum(diag(d^2)) * diag(3)
 
-      v$sigma_inertia^2 + v$mass^2 * (M1^2 + M2^2) + (v$sigma_mass * M3)^2
+      M4 <- v$mass^2 * (M1^2 + M2^2) + (v$sigma_mass * M3)^2
+      if (v$point) M4 else v$sigma_inertia^2 + M4
     },
     vl
   )))
