@@ -7,20 +7,26 @@
 get_mass_props_and_unc(df, id)
 }
 \arguments{
-\item{df}{data frame}
+\item{df}{A data frame with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint},
+\code{sigma_mass}, \code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz},\code{sigma_Ixy}, \code{sigma_Ixz},
+\code{sigma_Iyz}.
+\itemize{
+\item \code{sigma_mass} Mass uncertainty (numeric).
+\item \code{sigma_center_mass} Center of mass uncertainty (3-dimensional numeric vector).
+\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix).
+}}
 
-\item{id}{id value of the desired row}
+\item{id}{The \code{id} value of the desired row.}
 }
 \value{
-list with the following named elements:
+A list with the following named elements:
 \itemize{
-\item \code{mass} mass (numeric)
-\item \code{center_mass} center of mass (3-dimensional numeric)
-\item \code{inertia} Inertia tensor (3x3 numeric matrix)
-\item \code{point} Logical indicating point mass, i.e., negligible inertia
-\item \code{sigma_mass} mass uncertainty
-\item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
-\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
+\item \code{mass} Mass (numeric).
+\item \code{center_mass} Center of mass (3-dimensional numeric vector).
+\item \code{inertia} Inertia tensor (3x3 numeric matrix).
+\item \code{point} Logical indicating point mass. The intertia of point masses is not included in calculations.
+'
 }
 }
 \description{

@@ -1,22 +1,23 @@
 #' Get mass properties for a row in a data frame
 #'
-#' `get_mass_props()` gets mass properties for a specified row in a data frame
-#' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
-#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
+#' `get_mass_props()` creates a mass properties list from a specified row in a data frame.
 #'
-#' @param df  data frame
-#' @param id id value of the desired row
+#' @param df A data frame with (at least) these columns: `id`, `mass`, `Cx`,
+#'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
+#' @param id The `id` value of the desired row.
 #'
 #' @returns
-#' list with the following named elements:
-#' - `mass` mass (numeric)
-#' - `center_mass` center of mass (3-dimensional numeric)
-#' - `inertia` Inertia tensor (3x3 numeric matrix)
-#' - `point` Logical indicating point mass, i.e., negligible inertia
+#' A list with the following named elements:
+#' - `mass` Mass (numeric).
+#' - `center_mass` Center of mass (3-dimensional numeric vector).
+#' - `inertia` Inertia tensor (3x3 numeric matrix).
+#' - `point` Logical indicating point mass. The intertia of point masses is not included in calculations.
+
 #' @export
 #'
 #' @examples
 #' get_mass_props(mp_table, "C.1.2.2.3.1.2.3")
+#'
 get_mass_props <- function(df, id) {
   poi_conv <- df_get_by_id(df, id, "POIconv")
   list(
@@ -40,23 +41,24 @@ get_mass_props <- function(df, id) {
 
 #' Get mass properties uncertainties for a row in a data frame
 #'
-#' `get_mass_props_unc()` gets mass properties uncertainties for a specified row in a data frame
-#' with (at least) these columns: `id`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
-#' `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
+#' `get_mass_props_unc()` creates a mass properties uncertainties list from a specified row in a data frame.
 #'
-#' @param df data frame
-#' @param id id value of the desired row
+#' @inheritParams get_mass_props
+#' @param df A data frame  with (at least) these columns: `id`, `sigma_mass`,
+#'   `sigma_Cx`, `sigma_Cy`, `sigma_Cz`, `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`,
+#'   `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
 #'
 #' @returns
-#' list with the following named elements:
-#' - `sigma_mass` mass uncertainty
-#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
-#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
-#' - `point` Logical indicating point mass, i.e., negligible inertia
+#' A list with the following named elements:
+#' - `sigma_mass` Mass uncertainty (numeric).
+#' - `sigma_center_mass` Center of mass uncertainty (3-dimensional numeric vector).
+#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix).
+
 #' @export
 #'
 #' @examples
 #' get_mass_props_unc(mp_table, "C.1.2.2.3.1.2.3")
+#'
 get_mass_props_unc <- function(df, id) {
   list(
     sigma_mass = df_get_by_id(df, id, "sigma_mass"),
@@ -71,8 +73,7 @@ get_mass_props_unc <- function(df, id) {
       sit["x", "z"] <- sit["z", "x"] <- df_get_by_id(df, id, "sigma_Ixz")
       sit["y", "z"] <- sit["z", "y"] <- df_get_by_id(df, id, "sigma_Iyz")
       sit
-    }#,
-    # point = df_get_by_id(df, id, "Ipoint")
+    }
   )
 }
 
@@ -82,19 +83,22 @@ get_mass_props_unc <- function(df, id) {
 #' `get_mass_props_and_unc()` is a convenience wrapper that combines the results of
 #' `get_mass_props()` and `get_mass_props_unc()`.
 #'
-#' @param df data frame
-#' @param id id value of the desired row
+#' @inheritParams get_mass_props
+#' @param df A data frame with (at least) these columns: `id`, `mass`, `Cx`,
+#'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`,
+#'   `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,`sigma_Ixy`, `sigma_Ixz`,
+#'   `sigma_Iyz`.
+#' - `sigma_mass` Mass uncertainty (numeric).
+#' - `sigma_center_mass` Center of mass uncertainty (3-dimensional numeric vector).
+#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix).
 #'
 #' @returns
-#' list with the following named elements:
-#' - `mass` mass (numeric)
-#' - `center_mass` center of mass (3-dimensional numeric)
-#' - `inertia` Inertia tensor (3x3 numeric matrix)
-#' - `point` Logical indicating point mass, i.e., negligible inertia
-#' - `sigma_mass` mass uncertainty
-#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
-#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
-#'
+#' A list with the following named elements:
+#' - `mass` Mass (numeric).
+#' - `center_mass` Center of mass (3-dimensional numeric vector).
+#' - `inertia` Inertia tensor (3x3 numeric matrix).
+#' - `point` Logical indicating point mass. The intertia of point masses is not included in calculations.
+#''
 #' @export
 #'
 #' @examples

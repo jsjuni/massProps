@@ -7,24 +7,24 @@
 get_mass_props(df, id)
 }
 \arguments{
-\item{df}{data frame}
+\item{df}{A data frame with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
 
-\item{id}{id value of the desired row}
+\item{id}{The \code{id} value of the desired row.}
 }
 \value{
-list with the following named elements:
+A list with the following named elements:
 \itemize{
-\item \code{mass} mass (numeric)
-\item \code{center_mass} center of mass (3-dimensional numeric)
-\item \code{inertia} Inertia tensor (3x3 numeric matrix)
-\item \code{point} Logical indicating point mass, i.e., negligible inertia
+\item \code{mass} Mass (numeric).
+\item \code{center_mass} Center of mass (3-dimensional numeric vector).
+\item \code{inertia} Inertia tensor (3x3 numeric matrix).
+\item \code{point} Logical indicating point mass. The intertia of point masses is not included in calculations.
 }
 }
 \description{
-\code{get_mass_props()} gets mass properties for a specified row in a data frame
-with (at least) these columns: \code{id}, \code{mass}, \code{Cx}, \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy},
-\code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.
+\code{get_mass_props()} creates a mass properties list from a specified row in a data frame.
 }
 \examples{
 get_mass_props(mp_table, "C.1.2.2.3.1.2.3")
+
 }
