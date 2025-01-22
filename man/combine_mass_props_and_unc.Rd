@@ -7,17 +7,28 @@
 combine_mass_props_and_unc(vl)
 }
 \arguments{
-\item{vl}{list of mass properties and uncertainties lists}
+\item{vl}{A list of mass properties and uncertainties lists, each of which contains
+the following named elements:
+\itemize{
+\item \code{mass} mass (numeric)
+\item \code{center_mass} center of mass (3-dimensional numeric)
+\item \code{inertia} Inertia tensor (3x3 numeric matrix)
+\item \code{point} Logical indicating point mass, i.e., negligible inertia
+\item \code{sigma_mass} mass uncertainty
+\item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
+\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
+}}
 }
 \value{
-combined mass properties and uncertainties
+Combined mass properties list with the same named elements.
 }
 \description{
-\code{combine_mass_props_and_unc()} is a convenience wrapper that concatentates the
+\code{combine_mass_props_and_unc()} is a convenience wrapper that concatenates the
 results of \code{combine_mass_props()} and \code{combine_mass_props_unc()}.
 }
 \examples{
 leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
 vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
 combine_mass_props_and_unc(vl)
+
 }

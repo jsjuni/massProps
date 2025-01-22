@@ -101,6 +101,7 @@ get_mass_props_unc <- function(df, id) {
 #'
 #' @examples
 #' get_mass_props_and_unc(mp_table, "C.1.2.2.3.1.2.3")
+#'
 get_mass_props_and_unc <- function(df, id) {
   c(get_mass_props(df, id), get_mass_props_unc(df, id))
 }
@@ -120,6 +121,7 @@ get_mass_props_and_unc <- function(df, id) {
 #' - `poi_conv` Enumeration c("+", "-") indicating sign convention for products of inertia
 #'
 #' @returns The updated data frame.
+#'
 #' @export
 #'
 #' @examples
@@ -128,6 +130,7 @@ get_mass_props_and_unc <- function(df, id) {
 #' v$poi_conv = "+"
 #' df <- set_mass_props(df, "C.1.2.2.3.2.1.1", v)
 #' get_mass_props(df, "C.1.2.2.3.2.1.1")
+#'
 set_mass_props <- function(df, id, v) {
   m <- v$inertia
   poi_factor <- if (v$poi_conv == "-") 1 else -1
@@ -161,10 +164,12 @@ set_mass_props <- function(df, id, v) {
 #' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
 #'
 #' @returns The updated data frame.
+#'
 #' @export
 #'
 #' @examples
 #' set_mass_props_unc(sawe_table, "Combined", get_mass_props_unc(sawe_table, "Widget"))
+#'
 set_mass_props_unc <- function(df, id, v) {
   df |>
 
@@ -188,7 +193,6 @@ set_mass_props_unc <- function(df, id, v) {
 #' `set_mass_props_and_unc()` is a convenience wrapper that combines the results of
 #' `set_mass_props()` and `set_mass_props_unc()`.
 #'
-#'
 #' @inheritParams set_mass_props
 #' @param v A list containing the following named elements:
 #' - `mass` mass (numeric)
@@ -201,26 +205,43 @@ set_mass_props_unc <- function(df, id, v) {
 #' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
 #'
 #' @returns The updated data frame.
+#'
 #' @export
 #'
 #' @examples
 #' mpu <- c(get_mass_props_and_unc(sawe_table, "Widget"), poi_conv = "+")
 #' set_mass_props_and_unc(sawe_table, "Combined", mpu)
+#'
 set_mass_props_and_unc <- function(df, id, v) {
   set_mass_props(df, id, v) |> set_mass_props_unc(id, v)
 }
 
 #' Combine mass properties
 #'
-#' @param vl list of mass properties lists
+#' @description
+#' `combine_mass_props()` calculates the mass properties of an aggregate from
+#' the mass properties of its constituents.
 #'
-#' @return Combined mass properties list
+#' @details
+#' See vignette("massProps", package = "massProps") for details on the algorithms
+#' employed.
+#'
+#' @param vl A list of mass properties lists, each of which contains the
+#' following named elements:
+#' - `mass` mass (numeric)
+#' - `center_mass` center of mass (3-dimensional numeric)
+#' - `inertia` Inertia tensor (3x3 numeric matrix)
+#' - `point` Logical indicating point mass, i.e., negligible inertia
+#'
+#' @returns Combined mass properties list with the same named elements.
+#'
 #' @export
 #'
 #' @examples
 #' leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))
 #' vl <- Map(f = function(id) get_mass_props(test_table, id), leaves)
 #' combine_mass_props(vl)
+#'
 combine_mass_props <- function(vl) {
 
   r <- list()
@@ -233,9 +254,9 @@ combine_mass_props <- function(vl) {
 
   r$center_mass <- Reduce(`+`, Map(f = function(v) v$mass * v$center_mass, vl)) / r$mass
 
-  # parallel axis theorem
-  # https://en.wikipedia.org/wiki/Parallel_axis_theorem#Moment_of_inertia_matrix
-  # M is [d]^2 computed using the identities given
+
+  # inertia tensor
+
   r$inertia <- Reduce(`+`, Map(
     f  = function(v) {
       d <- r$center_mass - v$center_mass
@@ -256,16 +277,39 @@ combine_mass_props <- function(vl) {
 
 #' Combine mass properties uncertainties
 #'
-#' @param vl list of mass properties and uncertainties lists
-#' @param r mass properties previously combined
+#' @description
+#' `combine_mass_prop_unc()` calculates the mass properties uncertainties of an aggregate from
+#' the mass properties and uncertainties of its constituents and the mass properties of the aggregate.
 #'
-#' @return combined mass properties and uncertainties
+#' @details
+#' See vignette("massProps", package = "massProps") for details on the algorithms
+#' employed.
+#'
+#' @param vl A list of mass properties and uncertainties lists, each of which contains
+#' the following named elements:
+#' - `mass` mass (numeric)
+#' - `center_mass` center of mass (3-dimensional numeric)
+#' - `inertia` Inertia tensor (3x3 numeric matrix)
+#' - `point` Logical indicating point mass, i.e., negligible inertia
+#' - `sigma_mass` mass uncertainty
+#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
+#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
+#' @param r A named list of mass properties for the aggregate containing the following
+#' named elements:
+#' - `sigma_mass` mass uncertainty
+#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
+#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
+#'
+#' @returns The mass properties uncertainties of the aggregate. A list with the same elements as
+#' the parameter `r`.
+#'
 #' @export
 #'
 #' @examples
 #' leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
 #' vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
 #' combine_mass_props_unc(vl, r = get_mass_props(sawe_table, "Combined"))
+#'
 combine_mass_props_unc <- function(vl, r) {
 
   # mass uncertainty
@@ -310,18 +354,28 @@ combine_mass_props_unc <- function(vl, r) {
 #' Combine mass properties and uncertainties
 #'
 #' @description
-#' `combine_mass_props_and_unc()` is a convenience wrapper that concatentates the
+#' `combine_mass_props_and_unc()` is a convenience wrapper that concatenates the
 #' results of `combine_mass_props()` and `combine_mass_props_unc()`.
 #'
-#' @param vl list of mass properties and uncertainties lists
+#' @param vl A list of mass properties and uncertainties lists, each of which contains
+#' the following named elements:
+#' - `mass` mass (numeric)
+#' - `center_mass` center of mass (3-dimensional numeric)
+#' - `inertia` Inertia tensor (3x3 numeric matrix)
+#' - `point` Logical indicating point mass, i.e., negligible inertia
+#' - `sigma_mass` mass uncertainty
+#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
+#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
 #'
-#' @returns combined mass properties and uncertainties
+#' @returns Combined mass properties list with the same named elements.
+#'
 #' @export
 #'
 #' @examples
 #' leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
 #' vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
 #' combine_mass_props_and_unc(vl)
+#'
 combine_mass_props_and_unc <- function(vl) {
   combine_mass_props(vl) |> combine_mass_props_unc(vl, r = _)
 }

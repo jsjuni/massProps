@@ -33,4 +33,5 @@ The updated data frame.
 \examples{
 mpu <- c(get_mass_props_and_unc(sawe_table, "Widget"), poi_conv = "+")
 set_mass_props_and_unc(sawe_table, "Combined", mpu)
+
 }

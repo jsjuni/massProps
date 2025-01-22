@@ -27,4 +27,5 @@ specified row in a data frame with an \code{id} column.
 }
 \examples{
 set_mass_props_unc(sawe_table, "Combined", get_mass_props_unc(sawe_table, "Widget"))
+
 }

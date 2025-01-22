@@ -7,18 +7,41 @@
 combine_mass_props_unc(vl, r)
 }
 \arguments{
-\item{vl}{list of mass properties and uncertainties lists}
+\item{vl}{A list of mass properties and uncertainties lists, each of which contains
+the following named elements:
+\itemize{
+\item \code{mass} mass (numeric)
+\item \code{center_mass} center of mass (3-dimensional numeric)
+\item \code{inertia} Inertia tensor (3x3 numeric matrix)
+\item \code{point} Logical indicating point mass, i.e., negligible inertia
+\item \code{sigma_mass} mass uncertainty
+\item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
+\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
+}}
 
-\item{r}{mass properties previously combined}
+\item{r}{A named list of mass properties for the aggregate containing the following
+named elements:
+\itemize{
+\item \code{sigma_mass} mass uncertainty
+\item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
+\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
+}}
 }
 \value{
-combined mass properties and uncertainties
+The mass properties uncertainties of the aggregate. A list with the same elements as
+the parameter \code{r}.
 }
 \description{
-Combine mass properties uncertainties
+\code{combine_mass_prop_unc()} calculates the mass properties uncertainties of an aggregate from
+the mass properties and uncertainties of its constituents and the mass properties of the aggregate.
+}
+\details{
+See vignette("massProps", package = "massProps") for details on the algorithms
+employed.
 }
 \examples{
 leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
 vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
 combine_mass_props_unc(vl, r = get_mass_props(sawe_table, "Combined"))
+
 }
