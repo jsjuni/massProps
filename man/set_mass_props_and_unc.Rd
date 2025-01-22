@@ -7,11 +7,11 @@
 set_mass_props_and_unc(df, id, v)
 }
 \arguments{
-\item{df}{data frame}
+\item{df}{A data frame with an \code{id} column.}
 
-\item{id}{id value of the desired row}
+\item{id}{The \code{id} value of the desired row.}
 
-\item{v}{list containing the following named elements:
+\item{v}{A list containing the following named elements:
 \itemize{
 \item \code{mass} mass (numeric)
 \item \code{center_mass} center of mass (3-dimensional numeric)
@@ -24,7 +24,7 @@ set_mass_props_and_unc(df, id, v)
 }}
 }
 \value{
-updated data frame
+The updated data frame.
 }
 \description{
 \code{set_mass_props_and_unc()} is a convenience wrapper that combines the results of

@@ -7,11 +7,11 @@
 set_mass_props_unc(df, id, v)
 }
 \arguments{
-\item{df}{A data frame}
+\item{df}{A data frame with an \code{id} column.}
 
-\item{id}{ID value of the desired row}
+\item{id}{The \code{id} value of the desired row.}
 
-\item{v}{#' A list with the following named elements:
+\item{v}{A list with the following named elements:
 \itemize{
 \item \code{sigma_mass} mass uncertainty (numeric)
 \item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
@@ -19,7 +19,7 @@ set_mass_props_unc(df, id, v)
 }}
 }
 \value{
-The updated data frame
+The updated data frame.
 }
 \description{
 \code{set_mass_props_unc()} sets mass properties and uncertainties for a

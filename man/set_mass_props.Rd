@@ -7,11 +7,11 @@
 set_mass_props(df, id, v)
 }
 \arguments{
-\item{df}{A data frame}
+\item{df}{A data frame with an \code{id} column.}
 
-\item{id}{ID value of the desired row}
+\item{id}{The \code{id} value of the desired row.}
 
-\item{v}{#' A list with the following named elements:
+\item{v}{A list with the following named elements:
 \itemize{
 \item \code{mass} mass (numeric)
 \item \code{center_mass} center of mass (3-dimensional numeric)
@@ -21,11 +21,10 @@ set_mass_props(df, id, v)
 }}
 }
 \value{
-The updated data frame
+The updated data frame.
 }
 \description{
-\code{set_mass_props()} sets mass properties for a specified row in a data frame with
-an \code{id} column.
+\code{set_mass_props()} sets mass properties for a specified row in a data frame.
 }
 \examples{
 df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
