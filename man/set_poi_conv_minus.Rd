@@ -7,25 +7,25 @@
 set_poi_conv_minus(ds, target, v)
 }
 \arguments{
-\item{ds}{Ignored}
+\item{ds}{Ignored.}
 
-\item{target}{Ignored}
+\item{target}{Ignored.}
 
-\item{v}{A mass properties object}
+\item{v}{A mass properties list.}
 }
 \value{
-The mass properties object with the POI convention set to "-"
+The mass properties object with the named element \code{poi_conv} set to "-"
 }
 \description{
 \code{set_poi_conv_minus()} sets the products of inertia convention for a
-mass properties object to "+". This does not affect the values of the
-object, but it determines how products of inertia are saved to a
-data set.
+mass properties list to "-". This convention determines how products of inertia are
+saved to a data set.
 
-The signature \verb{of set_poi_conv_minus()} is such that it can be passed as an \code{override} argument
+The signature of \code{set_poi_conv_minus()} is such that it can be passed as an \code{override} argument
 to \code{update_mass_props()} and \code{update_mass_props_and_unc()}, thus ensuring
-that all calculated POI values follow the negative integral convention.
+that calculated POI values are saved using the negative integral convention.
 }
 \examples{
 set_poi_conv_minus(NULL, NULL, get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+
 }

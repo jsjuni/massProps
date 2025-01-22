@@ -385,23 +385,24 @@ combine_mass_props_and_unc <- function(vl) {
 #'
 #' @description
 #' `set_poi_conv_plus()` sets the products of inertia convention for a
-#' mass properties object to "+". This does not affect the values of the
-#' object, but it determines how products of inertia are saved to a
-#' data set.
+#' mass properties list to "+". This convention determines how products of inertia are
+#' saved to a data set.
 #'
 #' The signature of `set_poi_conv_plus()` is such that it can be passed as an `override` argument
 #' to `update_mass_props()` and `update_mass_props_and_unc()`, thus ensuring
-#' that all calculated POI values follow the positive integral convention.
+#' that calculated POI values are saved using the positive integral convention.
 #'
-#' @param ds Ignored
-#' @param target Ignored
-#' @param v A mass properties object
+#' @param ds Ignored.
+#' @param target Ignored.
+#' @param v A mass properties list.
 #'
-#' @return The mass properties object with the POI convention set to "+"
+#' @returns The mass properties object with the named element `poi_conv` set to "+"
+#'
 #' @export
 #'
 #' @examples
 #' set_poi_conv_plus(NULL, NULL, get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+#'
 set_poi_conv_plus <- function(ds, target, v) {
   v$poi_conv <- "+"
   v
@@ -411,23 +412,22 @@ set_poi_conv_plus <- function(ds, target, v) {
 #'
 #' @description
 #' `set_poi_conv_minus()` sets the products of inertia convention for a
-#' mass properties object to "+". This does not affect the values of the
-#' object, but it determines how products of inertia are saved to a
-#' data set.
+#' mass properties list to "-". This convention determines how products of inertia are
+#' saved to a data set.
 #'
-#' The signature `of set_poi_conv_minus()` is such that it can be passed as an `override` argument
+#' The signature of `set_poi_conv_minus()` is such that it can be passed as an `override` argument
 #' to `update_mass_props()` and `update_mass_props_and_unc()`, thus ensuring
-#' that all calculated POI values follow the negative integral convention.
+#' that calculated POI values are saved using the negative integral convention.
 #'
-#' @param ds Ignored
-#' @param target Ignored
-#' @param v A mass properties object
+#' @inheritParams set_poi_conv_plus
 #'
-#' @return The mass properties object with the POI convention set to "-"
+#' @returns The mass properties object with the named element `poi_conv` set to "-"
+#'
 #' @export
 #'
 #' @examples
 #' set_poi_conv_minus(NULL, NULL, get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+#'
 set_poi_conv_minus <- function(ds, target, v) {
   v$poi_conv <- "-"
   v
@@ -437,23 +437,25 @@ set_poi_conv_minus <- function(ds, target, v) {
 #'
 #' @description
 #' `set_poi_conv_from_target()` sets the products of inertia convention for a
-#' mass properties object to that of the target item in the mass properties table. This does not affect the values of
-#' object, but it determines how products of inertia are saved to the
+#' mass properties object to that of the target item in the mass properties table. This convention
+#' determines how products of inertia are saved to the
 #' data frame.
 #'
 #' The signature `of set_poi_conv_from_target()` is such that it can be passed as an `override` argument
 #' to `update_mass_props()` and `update_mass_props_and_unc()`, thus ensuring
 #' that all calculated POI values follow the negative integral convention of the target item to which they are written.
 #'
-#' @param df A data frame with column `id`
-#' @param target ID value for the target item
-#' @param v A mass properties object
+#' @inheritParams set_poi_conv_plus
+#' @param df A data frame with columns `id` and `POIconv`.
+#' @param target The `id` value of the target row.
 #'
-#' @return The mass properties object with the POI convention set to that of the target item
+#' @return The mass properties object with thenamed element `poi_conv` set to that of the target item.
+#'
 #' @export
 #'
 #' @examples
 #' set_poi_conv_from_target(mp_table, "C.1.2.2.3.2.1", get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+#'
 set_poi_conv_from_target <- function(df, target, v) {
   v$poi_conv <- df_get_by_id(df, target, "POIconv")
   v

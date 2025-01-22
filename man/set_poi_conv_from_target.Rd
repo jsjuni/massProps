@@ -7,19 +7,19 @@
 set_poi_conv_from_target(df, target, v)
 }
 \arguments{
-\item{df}{A data frame with column \code{id}}
+\item{df}{A data frame with columns \code{id} and \code{POIconv}.}
 
-\item{target}{ID value for the target item}
+\item{target}{The \code{id} value of the target row.}
 
-\item{v}{A mass properties object}
+\item{v}{A mass properties list.}
 }
 \value{
-The mass properties object with the POI convention set to that of the target item
+The mass properties object with thenamed element \code{poi_conv} set to that of the target item.
 }
 \description{
 \code{set_poi_conv_from_target()} sets the products of inertia convention for a
-mass properties object to that of the target item in the mass properties table. This does not affect the values of
-object, but it determines how products of inertia are saved to the
+mass properties object to that of the target item in the mass properties table. This convention
+determines how products of inertia are saved to the
 data frame.
 
 The signature \verb{of set_poi_conv_from_target()} is such that it can be passed as an \code{override} argument
@@ -28,4 +28,5 @@ that all calculated POI values follow the negative integral convention of the ta
 }
 \examples{
 set_poi_conv_from_target(mp_table, "C.1.2.2.3.2.1", get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+
 }
