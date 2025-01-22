@@ -296,9 +296,10 @@ combine_mass_props <- function(vl) {
 #' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
 #' @param r A named list of mass properties for the aggregate containing the following
 #' named elements:
-#' - `sigma_mass` mass uncertainty
-#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
-#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
+#' - `mass` mass (numeric)
+#' - `center_mass` center of mass (3-dimensional numeric)
+#' - `inertia` Inertia tensor (3x3 numeric matrix)
+#' - `point` Logical indicating point mass, i.e., negligible inertia
 #'
 #' @returns The mass properties uncertainties of the aggregate. A list with the same elements as
 #' the parameter `r`.
