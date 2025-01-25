@@ -2,7 +2,7 @@
 % Please edit documentation in R/massprops.R
 \name{rollup_mass_props_unc}
 \alias{rollup_mass_props_unc}
-\title{Roll Up Mass Properties Uncertainties}
+\title{Roll up mass properties uncertainties}
 \usage{
 rollup_mass_props_unc(
   tree,
@@ -12,27 +12,27 @@ rollup_mass_props_unc(
 )
 }
 \arguments{
-\item{tree}{'igraph' directed graph that is a valid single-rooted in-tree with edges from child vertex to parent vertex.}
+\item{tree}{An igraph directed graph that is a single-rooted in-tree with edges from child vertex to parent vertex.}
 
-\item{df}{mass properties and uncertainties table}
+\item{df}{A data frame  with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
 
-\item{validate_df}{validator for the tree and table, default \code{validate_mass_props_and_unc_table()}}
+\item{validate_df}{A validator for the tree and table, default \code{validate_mass_props_and_unc_table()}}
 
-\item{...}{other parameters passed \code{rollup()}}
+\item{...}{Other parameters passed to \code{rollupTree::rollup()}}
 }
 \value{
 The updated data frame
 }
 \description{
-'rollup_mass_props_unc()' rolls up mass properties in a data frame
-with (at least) these columns: \code{id}, \code{mass}, \code{Cx}, \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy},
-\code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}, \code{sigma_mass}, \code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz},
-\code{sigma_Ixx}, \code{sigma_Iyy}, \code{sigma_Izz}, \code{sigma_Ixy}, \code{sigma_Ixz}, \code{sigma_Iyz}.
+'rollup_mass_props_unc()' rolls up mass properties uncertainties in a data frame such that the uncertainties of each
+non-leaf vertex element is the aggregation of the mass properties and uncertainties of its child elements.
 
 The difference between \code{rollup_mass_props_unc()} and \code{rollup_mass_props_and_unc()} is that \code{rollup_mass_props_unc()}
 expects the mass properties in its input to have been rolled up, whereas \code{rollup_mass_props_and_unc()} performs
 the mass properties rollup itself.
 }
 \examples{
-rollup_mass_props_and_unc(sawe_tree, sawe_table)
+mp_ru <- rollup_mass_props(mp_tree, mp_table)
+rollup_mass_props_unc(mp_tree, mp_ru)
 }

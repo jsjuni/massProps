@@ -569,10 +569,10 @@ update_mass_props_and_unc <- function(df, target, sources, override = set_poi_co
 #' - `point` is TRUE or FALSE
 #' - if `point` is FALSE:
 #'   - `inertia` is positive definite
-#'   - eigenvalues {`e1`, `e2`, `3`} of  `inertia` satisfy the triangle inequalities:
-#'     - `e1` < `e2` + `e3`
-#'     - `e2` < `e1` + `e3`
-#'     - `e3` < `e1` + `e2`
+#'   - eigenvalues \eqn{\{\lambda_1, \lambda_2, \lambda_3\}} of  `inertia` satisfy the triangle inequalities:
+#'     - \eqn{\lambda_1 < \lambda_2 + \lambda_3}
+#'     - \eqn{\lambda_2 < \lambda_1 + \lambda_3}
+#'     - \eqn{\lambda_3 < \lambda_1 + \lambda_2}
 #'
 #' @param mp Mass properties list containing the following named elements
 #' - `mass` mass (numeric)
@@ -732,7 +732,8 @@ validate_mass_props_and_unc <- function(mpu) {
 #' of the tree contain the same identifiers, and that the mass properties of every leaf element
 #' of the table are valid.
 #'
-#' @return TRUE if valid, stops with an error otherwise
+#' @returns TRUE if valid, stops with an error otherwise
+#'
 #' @export
 #'
 #' @examples
@@ -751,7 +752,8 @@ validate_mass_props_table <- function(tree, df) {
 #' `validate_mass_props_and_unc()` to every row of the data frame corresponding
 #' to a leaf vertex of the tree.
 #'
-#' @return TRUE if valid, stops with an error otherwise
+#' @returns TRUE if valid, stops with an error otherwise
+#'
 #' @export
 #'
 #' @examples
@@ -760,58 +762,55 @@ validate_mass_props_and_unc_table <- function(tree, df) {
   validate_ds(tree, df, df_get_ids, get_mass_props_and_unc, validate_mass_props_and_unc)
 }
 
-#' Roll Up Mass Properties
+#' Roll up mass properties
 #'
 #' @description
-#' 'rollup_mass_props()' rolls up mass properties in a data frame
-#' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
-#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
+#' 'rollup_mass_props()' rolls up mass properties in a data frame such that the mass properties of each
+#' non-leaf vertex element is the aggregation of those of its child elements.
 #'
-#' @param tree An igraph directed graph that is a valid single-rooted in-tree with edges from child vertex to parent vertex.
-#' @param df A mass properties table
+#' @inheritParams update_mass_props
+#' @param tree An igraph directed graph that is a single-rooted in-tree with edges from child vertex to parent vertex.
 #' @param validate_df A validator for the tree and table, default `validate_mass_props_table()`
-#' @param ... Other parameters passed `rollup()`
+#' @param ... Other parameters passed to `rollupTree::rollup()`
 #'
 #' @returns The updated data frame
+#'
 #' @export
 #'
 #' @examples
-#' rollup_mass_props(test_tree, test_table)
+#' rollup_mass_props(mp_tree, mp_table)
+#'
 rollup_mass_props <- function(tree, df, validate_df = validate_mass_props_table, ...) {
   rollup(tree, df, update_mass_props, validate_df, ...)
 }
 
-rollup_mass_props_unc <- function(tree, df, validate_df = validate_mass_props_table, ...) {
-  rollup(tree, df, update_mass_props_unc, validate_df, ...)
-}
-
-#' Roll Up Mass Properties Uncertainties
+#' Roll up mass properties uncertainties
 #'
 #' @description
-#' 'rollup_mass_props_unc()' rolls up mass properties in a data frame
-#' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
-#' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
-#' `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
+#' 'rollup_mass_props_unc()' rolls up mass properties uncertainties in a data frame such that the uncertainties of each
+#' non-leaf vertex element is the aggregation of the mass properties and uncertainties of its child elements.
 #'
 #' The difference between `rollup_mass_props_unc()` and `rollup_mass_props_and_unc()` is that `rollup_mass_props_unc()`
 #' expects the mass properties in its input to have been rolled up, whereas `rollup_mass_props_and_unc()` performs
 #' the mass properties rollup itself.
 #'
-#' @param tree 'igraph' directed graph that is a valid single-rooted in-tree with edges from child vertex to parent vertex.
-#' @param df mass properties and uncertainties table
-#' @param validate_df validator for the tree and table, default `validate_mass_props_and_unc_table()`
-#' @param ... other parameters passed `rollup()`
+#' @inheritParams rollup_mass_props
+#' @inheritParams update_mass_props_unc
+#' @param validate_df A validator for the tree and table, default `validate_mass_props_and_unc_table()`
 #'
 #' @returns The updated data frame
+#'
 #' @export
 #'
 #' @examples
-#' rollup_mass_props_and_unc(sawe_tree, sawe_table)
+#' mp_ru <- rollup_mass_props(mp_tree, mp_table)
+#' rollup_mass_props_unc(mp_tree, mp_ru)
+
 rollup_mass_props_unc <- function(tree, df, validate_df = validate_mass_props_and_unc_table, ...) {
   rollup(tree, df, update_mass_props_unc, validate_df, ...)
 }
 
-#' Roll Up Mass Properties and Uncertainties
+#' Roll up mass properties and uncertainties
 #'
 #' @description
 #' 'rollup_mass_props_and_unc()' rolls up mass properties in a data frame
@@ -823,10 +822,9 @@ rollup_mass_props_unc <- function(tree, df, validate_df = validate_mass_props_an
 #' expects the mass properties in its input to have been rolled up, whereas `rollup_mass_props_and_unc()` performs
 #' the mass properties rollup itself.
 #'
-#' @param tree An igraph directed graph that is a valid single-rooted in-tree with edges from child vertex to parent vertex.
-#' @param df A mass properties and uncertainties table
+#' @inheritParams rollup_mass_props
+#' @inheritParams update_mass_props_unc
 #' @param validate_df A validator for the tree and table, default `validate_mass_props_and_unc_table()`
-#' @param ... Other parameters passed `rollup()`
 #'
 #' @returns The updated data frame
 #' @export
@@ -845,14 +843,15 @@ rollup_mass_props_and_unc <- function(tree, df, validate_df = validate_mass_prop
 #' be used with caution and only under circumstances in which the caller assumes
 #' responsibility for validity of input. Its behavior when passed ill-formed input is unspecified.
 #'
-#' @param tree tree passed to `rollup()`
-#' @param df mass properties and uncertainties table passed to `rollup()`
+#' @inheritParams rollup_mass_props
 #'
 #' @returns The updated data frame
+#'
 #' @export
 #'
 #' @examples
 #' rollup_mass_props_fast(test_tree, test_table)
+#'
 rollup_mass_props_fast <- function(tree, df) {
   rollup_mass_props(tree, df, validate_df = function(t, d) TRUE, validate_tree = function(t) NA)
 }
@@ -866,14 +865,16 @@ rollup_mass_props_fast <- function(tree, df) {
 #' be used with caution and only under circumstances in which the caller assumes
 #' responsibility for validity of input. Its behavior when passed ill-formed input is unspecified.
 #'
-#' @param tree tree passed to `rollup()`
-#' @param df mass properties and uncertainties table passed to `rollup()`
+#' @inheritParams rollup_mass_props
+#' @inheritParams update_mass_props_unc
 #'
 #' @returns The updated data frame
+#'
 #' @export
 #'
 #' @examples
 #' rollup_mass_props_unc_fast(sawe_tree, sawe_table)
+#'
 rollup_mass_props_unc_fast <- function(tree, df) {
   rollup_mass_props_unc(tree, df, validate_df = function(t, d) TRUE, validate_tree = function(t) NA)
 }
@@ -886,14 +887,16 @@ rollup_mass_props_unc_fast <- function(tree, df) {
 #' be used with caution and only under circumstances in which the caller assumes
 #' responsibility for validity of input. Its behavior when passed ill-formed input is unspecified.
 #'
-#' @param tree tree passed to `rollup()`
-#' @param df mass properties and uncertainties table passed to `rollup()`
+#' @inheritParams rollup_mass_props
+#' @inheritParams update_mass_props_unc
 #'
 #' @returns The updated data frame
+#'
 #' @export
 #'
 #' @examples
 #' rollup_mass_props_and_unc_fast(sawe_tree, sawe_table)
+#'
 rollup_mass_props_and_unc_fast <- function(tree, df) {
   rollup_mass_props_and_unc(tree, df, validate_df = function(t, d) TRUE, validate_tree = function(t) NA)
 }

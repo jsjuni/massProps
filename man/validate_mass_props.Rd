@@ -28,11 +28,11 @@ constraints:
 \item if \code{point} is FALSE:
 \itemize{
 \item \code{inertia} is positive definite
-\item eigenvalues {\code{e1}, \code{e2}, \code{3}} of  \code{inertia} satisfy the triangle inequalities:
+\item eigenvalues \eqn{\{\lambda_1, \lambda_2, \lambda_3\}} of  \code{inertia} satisfy the triangle inequalities:
 \itemize{
-\item \code{e1} < \code{e2} + \code{e3}
-\item \code{e2} < \code{e1} + \code{e3}
-\item \code{e3} < \code{e1} + \code{e2}
+\item \eqn{\lambda_1 < \lambda_2 + \lambda_3}
+\item \eqn{\lambda_2 < \lambda_1 + \lambda_3}
+\item \eqn{\lambda_3 < \lambda_1 + \lambda_2}
 }
 }
 }

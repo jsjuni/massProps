@@ -7,9 +7,10 @@
 rollup_mass_props_unc_fast(tree, df)
 }
 \arguments{
-\item{tree}{tree passed to \code{rollup()}}
+\item{tree}{An igraph directed graph that is a single-rooted in-tree with edges from child vertex to parent vertex.}
 
-\item{df}{mass properties and uncertainties table passed to \code{rollup()}}
+\item{df}{A data frame  with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
 }
 \value{
 The updated data frame
@@ -22,4 +23,5 @@ responsibility for validity of input. Its behavior when passed ill-formed input 
 }
 \examples{
 rollup_mass_props_unc_fast(sawe_tree, sawe_table)
+
 }
