@@ -211,7 +211,7 @@ The author has intentionally made no effort to micro-optimize for performance. I
 
 In this section, we state the reference equations [@zimmerman:05:sawe] and show, where applicable, how those equations can be rewritten in more concise form. The form of the equations actually implemented is displayed within a box, e.g. $\boxed{F = ma}$.
 
-The reference uses the word *weight* and the symbol $w$ in equations. We interpret weight as mass. The reference refers to center of mass by its $x$, $y$, and $z$ components. Symbols for moments ($I_{XX}$) and products ($I_{XY}$) of inertia are conventional. Variables with subscripts designate properties of parts; those without designate properties of aggregates. The letter $\sigma$ denotes uncertainty. $\sigma_w$, for example, is the mass uncertainty.
+The reference uses the word *weight* and the symbol $w$ in equations. We interpret weight as mass. The reference refers to center of mass by its $x$, $y$, and $z$ components. Symbols for moments ($I_{xx}$) and products ($I_{xy}$) of inertia are conventional. Variables with $i$ subscripts designate properties of parts; those without designate properties of aggregates. The letter $\sigma$ denotes uncertainty. $\sigma_w$, for example, is the mass uncertainty.
 
 ## Mass Properties
 
@@ -324,16 +324,16 @@ Let $I$ be the inertia tensor of the aggregate and $I_i$ be that of part $i$. Th
 $$
 I =
 \left[ \begin{matrix}
- I_{XX} & -I_{XY} & -I_{XZ} \\
--I_{XY} &  I_{YY} & -I_{YZ} \\
--I_{XZ} & -I_{YZ} &  I_{ZZ} 
+ I_{xx} & -I_{xy} & -I_{xz} \\
+-I_{xy} &  I_{yy} & -I_{yz} \\
+-I_{xz} & -I_{yz} &  I_{zz} 
 \end{matrix}
 \right]
 $$
 
 and similarly for $I_i$.
 
-Noting the repeated appearance of terms of the form $({x}_i - \bar{x})$, we form the outer product
+Noting the repeated appearance of terms of the form $({x}_i - \bar{x})({y}_i - \bar{y})$, we form the outer product
 
 $$
 \boxed{

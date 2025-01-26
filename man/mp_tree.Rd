@@ -5,7 +5,9 @@
 \alias{mp_tree}
 \title{Example Mass Properties Tree}
 \format{
-An igraph tree with edges from child id to parent id.
+An 'igraph' tree whose vertices are named as the values of the \code{id}
+column of a mass properties table and whose directed edges point from child
+id to parent id.
 }
 \usage{
 mp_tree

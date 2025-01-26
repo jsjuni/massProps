@@ -301,8 +301,8 @@ combine_mass_props <- function(vl) {
 #' - `inertia` Inertia tensor (3x3 numeric matrix)
 #' - `point` Logical indicating point mass, i.e., negligible inertia
 #'
-#' @returns The mass properties uncertainties of the aggregate. A list with the same elements as
-#' the parameter `r`.
+#' @returns The mass properties and uncertainties of the aggregate. A list with the same elements as
+#' members of `vl`.
 #'
 #' @export
 #'

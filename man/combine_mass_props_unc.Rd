@@ -29,8 +29,8 @@ named elements:
 }}
 }
 \value{
-The mass properties uncertainties of the aggregate. A list with the same elements as
-the parameter \code{r}.
+The mass properties and uncertainties of the aggregate. A list with the same elements as
+members of \code{vl}.
 }
 \description{
 \code{combine_mass_prop_unc()} calculates the mass properties uncertainties of an aggregate from
