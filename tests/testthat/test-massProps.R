@@ -232,13 +232,13 @@ test_that("combine_mass_props_unc() works for point masses", {
 
   np_vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
   np_sisq <- Reduce(`+`, Map(f = function(x) x$sigma_inertia^2, np_vl))
-  np_sigma_inertia <- combine_mass_props_unc(np_vl, r = get_mass_props_and_unc(sawe_table, "Combined"))$sigma_inertia
+  np_sigma_inertia <- combine_mass_props_unc(np_vl, amp = get_mass_props_and_unc(sawe_table, "Combined"))$sigma_inertia
 
   # point masses
 
   pm_vl <- Map(f = function(v) { v$point = TRUE; v },
             Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves))
-  pm_sigma_inertia <- combine_mass_props_unc(pm_vl, r = get_mass_props_and_unc(sawe_table, "Combined"))$sigma_inertia
+  pm_sigma_inertia <- combine_mass_props_unc(pm_vl, amp = get_mass_props_and_unc(sawe_table, "Combined"))$sigma_inertia
 
   expect_equal(np_sigma_inertia, sqrt(pm_sigma_inertia^2 + np_sisq))
 })

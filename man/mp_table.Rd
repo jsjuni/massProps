@@ -20,7 +20,7 @@ A data frame with columns:
 \item{Ixy}{\eqn{I_{xy}} product of inertia}
 \item{Ixz}{\eqn{I_{xz}} product of inertia}
 \item{Iyz}{\eqn{I_{yz}} product of inertia}
-\item{Ipoint}{logical indicator to consider item a point mass}
+\item{Ipoint}{logical indicator to consider item a point mass, i.e., with negligible inertia}
 \item{sigma_mass}{mass uncertainty}
 \item{sigma_Cx}{\eqn{x}-component of center of mass uncertainty}
 \item{sigma_Cy}{\eqn{y}-component of center of mass uncertainty}

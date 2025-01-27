@@ -1,18 +1,19 @@
 #' Get mass properties for a row in a data frame
 #'
-#' `get_mass_props()` creates a mass properties list from a specified row in a data frame.
+#' `get_mass_props()` creates a mass properties list from a selected row in a data frame.
 #'
 #' @param df A data frame with (at least) these columns: `id`, `mass`, `Cx`,
 #'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
 #' @param id The `id` value of the desired row.
 #'
-#' @returns
-#' A list with the following named elements:
-#' - `mass` Mass (numeric).
-#' - `center_mass` Center of mass (3-dimensional numeric vector).
-#' - `inertia` Inertia tensor (3x3 numeric matrix).
-#' - `point` Logical indicating point mass. The intertia of point masses is not included in calculations.
-
+#' @returns A list with the following named elements:
+#' - `mass` Numeric mass.
+#' - `center_mass` Numeric 3-vector center of mass.
+#' - `point` Logical indicating point mass. The inertia of point masses is excluded from calculations.
+#' - `inertia` Numeric 3x3 matrix inertia tensor. The signs of the off-diagonal elements of the inertia tensor
+#' are determined by `POIconv`. For example, the \eqn{xy} element of the inertia
+#' tensor is `Ixy` if `POIconv` is "-"; it is -`Ixy` if `POIconv` is "+".
+#'
 #' @export
 #'
 #' @examples
@@ -41,7 +42,7 @@ get_mass_props <- function(df, id) {
 
 #' Get mass properties uncertainties for a row in a data frame
 #'
-#' `get_mass_props_unc()` creates a mass properties uncertainties list from a specified row in a data frame.
+#' `get_mass_props_unc()` creates a mass properties uncertainties list from a selected row in a data frame.
 #'
 #' @inheritParams get_mass_props
 #' @param df A data frame  with (at least) these columns: `id`, `sigma_mass`,
@@ -49,9 +50,9 @@ get_mass_props <- function(df, id) {
 #'   `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
 #'
 #' @returns A list with the following named elements:
-#' - `sigma_mass` Mass uncertainty (numeric).
-#' - `sigma_center_mass` Center of mass uncertainty (3-dimensional numeric vector).
-#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix).
+#' - `sigma_mass` Numeric mass uncertainty.
+#' - `sigma_center_mass` Numeric 3-vector center of mass uncertainties.
+#' - `sigma_inertia` Numeric 3x3 matrix inertia tensor uncertainties.
 
 #' @export
 #'
@@ -89,13 +90,15 @@ get_mass_props_unc <- function(df, id) {
 #'   `sigma_Iyz`.
 #'
 #' @returns A list with the following named elements:
-#' - `mass` Mass (numeric).
-#' - `center_mass` Center of mass (3-dimensional numeric vector).
-#' - `inertia` Inertia tensor (3x3 numeric matrix).
+#' - `mass` Numeric mass.
+#' - `center_mass` Numeric 3-vector center of mass.
 #' - `point` Logical indicating point mass. The inertia of point masses is excluded from calculations.
-#' - `sigma_mass` Mass uncertainty (numeric).
-#' - `sigma_center_mass` Center of mass uncertainty (3-dimensional numeric vector).
-#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix).
+#' - `inertia` Numeric 3x3 matrix inertia tensor. The signs of the off-diagonal elements of the inertia tensor
+#' are determined by `POIconv`. For example, the \eqn{xy} element of the inertia
+#' tensor is `Ixy` if `POIconv` is "-"; it is -`Ixy` if `POIconv` is "+".
+#' - `sigma_mass` Numeric mass uncertainty.
+#' - `sigma_center_mass` Numeric 3-vector center of mass uncertainties.
+#' - `sigma_inertia` Numeric 3x3 matrix inertia tensor uncertainties.
 #'
 #' @export
 #'
@@ -114,13 +117,16 @@ get_mass_props_and_unc <- function(df, id) {
 #' @param df A data frame with an `id` column.
 #' @param v
 #' A list with the following named elements:
-#' - `mass` mass (numeric)
-#' - `center_mass` center of mass (3-dimensional numeric)
-#' - `inertia` Inertia tensor (3x3 numeric matrix)
-#' - `point` Logical indicating point mass, i.e., negligible inertia
-#' - `poi_conv` Enumeration c("+", "-") indicating sign convention for products of inertia
+#' - `mass` Numeric mass.
+#' - `center_mass` Numeric 3-vector center of mass.
+#' - `point` Logical indicating point mass. The inertia of point masses is excluded from calculations.
+#' - `poi_conv` Enumeration c("+", "-") indicating sign convention for products of inertia.
+#' - `inertia` Numeric 3x3 matrix inertia tensor. The signs of the products of inertia
+#' are determined by `POIconv`. For example, `Ixy` is the \eqn{xy} element of the inertia
+#' tensor if `POIconv` is "-"; it is the additive inverse of that value if `POIconv` is "+".
 #'
-#' @returns The updated data frame.
+#' @returns The updated data frame with columns `id`, `mass`, `Cx`,
+#'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
 #'
 #' @export
 #'
@@ -154,14 +160,14 @@ set_mass_props <- function(df, id, v) {
 #' Set mass properties uncertainties for a row in a data frame
 #'
 #' `set_mass_props_unc()` sets mass properties and uncertainties for a
-#' specified row in a data frame with an `id` column.
+#' selected row in a data frame with an `id` column.
 #'
 #' @inheritParams set_mass_props
 #' @param v
 #' A list with the following named elements:
-#' - `sigma_mass` mass uncertainty (numeric)
-#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
-#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
+#' - `sigma_mass` Numeric mass uncertainty.
+#' - `sigma_center_mass` Numeric 3-vector center of mass uncertainties.
+#' - `sigma_inertia` Numeric 3x3 matrix inertia tensor uncertainties.
 #'
 #' @returns The updated data frame.
 #'
@@ -195,14 +201,16 @@ set_mass_props_unc <- function(df, id, v) {
 #'
 #' @inheritParams set_mass_props
 #' @param v A list containing the following named elements:
-#' - `mass` mass (numeric)
-#' - `center_mass` center of mass (3-dimensional numeric)
-#' - `inertia` Inertia tensor (3x3 numeric matrix)
-#' - `point` Logical indicating point mass, i.e., negligible inertia
-#' - `poi_conv` Enumeration c("+", "-") indicating sign convention for products of inertia
-#' - `sigma_mass` mass uncertainty
-#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
-#' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
+#' - `mass` Numeric mass.
+#' - `center_mass` Numeric 3-vector center of mass.
+#' - `point` Logical indicating point mass. The inertia of point masses is excluded from calculations.
+#' - `poi_conv` Enumeration c("+", "-") indicating sign convention for products of inertia.
+#' - `inertia` Numeric 3x3 matrix inertia tensor. The signs of the products of inertia
+#' are determined by `POIconv`. For example, `Ixy` is the \eqn{xy} element of the inertia
+#' tensor if `POIconv` is "-"; it is the additive inverse of that value if `POIconv` is "+".
+#' - `sigma_mass` Numeric mass uncertainty.
+#' - `sigma_center_mass` Numeric 3-vector center of mass uncertainties.
+#' - `sigma_inertia` Numeric 3x3 matrix inertia tensor uncertainties.
 #'
 #' @returns The updated data frame.
 #'
@@ -220,18 +228,18 @@ set_mass_props_and_unc <- function(df, id, v) {
 #'
 #' @description
 #' `combine_mass_props()` calculates the mass properties of an aggregate from
-#' the mass properties of its constituents.
+#' a list of constituent mass properties.
 #'
 #' @details
 #' See vignette("massProps", package = "massProps") for details on the algorithms
 #' employed.
 #'
-#' @param vl A list of mass properties lists, each of which contains the
+#' @param mpl A list of mass properties lists, each of which contains the
 #' following named elements:
-#' - `mass` mass (numeric)
-#' - `center_mass` center of mass (3-dimensional numeric)
-#' - `inertia` Inertia tensor (3x3 numeric matrix)
-#' - `point` Logical indicating point mass, i.e., negligible inertia
+#' - `mass` Numeric mass.
+#' - `center_mass` Numeric 3-vector center of mass.
+#' - `point` Logical indicating point mass. The inertia of point masses is excluded from calculations.
+#' - `inertia` Numeric 3x3 matrix inertia tensor.
 #'
 #' @returns Combined mass properties list with the same named elements.
 #'
@@ -242,37 +250,37 @@ set_mass_props_and_unc <- function(df, id, v) {
 #' vl <- Map(f = function(id) get_mass_props(test_table, id), leaves)
 #' combine_mass_props(vl)
 #'
-combine_mass_props <- function(vl) {
+combine_mass_props <- function(mpl) {
 
-  r <- list()
+  amp <- list()
 
   # sum of masses
 
-  r$mass <- Reduce(`+`, Map(f = function(v) v$mass, vl))
+  amp$mass <- Reduce(`+`, Map(f = function(mp) mp$mass, mpl))
 
   # mass-weighted sum of centers of mass
 
-  r$center_mass <- Reduce(`+`, Map(f = function(v) v$mass * v$center_mass, vl)) / r$mass
+  amp$center_mass <- Reduce(`+`, Map(f = function(mp) mp$mass * mp$center_mass, mpl)) / amp$mass
 
 
   # inertia tensor
 
-  r$inertia <- Reduce(`+`, Map(
-    f  = function(v) {
-      d <- r$center_mass - v$center_mass
+  amp$inertia <- Reduce(`+`, Map(
+    f  = function(mp) {
+      d <- amp$center_mass - mp$center_mass
       M <- outer(d, d) - sum(d^2) * diag(3)
-      if (v$point) -v$mass * M else v$inertia - v$mass * M
+      if (mp$point) -mp$mass * M else mp$inertia - mp$mass * M
     },
-    vl
+    mpl
   ))
 
   # aggregate is a point mass iff all parts are point masses at the same center
 
-  r$point = Reduce(f = `&&`,
-         Map(f = function(v) v$point && isTRUE(all.equal(v$center_mass, r$center_mass)), vl)
+  amp$point = Reduce(f = `&&`,
+         Map(f = function(mp) mp$point && isTRUE(all.equal(mp$center_mass, amp$center_mass)), mpl)
   )
 
-  r
+  amp
 }
 
 #' Combine mass properties uncertainties
@@ -285,54 +293,54 @@ combine_mass_props <- function(vl) {
 #' See vignette("massProps", package = "massProps") for details on the algorithms
 #' employed.
 #'
-#' @param vl A list of mass properties and uncertainties lists, each of which contains
+#' @param mpl A list of mass properties and uncertainties lists, each of which contains
 #' the following named elements:
-#' - `mass` mass (numeric)
-#' - `center_mass` center of mass (3-dimensional numeric)
-#' - `inertia` Inertia tensor (3x3 numeric matrix)
-#' - `point` Logical indicating point mass, i.e., negligible inertia
+#' - `mass` Numeric mass.
+#' - `center_mass` Numeric 3-vector center of mass.
+#' - `point` Logical indicating point mass. The inertia of point masses is excluded from calculations.
+#' - `inertia` Numeric 3x3 matrix inertia tensor.
 #' - `sigma_mass` mass uncertainty
 #' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
 #' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
-#' @param r A named list of mass properties for the aggregate containing the following
+#' @param amp A named list of mass properties for the aggregate containing the following
 #' named elements:
-#' - `mass` mass (numeric)
-#' - `center_mass` center of mass (3-dimensional numeric)
-#' - `inertia` Inertia tensor (3x3 numeric matrix)
-#' - `point` Logical indicating point mass, i.e., negligible inertia
-#'
+#' - `mass` Numeric mass.
+#' - `center_mass` Numeric 3-vector center of mass.
+#' - `point` Logical indicating point mass. The inertia of point masses is excluded from calculations.
+#' - `inertia` Numeric 3x3 matrix inertia tensor.
+##'
 #' @returns The mass properties and uncertainties of the aggregate. A list with the same elements as
-#' members of `vl`.
+#' members of `mpl`.
 #'
 #' @export
 #'
 #' @examples
 #' leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
-#' vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
-#' combine_mass_props_unc(vl, r = get_mass_props(sawe_table, "Combined"))
+#' mpl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
+#' combine_mass_props_unc(mpl, amp = get_mass_props(sawe_table, "Combined"))
 #'
-combine_mass_props_unc <- function(vl, r) {
+combine_mass_props_unc <- function(mpl, amp) {
 
   # mass uncertainty
 
-  r$sigma_mass = sqrt(Reduce(`+`, Map(f = function(v) v$sigma_mass^2, vl)))
+  amp$sigma_mass = sqrt(Reduce(`+`, Map(f = function(v) v$sigma_mass^2, mpl)))
 
   # center of mass uncertainty
 
-  r$sigma_center_mass = sqrt(Reduce(`+`, Map(
+  amp$sigma_center_mass = sqrt(Reduce(`+`, Map(
     f = function(v) {
       (v$mass * v$sigma_center_mass)^2 +
-        (v$sigma_mass * (v$center_mass - r$center_mass))^2
+        (v$sigma_mass * (v$center_mass - amp$center_mass))^2
     },
-    vl
-  ))) / r$mass
+    mpl
+  ))) / amp$mass
 
   # inertia tensor uncertainty
 
-  r$sigma_inertia = sqrt(Reduce(`+`, Map(
+  amp$sigma_inertia = sqrt(Reduce(`+`, Map(
     f = function(v) {
 
-      d <- v$center_mass - r$center_mass
+      d <- v$center_mass - amp$center_mass
 
       P <- outer(d, v$sigma_center_mass)
       p <- as.list(diag(P))
@@ -344,12 +352,12 @@ combine_mass_props_unc <- function(vl, r) {
       M4 <- v$mass^2 * (M1^2 + M2^2) + (v$sigma_mass * M3)^2
       if (v$point) M4 else v$sigma_inertia^2 + M4
     },
-    vl
+    mpl
   )))
 
   # result
 
-  r
+  amp
 }
 
 #' Combine mass properties and uncertainties
@@ -358,12 +366,12 @@ combine_mass_props_unc <- function(vl, r) {
 #' `combine_mass_props_and_unc()` is a convenience wrapper that concatenates the
 #' results of `combine_mass_props()` and `combine_mass_props_unc()`.
 #'
-#' @param vl A list of mass properties and uncertainties lists, each of which contains
+#' @param mpl A list of mass properties and uncertainties lists, each of which contains
 #' the following named elements:
-#' - `mass` mass (numeric)
-#' - `center_mass` center of mass (3-dimensional numeric)
-#' - `inertia` Inertia tensor (3x3 numeric matrix)
-#' - `point` Logical indicating point mass, i.e., negligible inertia
+#' - `mass` Numeric mass.
+#' - `center_mass` Numeric 3-vector center of mass.
+#' - `point` Logical indicating point mass. The inertia of point masses is excluded from calculations.
+#' - `inertia` Numeric 3x3 matrix inertia tensor.
 #' - `sigma_mass` mass uncertainty
 #' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
 #' - `sigma_inertia` Inertia tensor uncertainty (3x3 numeric matrix)
@@ -374,17 +382,17 @@ combine_mass_props_unc <- function(vl, r) {
 #'
 #' @examples
 #' leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
-#' vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
-#' combine_mass_props_and_unc(vl)
+#' mpl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
+#' combine_mass_props_and_unc(mpl)
 #'
-combine_mass_props_and_unc <- function(vl) {
-  combine_mass_props(vl) |> combine_mass_props_unc(vl, r = _)
+combine_mass_props_and_unc <- function(mpl) {
+  combine_mass_props(mpl) |> combine_mass_props_unc(mpl, amp = _)
 }
 
-#' Set POI convention for mass properties object to "+"
+#' Set POI sign convention for mass properties list to "+"
 #'
 #' @description
-#' `set_poi_conv_plus()` sets the products of inertia convention for a
+#' `set_poi_conv_plus()` sets the products of inertia sign convention for a
 #' mass properties list to "+". This convention determines how products of inertia are
 #' saved to a data set.
 #'
@@ -396,7 +404,7 @@ combine_mass_props_and_unc <- function(vl) {
 #' @param target Ignored.
 #' @param v A mass properties list.
 #'
-#' @returns The mass properties object with the named element `poi_conv` set to "+"
+#' @returns The input mass properties list with the named element `poi_conv` set to "+"
 #'
 #' @export
 #'
@@ -408,10 +416,10 @@ set_poi_conv_plus <- function(ds, target, v) {
   v
 }
 
-#' Set POI convention for mass properties object to "-"
+#' Set POI sign convention for mass properties list to "-"
 #'
 #' @description
-#' `set_poi_conv_minus()` sets the products of inertia convention for a
+#' `set_poi_conv_minus()` sets the products of inertia sign convention for a
 #' mass properties list to "-". This convention determines how products of inertia are
 #' saved to a data set.
 #'
@@ -421,7 +429,7 @@ set_poi_conv_plus <- function(ds, target, v) {
 #'
 #' @inheritParams set_poi_conv_plus
 #'
-#' @returns The mass properties object with the named element `poi_conv` set to "-"
+#' @returns The mass properties list with the named element `poi_conv` set to "-"
 #'
 #' @export
 #'
@@ -433,13 +441,12 @@ set_poi_conv_minus <- function(ds, target, v) {
   v
 }
 
-#' Set POI convention for mass properties object to match the target item
+#' Set POI convention for mass properties list to match a target item
 #'
 #' @description
-#' `set_poi_conv_from_target()` sets the products of inertia convention for a
-#' mass properties object to that of the target item in the mass properties table. This convention
-#' determines how products of inertia are saved to the
-#' data frame.
+#' `set_poi_conv_from_target()` sets the products of inertia sign convention for a
+#' mass properties list to that of a target item in a mass properties table. This convention
+#' determines how products of inertia are saved to the data frame.
 #'
 #' The signature `of set_poi_conv_from_target()` is such that it can be passed as an `override` argument
 #' to `update_mass_props()` and `update_mass_props_and_unc()`, thus ensuring
@@ -449,7 +456,8 @@ set_poi_conv_minus <- function(ds, target, v) {
 #' @param df A data frame with columns `id` and `POIconv`.
 #' @param target The `id` value of the target row.
 #'
-#' @return The mass properties object with thenamed element `poi_conv` set to that of the target item.
+#' @return The mass properties list with the named element `poi_conv` set to the
+#'   `POIconv` column of the target row in the data frame.
 #'
 #' @export
 #'
@@ -470,7 +478,8 @@ set_poi_conv_from_target <- function(df, target, v) {
 #'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
 #' @param target The `id` value of the target row.
 #' @param sources List of `id` values of the of the source rows.
-#' @param override An override function, called as override(df, target, value)
+#' @param override An override function, called as override(df, target, value). The default override sets the POI sign convention
+#' of a computed aggregate to the `POIconv` column of the target row in the data frame.
 #'
 #' @return The updated data frame.
 #'
@@ -524,7 +533,7 @@ update_mass_props_unc <- function(df, target, sources, override = set_poi_conv_f
     sources = sources,
     set = set_mass_props_unc,
     get = get_mass_props_and_unc,
-    combine = function(l) { combine_mass_props_unc(l, r = get_mass_props(df, target))},
+    combine = function(l) { combine_mass_props_unc(l, amp = get_mass_props(df, target))},
     override = override
   )
 }
@@ -575,10 +584,10 @@ update_mass_props_and_unc <- function(df, target, sources, override = set_poi_co
 #'     - \eqn{\lambda_3 < \lambda_1 + \lambda_2}
 #'
 #' @param mp Mass properties list containing the following named elements
-#' - `mass` mass (numeric)
-#' - `center_mass` center of mass (3-dimensional numeric)
-#' - `inertia` Inertia tensor (3x3 numeric matrix)
-#' - `point` Logical indicating point mass, i.e., negligible inertia
+#' - `mass` Numeric mass.
+#' - `center_mass` Numeric 3-vector center of mass.
+#' - `point` Logical indicating point mass. The inertia of point masses is excluded from calculations.
+#' - `inertia` Numeric 3x3 matrix inertia tensor.
 #'
 #' @returns TRUE if valid, stops otherwise
 #'
@@ -787,7 +796,7 @@ rollup_mass_props <- function(tree, df, validate_df = validate_mass_props_table,
 #' Roll up mass properties uncertainties
 #'
 #' @description
-#' 'rollup_mass_props_unc()' rolls up mass properties uncertainties in a data frame such that the uncertainties of each
+#' `rollup_mass_props_unc()` rolls up mass properties uncertainties in a data frame such that the uncertainties of each
 #' non-leaf vertex element is the aggregation of the mass properties and uncertainties of its child elements.
 #'
 #' The difference between `rollup_mass_props_unc()` and `rollup_mass_props_and_unc()` is that `rollup_mass_props_unc()`
@@ -835,7 +844,7 @@ rollup_mass_props_and_unc <- function(tree, df, validate_df = validate_mass_prop
   rollup(tree, df, update_mass_props_and_unc, validate_df, ...)
 }
 
-#' Roll Up Mass Properties Without Input Validation
+#' Roll up mass properties without input validation
 #'
 #' @description
 #' `rollup_mass_props_fast()` performs the same operation as `rollup_mass_props()`
@@ -857,7 +866,7 @@ rollup_mass_props_fast <- function(tree, df) {
 }
 
 
-#' Roll Up Mass Properties Uncertainties Without Input Validation
+#' Roll up mass properties uncertainties without input validation
 #'
 #' @description
 #' `rollup_mass_props_unc_fast()` performs the same operation as `rollup_mass_props_unc()`
@@ -879,7 +888,7 @@ rollup_mass_props_unc_fast <- function(tree, df) {
   rollup_mass_props_unc(tree, df, validate_df = function(t, d) TRUE, validate_tree = function(t) NA)
 }
 
-#' Roll Up Mass Properties And Uncertainties Without Input Validation
+#' Roll up mass properties and uncertainties without input validation
 #'
 #' @description
 #' `rollup_mass_props_and_unc_fast()` performs the same operation as `rollup_mass_props_and_unc()`

@@ -25,7 +25,7 @@ rollup_mass_props_unc(
 The updated data frame
 }
 \description{
-'rollup_mass_props_unc()' rolls up mass properties uncertainties in a data frame such that the uncertainties of each
+\code{rollup_mass_props_unc()} rolls up mass properties uncertainties in a data frame such that the uncertainties of each
 non-leaf vertex element is the aggregation of the mass properties and uncertainties of its child elements.
 
 The difference between \code{rollup_mass_props_unc()} and \code{rollup_mass_props_and_unc()} is that \code{rollup_mass_props_unc()}

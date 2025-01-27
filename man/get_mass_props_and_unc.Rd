@@ -17,13 +17,15 @@ get_mass_props_and_unc(df, id)
 \value{
 A list with the following named elements:
 \itemize{
-\item \code{mass} Mass (numeric).
-\item \code{center_mass} Center of mass (3-dimensional numeric vector).
-\item \code{inertia} Inertia tensor (3x3 numeric matrix).
+\item \code{mass} Numeric mass.
+\item \code{center_mass} Numeric 3-vector center of mass.
 \item \code{point} Logical indicating point mass. The inertia of point masses is excluded from calculations.
-\item \code{sigma_mass} Mass uncertainty (numeric).
-\item \code{sigma_center_mass} Center of mass uncertainty (3-dimensional numeric vector).
-\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix).
+\item \code{inertia} Numeric 3x3 matrix inertia tensor. The signs of the off-diagonal elements of the inertia tensor
+are determined by \code{POIconv}. For example, the \eqn{xy} element of the inertia
+tensor is \code{Ixy} if \code{POIconv} is "-"; it is -\code{Ixy} if \code{POIconv} is "+".
+\item \code{sigma_mass} Numeric mass uncertainty.
+\item \code{sigma_center_mass} Numeric 3-vector center of mass uncertainties.
+\item \code{sigma_inertia} Numeric 3x3 matrix inertia tensor uncertainties.
 }
 }
 \description{

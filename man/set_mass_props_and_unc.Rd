@@ -13,14 +13,16 @@ set_mass_props_and_unc(df, id, v)
 
 \item{v}{A list containing the following named elements:
 \itemize{
-\item \code{mass} mass (numeric)
-\item \code{center_mass} center of mass (3-dimensional numeric)
-\item \code{inertia} Inertia tensor (3x3 numeric matrix)
-\item \code{point} Logical indicating point mass, i.e., negligible inertia
-\item \code{poi_conv} Enumeration c("+", "-") indicating sign convention for products of inertia
-\item \code{sigma_mass} mass uncertainty
-\item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
-\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
+\item \code{mass} Numeric mass.
+\item \code{center_mass} Numeric 3-vector center of mass.
+\item \code{point} Logical indicating point mass. The inertia of point masses is excluded from calculations.
+\item \code{poi_conv} Enumeration c("+", "-") indicating sign convention for products of inertia.
+\item \code{inertia} Numeric 3x3 matrix inertia tensor. The signs of the products of inertia
+are determined by \code{POIconv}. For example, \code{Ixy} is the \eqn{xy} element of the inertia
+tensor if \code{POIconv} is "-"; it is the additive inverse of that value if \code{POIconv} is "+".
+\item \code{sigma_mass} Numeric mass uncertainty.
+\item \code{sigma_center_mass} Numeric 3-vector center of mass uncertainties.
+\item \code{sigma_inertia} Numeric 3x3 matrix inertia tensor uncertainties.
 }}
 }
 \value{

@@ -4,16 +4,16 @@
 \alias{combine_mass_props}
 \title{Combine mass properties}
 \usage{
-combine_mass_props(vl)
+combine_mass_props(mpl)
 }
 \arguments{
-\item{vl}{A list of mass properties lists, each of which contains the
+\item{mpl}{A list of mass properties lists, each of which contains the
 following named elements:
 \itemize{
-\item \code{mass} mass (numeric)
-\item \code{center_mass} center of mass (3-dimensional numeric)
-\item \code{inertia} Inertia tensor (3x3 numeric matrix)
-\item \code{point} Logical indicating point mass, i.e., negligible inertia
+\item \code{mass} Numeric mass.
+\item \code{center_mass} Numeric 3-vector center of mass.
+\item \code{point} Logical indicating point mass. The inertia of point masses is excluded from calculations.
+\item \code{inertia} Numeric 3x3 matrix inertia tensor.
 }}
 }
 \value{
@@ -21,7 +21,7 @@ Combined mass properties list with the same named elements.
 }
 \description{
 \code{combine_mass_props()} calculates the mass properties of an aggregate from
-the mass properties of its constituents.
+a list of constituent mass properties.
 }
 \details{
 See vignette("massProps", package = "massProps") for details on the algorithms

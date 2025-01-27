@@ -16,13 +16,13 @@ get_mass_props_unc(df, id)
 \value{
 A list with the following named elements:
 \itemize{
-\item \code{sigma_mass} Mass uncertainty (numeric).
-\item \code{sigma_center_mass} Center of mass uncertainty (3-dimensional numeric vector).
-\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix).
+\item \code{sigma_mass} Numeric mass uncertainty.
+\item \code{sigma_center_mass} Numeric 3-vector center of mass uncertainties.
+\item \code{sigma_inertia} Numeric 3x3 matrix inertia tensor uncertainties.
 }
 }
 \description{
-\code{get_mass_props_unc()} creates a mass properties uncertainties list from a specified row in a data frame.
+\code{get_mass_props_unc()} creates a mass properties uncertainties list from a selected row in a data frame.
 }
 \examples{
 get_mass_props_unc(mp_table, "C.1.2.2.3.1.2.3")

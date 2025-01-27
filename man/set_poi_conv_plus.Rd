@@ -2,7 +2,7 @@
 % Please edit documentation in R/massprops.R
 \name{set_poi_conv_plus}
 \alias{set_poi_conv_plus}
-\title{Set POI convention for mass properties object to "+"}
+\title{Set POI sign convention for mass properties list to "+"}
 \usage{
 set_poi_conv_plus(ds, target, v)
 }
@@ -14,10 +14,10 @@ set_poi_conv_plus(ds, target, v)
 \item{v}{A mass properties list.}
 }
 \value{
-The mass properties object with the named element \code{poi_conv} set to "+"
+The input mass properties list with the named element \code{poi_conv} set to "+"
 }
 \description{
-\code{set_poi_conv_plus()} sets the products of inertia convention for a
+\code{set_poi_conv_plus()} sets the products of inertia sign convention for a
 mass properties list to "+". This convention determines how products of inertia are
 saved to a data set.
 

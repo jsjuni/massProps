@@ -14,7 +14,8 @@ update_mass_props(df, target, sources, override = set_poi_conv_from_target)
 
 \item{sources}{List of \code{id} values of the of the source rows.}
 
-\item{override}{An override function, called as override(df, target, value)}
+\item{override}{An override function, called as override(df, target, value). The default override sets the POI sign convention
+of a computed aggregate to the \code{POIconv} column of the target row in the data frame.}
 }
 \value{
 The updated data frame.

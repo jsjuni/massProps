@@ -13,15 +13,18 @@ set_mass_props(df, id, v)
 
 \item{v}{A list with the following named elements:
 \itemize{
-\item \code{mass} mass (numeric)
-\item \code{center_mass} center of mass (3-dimensional numeric)
-\item \code{inertia} Inertia tensor (3x3 numeric matrix)
-\item \code{point} Logical indicating point mass, i.e., negligible inertia
-\item \code{poi_conv} Enumeration c("+", "-") indicating sign convention for products of inertia
+\item \code{mass} Numeric mass.
+\item \code{center_mass} Numeric 3-vector center of mass.
+\item \code{point} Logical indicating point mass. The inertia of point masses is excluded from calculations.
+\item \code{poi_conv} Enumeration c("+", "-") indicating sign convention for products of inertia.
+\item \code{inertia} Numeric 3x3 matrix inertia tensor. The signs of the products of inertia
+are determined by \code{POIconv}. For example, \code{Ixy} is the \eqn{xy} element of the inertia
+tensor if \code{POIconv} is "-"; it is the additive inverse of that value if \code{POIconv} is "+".
 }}
 }
 \value{
-The updated data frame.
+The updated data frame with columns \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.
 }
 \description{
 \code{set_mass_props()} sets mass properties for a specified row in a data frame.

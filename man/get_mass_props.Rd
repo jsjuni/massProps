@@ -15,14 +15,16 @@ get_mass_props(df, id)
 \value{
 A list with the following named elements:
 \itemize{
-\item \code{mass} Mass (numeric).
-\item \code{center_mass} Center of mass (3-dimensional numeric vector).
-\item \code{inertia} Inertia tensor (3x3 numeric matrix).
-\item \code{point} Logical indicating point mass. The intertia of point masses is not included in calculations.
+\item \code{mass} Numeric mass.
+\item \code{center_mass} Numeric 3-vector center of mass.
+\item \code{point} Logical indicating point mass. The inertia of point masses is excluded from calculations.
+\item \code{inertia} Numeric 3x3 matrix inertia tensor. The signs of the off-diagonal elements of the inertia tensor
+are determined by \code{POIconv}. For example, the \eqn{xy} element of the inertia
+tensor is \code{Ixy} if \code{POIconv} is "-"; it is -\code{Ixy} if \code{POIconv} is "+".
 }
 }
 \description{
-\code{get_mass_props()} creates a mass properties list from a specified row in a data frame.
+\code{get_mass_props()} creates a mass properties list from a selected row in a data frame.
 }
 \examples{
 get_mass_props(mp_table, "C.1.2.2.3.1.2.3")

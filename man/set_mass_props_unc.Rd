@@ -13,9 +13,9 @@ set_mass_props_unc(df, id, v)
 
 \item{v}{A list with the following named elements:
 \itemize{
-\item \code{sigma_mass} mass uncertainty (numeric)
-\item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
-\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
+\item \code{sigma_mass} Numeric mass uncertainty.
+\item \code{sigma_center_mass} Numeric 3-vector center of mass uncertainties.
+\item \code{sigma_inertia} Numeric 3x3 matrix inertia tensor uncertainties.
 }}
 }
 \value{
@@ -23,7 +23,7 @@ The updated data frame.
 }
 \description{
 \code{set_mass_props_unc()} sets mass properties and uncertainties for a
-specified row in a data frame with an \code{id} column.
+selected row in a data frame with an \code{id} column.
 }
 \examples{
 set_mass_props_unc(sawe_table, "Combined", get_mass_props_unc(sawe_table, "Widget"))

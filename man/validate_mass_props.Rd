@@ -9,10 +9,10 @@ validate_mass_props(mp)
 \arguments{
 \item{mp}{Mass properties list containing the following named elements
 \itemize{
-\item \code{mass} mass (numeric)
-\item \code{center_mass} center of mass (3-dimensional numeric)
-\item \code{inertia} Inertia tensor (3x3 numeric matrix)
-\item \code{point} Logical indicating point mass, i.e., negligible inertia
+\item \code{mass} Numeric mass.
+\item \code{center_mass} Numeric 3-vector center of mass.
+\item \code{point} Logical indicating point mass. The inertia of point masses is excluded from calculations.
+\item \code{inertia} Numeric 3x3 matrix inertia tensor.
 }}
 }
 \value{

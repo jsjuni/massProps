@@ -2,7 +2,7 @@
 % Please edit documentation in R/massprops.R
 \name{set_poi_conv_from_target}
 \alias{set_poi_conv_from_target}
-\title{Set POI convention for mass properties object to match the target item}
+\title{Set POI convention for mass properties list to match a target item}
 \usage{
 set_poi_conv_from_target(df, target, v)
 }
@@ -14,13 +14,13 @@ set_poi_conv_from_target(df, target, v)
 \item{v}{A mass properties list.}
 }
 \value{
-The mass properties object with thenamed element \code{poi_conv} set to that of the target item.
+The mass properties list with the named element \code{poi_conv} set to the
+\code{POIconv} column of the target row in the data frame.
 }
 \description{
-\code{set_poi_conv_from_target()} sets the products of inertia convention for a
-mass properties object to that of the target item in the mass properties table. This convention
-determines how products of inertia are saved to the
-data frame.
+\code{set_poi_conv_from_target()} sets the products of inertia sign convention for a
+mass properties list to that of a target item in a mass properties table. This convention
+determines how products of inertia are saved to the data frame.
 
 The signature \verb{of set_poi_conv_from_target()} is such that it can be passed as an \code{override} argument
 to \code{update_mass_props()} and \code{update_mass_props_and_unc()}, thus ensuring

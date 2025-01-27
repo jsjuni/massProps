@@ -2,7 +2,7 @@
 % Please edit documentation in R/massprops.R
 \name{rollup_mass_props_fast}
 \alias{rollup_mass_props_fast}
-\title{Roll Up Mass Properties Without Input Validation}
+\title{Roll up mass properties without input validation}
 \usage{
 rollup_mass_props_fast(tree, df)
 }

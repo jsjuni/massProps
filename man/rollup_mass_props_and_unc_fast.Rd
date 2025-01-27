@@ -2,7 +2,7 @@
 % Please edit documentation in R/massprops.R
 \name{rollup_mass_props_and_unc_fast}
 \alias{rollup_mass_props_and_unc_fast}
-\title{Roll Up Mass Properties And Uncertainties Without Input Validation}
+\title{Roll up mass properties and uncertainties without input validation}
 \usage{
 rollup_mass_props_and_unc_fast(tree, df)
 }
