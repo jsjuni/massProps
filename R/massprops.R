@@ -835,7 +835,7 @@ rollup_mass_props_unc <- function(tree, df, validate_df = validate_mass_props_an
 #' @export
 #'
 #' @examples
-#' rollup_mass_props_and_unc(sawe_tree, sawe_table)
+#' rollup_mass_props_and_unc(mp_tree, mp_table)
 rollup_mass_props_and_unc <- function(tree, df, validate_df = validate_mass_props_and_unc_table, ...) {
   rollup(tree, df, update_mass_props_and_unc, validate_df, ...)
 }
