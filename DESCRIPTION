@@ -7,8 +7,9 @@ Authors@R:
       role = c("aut", "cre", "cph"),
       comment = c(ORCID = "0000-0002-0725-0884")
     )
-Description: The 'massProps' package calculates mass properties and uncertainties
-  for tree structures (e.g., assembly bill of materials).
+Description: The 'massProps' package extends 'rollupTree' with functions to recursively calculate mass properties (and optionally,
+    their uncertainties) for arbitrary decomposition trees.
+    R. L. Zimmerman, J. H. Nakai. (2005) <https://www.sawe.org/product/paper-3360/>).
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

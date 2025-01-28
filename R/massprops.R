@@ -733,8 +733,7 @@ validate_mass_props_and_unc <- function(mpu) {
 #'   frame corresponding to a leaf vertex of the tree.
 #'
 #' @inheritParams update_mass_props
-#' @param tree An `igraph` tree whose vertex names match the `id` column of a
-#'   data frame and whose edges go from child to parent.
+#' @inheritParams rollup_mass_props
 #'
 #' @description
 #' `validate_mass_props_table()` ensures that the `id` column of the table and the vertices
@@ -778,7 +777,8 @@ validate_mass_props_and_unc_table <- function(tree, df) {
 #' non-leaf vertex element is the aggregation of those of its child elements.
 #'
 #' @inheritParams update_mass_props
-#' @param tree An igraph directed graph that is a single-rooted in-tree with edges from child vertex to parent vertex.
+#' @param tree An 'igraph' tree whose vertices are named as the values of the `id`
+#'   column of `df` and whose directed edges point from child id to parent id.
 #' @param validate_df A validator for the tree and table, default `validate_mass_props_table()`
 #' @param ... Other parameters passed to `rollupTree::rollup()`
 #'
