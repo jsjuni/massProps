@@ -29,7 +29,7 @@ employed.
 }
 \examples{
 leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))
-vl <- Map(f = function(id) get_mass_props(test_table, id), leaves)
-combine_mass_props(vl)
+mpl <- Map(f = function(id) get_mass_props(test_table, id), leaves)
+combine_mass_props(mpl)
 
 }

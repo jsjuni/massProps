@@ -26,7 +26,6 @@ specified source rows in a data frame.
 }
 \examples{
 leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))
-df <- update_mass_props(test_table, "A.3", leaves)
-get_mass_props(df, "A.3")
+update_mass_props(test_table, "A.3", leaves)
 
 }

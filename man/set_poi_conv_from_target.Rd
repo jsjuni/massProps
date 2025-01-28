@@ -4,14 +4,14 @@
 \alias{set_poi_conv_from_target}
 \title{Set POI convention for mass properties list to match a target item}
 \usage{
-set_poi_conv_from_target(df, target, v)
+set_poi_conv_from_target(df, target, mp)
 }
 \arguments{
 \item{df}{A data frame with columns \code{id} and \code{POIconv}.}
 
 \item{target}{The \code{id} value of the target row.}
 
-\item{v}{A mass properties list.}
+\item{mp}{A mass properties list.}
 }
 \value{
 The mass properties list with the named element \code{poi_conv} set to the

@@ -4,14 +4,14 @@
 \alias{set_poi_conv_plus}
 \title{Set POI sign convention for mass properties list to "+"}
 \usage{
-set_poi_conv_plus(ds, target, v)
+set_poi_conv_plus(ds, target, mp)
 }
 \arguments{
 \item{ds}{Ignored.}
 
 \item{target}{Ignored.}
 
-\item{v}{A mass properties list.}
+\item{mp}{A mass properties list.}
 }
 \value{
 The input mass properties list with the named element \code{poi_conv} set to "+"

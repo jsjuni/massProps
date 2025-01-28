@@ -31,7 +31,6 @@ with (at least) these columns: \code{id}, \code{sigma_mass}, \code{sigma_Cx}, \c
 }
 \examples{
 leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
-df <- update_mass_props_unc(sawe_table, "Combined", leaves)
-get_mass_props_unc(df, "Combined")
+update_mass_props_unc(sawe_table, "Combined", leaves)
 
 }

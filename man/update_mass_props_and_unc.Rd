@@ -34,7 +34,6 @@ specified source rows in a data frame.
 }
 \examples{
 leaves <- list("Widget", "2nd Part")
-df <- update_mass_props_and_unc(sawe_table, "Combined", leaves)
-get_mass_props_and_unc(sawe_table, "Combined")
+update_mass_props_and_unc(sawe_table, "Combined", leaves)
 
 }

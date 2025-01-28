@@ -4,14 +4,14 @@
 \alias{set_mass_props_and_unc}
 \title{Set mass properties and uncertainties for a row in a data frame}
 \usage{
-set_mass_props_and_unc(df, id, v)
+set_mass_props_and_unc(df, id, mpu)
 }
 \arguments{
 \item{df}{A data frame with an \code{id} column.}
 
 \item{id}{The \code{id} value of the desired row.}
 
-\item{v}{A list containing the following named elements:
+\item{mpu}{A list containing the following named elements:
 \itemize{
 \item \code{mass} Numeric mass.
 \item \code{center_mass} Numeric 3-vector center of mass.

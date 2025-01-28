@@ -115,7 +115,7 @@ get_mass_props_and_unc <- function(df, id) {
 #'
 #' @inheritParams get_mass_props
 #' @param df A data frame with an `id` column.
-#' @param v
+#' @param mp
 #' A list with the following named elements:
 #' - `mass` Numeric mass.
 #' - `center_mass` Numeric 3-vector center of mass.
@@ -132,19 +132,18 @@ get_mass_props_and_unc <- function(df, id) {
 #'
 #' @examples
 #' df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
-#' v <- get_mass_props(mp_table, "C.1.2.2.3.2.1.1")
-#' v$poi_conv = "+"
-#' df <- set_mass_props(df, "C.1.2.2.3.2.1.1", v)
-#' get_mass_props(df, "C.1.2.2.3.2.1.1")
+#' mp <- get_mass_props(mp_table, "C.1.2.2.3.2.1.1")
+#' mp$poi_conv = "+"
+#' set_mass_props(df, "C.1.2.2.3.2.1.1", mp)
 #'
-set_mass_props <- function(df, id, v) {
-  m <- v$inertia
-  poi_factor <- if (v$poi_conv == "-") 1 else -1
-  df |> df_set_by_id(id, "mass", v$mass) |>
+set_mass_props <- function(df, id, mp) {
+  m <- mp$inertia
+  poi_factor <- if (mp$poi_conv == "-") 1 else -1
+  df |> df_set_by_id(id, "mass", mp$mass) |>
 
-    df_set_by_id(id, "Cx", v$center_mass[1]) |>
-    df_set_by_id(id, "Cy", v$center_mass[2]) |>
-    df_set_by_id(id, "Cz", v$center_mass[3]) |>
+    df_set_by_id(id, "Cx", mp$center_mass[1]) |>
+    df_set_by_id(id, "Cy", mp$center_mass[2]) |>
+    df_set_by_id(id, "Cz", mp$center_mass[3]) |>
 
     df_set_by_id(id, "Ixx", m["x", "x"]) |>
     df_set_by_id(id, "Iyy", m["y", "y"]) |>
@@ -153,8 +152,8 @@ set_mass_props <- function(df, id, v) {
     df_set_by_id(id, "Ixz", poi_factor * (m["x", "z"] + m["z", "x"]) / 2.0) |>
     df_set_by_id(id, "Iyz", poi_factor * (m["y", "z"] + m["z", "y"]) / 2.0) |>
 
-    df_set_by_id(id, "POIconv", v$poi_conv) |>
-    df_set_by_id(id, "Ipoint", v$point)
+    df_set_by_id(id, "POIconv", mp$poi_conv) |>
+    df_set_by_id(id, "Ipoint", mp$point)
 }
 
 #' Set mass properties uncertainties for a row in a data frame
@@ -163,7 +162,7 @@ set_mass_props <- function(df, id, v) {
 #' selected row in a data frame with an `id` column.
 #'
 #' @inheritParams set_mass_props
-#' @param v
+#' @param mpu
 #' A list with the following named elements:
 #' - `sigma_mass` Numeric mass uncertainty.
 #' - `sigma_center_mass` Numeric 3-vector center of mass uncertainties.
@@ -176,21 +175,21 @@ set_mass_props <- function(df, id, v) {
 #' @examples
 #' set_mass_props_unc(sawe_table, "Combined", get_mass_props_unc(sawe_table, "Widget"))
 #'
-set_mass_props_unc <- function(df, id, v) {
+set_mass_props_unc <- function(df, id, mpu) {
   df |>
 
-    df_set_by_id(id, "sigma_mass", v$sigma_mass) |>
+    df_set_by_id(id, "sigma_mass", mpu$sigma_mass) |>
 
-    df_set_by_id(id, "sigma_Cx", v$sigma_center_mass[1]) |>
-    df_set_by_id(id, "sigma_Cy", v$sigma_center_mass[2]) |>
-    df_set_by_id(id, "sigma_Cz", v$sigma_center_mass[3]) |>
+    df_set_by_id(id, "sigma_Cx", mpu$sigma_center_mass[1]) |>
+    df_set_by_id(id, "sigma_Cy", mpu$sigma_center_mass[2]) |>
+    df_set_by_id(id, "sigma_Cz", mpu$sigma_center_mass[3]) |>
 
-    df_set_by_id(id, "sigma_Ixx", v$sigma_inertia["x", "x"]) |>
-    df_set_by_id(id, "sigma_Iyy", v$sigma_inertia["y", "y"]) |>
-    df_set_by_id(id, "sigma_Izz", v$sigma_inertia["z", "z"]) |>
-    df_set_by_id(id, "sigma_Ixy", v$sigma_inertia["x", "y"]) |>
-    df_set_by_id(id, "sigma_Ixz", v$sigma_inertia["x", "z"]) |>
-    df_set_by_id(id, "sigma_Iyz", v$sigma_inertia["y", "z"])
+    df_set_by_id(id, "sigma_Ixx", mpu$sigma_inertia["x", "x"]) |>
+    df_set_by_id(id, "sigma_Iyy", mpu$sigma_inertia["y", "y"]) |>
+    df_set_by_id(id, "sigma_Izz", mpu$sigma_inertia["z", "z"]) |>
+    df_set_by_id(id, "sigma_Ixy", mpu$sigma_inertia["x", "y"]) |>
+    df_set_by_id(id, "sigma_Ixz", mpu$sigma_inertia["x", "z"]) |>
+    df_set_by_id(id, "sigma_Iyz", mpu$sigma_inertia["y", "z"])
 }
 
 #' Set mass properties and uncertainties for a row in a data frame
@@ -200,7 +199,7 @@ set_mass_props_unc <- function(df, id, v) {
 #' `set_mass_props()` and `set_mass_props_unc()`.
 #'
 #' @inheritParams set_mass_props
-#' @param v A list containing the following named elements:
+#' @param mpu A list containing the following named elements:
 #' - `mass` Numeric mass.
 #' - `center_mass` Numeric 3-vector center of mass.
 #' - `point` Logical indicating point mass. The inertia of point masses is excluded from calculations.
@@ -220,8 +219,8 @@ set_mass_props_unc <- function(df, id, v) {
 #' mpu <- c(get_mass_props_and_unc(sawe_table, "Widget"), poi_conv = "+")
 #' set_mass_props_and_unc(sawe_table, "Combined", mpu)
 #'
-set_mass_props_and_unc <- function(df, id, v) {
-  set_mass_props(df, id, v) |> set_mass_props_unc(id, v)
+set_mass_props_and_unc <- function(df, id, mpu) {
+  set_mass_props(df, id, mpu) |> set_mass_props_unc(id, mpu)
 }
 
 #' Combine mass properties
@@ -247,8 +246,8 @@ set_mass_props_and_unc <- function(df, id, v) {
 #'
 #' @examples
 #' leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))
-#' vl <- Map(f = function(id) get_mass_props(test_table, id), leaves)
-#' combine_mass_props(vl)
+#' mpl <- Map(f = function(id) get_mass_props(test_table, id), leaves)
+#' combine_mass_props(mpl)
 #'
 combine_mass_props <- function(mpl) {
 
@@ -402,7 +401,7 @@ combine_mass_props_and_unc <- function(mpl) {
 #'
 #' @param ds Ignored.
 #' @param target Ignored.
-#' @param v A mass properties list.
+#' @param mp A mass properties list.
 #'
 #' @returns The input mass properties list with the named element `poi_conv` set to "+"
 #'
@@ -411,9 +410,9 @@ combine_mass_props_and_unc <- function(mpl) {
 #' @examples
 #' set_poi_conv_plus(NULL, NULL, get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
 #'
-set_poi_conv_plus <- function(ds, target, v) {
-  v$poi_conv <- "+"
-  v
+set_poi_conv_plus <- function(ds, target, mp) {
+  mp$poi_conv <- "+"
+  mp
 }
 
 #' Set POI sign convention for mass properties list to "-"
@@ -436,9 +435,9 @@ set_poi_conv_plus <- function(ds, target, v) {
 #' @examples
 #' set_poi_conv_minus(NULL, NULL, get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
 #'
-set_poi_conv_minus <- function(ds, target, v) {
-  v$poi_conv <- "-"
-  v
+set_poi_conv_minus <- function(ds, target, mp) {
+  mp$poi_conv <- "-"
+  mp
 }
 
 #' Set POI convention for mass properties list to match a target item
@@ -464,9 +463,9 @@ set_poi_conv_minus <- function(ds, target, v) {
 #' @examples
 #' set_poi_conv_from_target(mp_table, "C.1.2.2.3.2.1", get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
 #'
-set_poi_conv_from_target <- function(df, target, v) {
-  v$poi_conv <- df_get_by_id(df, target, "POIconv")
-  v
+set_poi_conv_from_target <- function(df, target, mp) {
+  mp$poi_conv <- df_get_by_id(df, target, "POIconv")
+  mp
 }
 
 #' Update mass properties
@@ -487,8 +486,7 @@ set_poi_conv_from_target <- function(df, target, v) {
 #'
 #' @examples
 #' leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))
-#' df <- update_mass_props(test_table, "A.3", leaves)
-#' get_mass_props(df, "A.3")
+#' update_mass_props(test_table, "A.3", leaves)
 #'
 update_mass_props <- function(df, target, sources, override = set_poi_conv_from_target) {
   update_prop(
@@ -523,8 +521,7 @@ update_mass_props <- function(df, target, sources, override = set_poi_conv_from_
 #'
 #' @examples
 #' leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
-#' df <- update_mass_props_unc(sawe_table, "Combined", leaves)
-#' get_mass_props_unc(df, "Combined")
+#' update_mass_props_unc(sawe_table, "Combined", leaves)
 #'
 update_mass_props_unc <- function(df, target, sources, override = set_poi_conv_from_target) {
   update_prop(
@@ -553,8 +550,7 @@ update_mass_props_unc <- function(df, target, sources, override = set_poi_conv_f
 #'
 #' @examples
 #' leaves <- list("Widget", "2nd Part")
-#' df <- update_mass_props_and_unc(sawe_table, "Combined", leaves)
-#' get_mass_props_and_unc(sawe_table, "Combined")
+#' update_mass_props_and_unc(sawe_table, "Combined", leaves)
 #'
 update_mass_props_and_unc <- function(df, target, sources, override = set_poi_conv_from_target) {
   update_prop(
