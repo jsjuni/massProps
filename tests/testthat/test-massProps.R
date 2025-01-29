@@ -184,6 +184,41 @@ test_that("set_mass_props_and_unc() works for negative convention", {
 
 })
 
+test_that("set_mass_props() properly diagnoses NA sign convention indicator", {
+  input <- mp_set$"+"
+  input$poi_conv = NA
+  df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
+  expect_error(set_mass_props(df, "C.1.2.2.3.1.2.3", input), "invalid sign convention")
+})
+
+test_that("set_mass_props() properly diagnoses NULL sign convention indicator", {
+  input <- mp_set$"+"
+  input$poi_conv = NULL
+  df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
+  expect_error(set_mass_props(df, "C.1.2.2.3.1.2.3", input), "invalid sign convention")
+})
+
+test_that("set_mass_props() properly diagnoses numeric sign convention indicator", {
+  input <- mp_set$"+"
+  input$poi_conv = 1.0
+  df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
+  expect_error(set_mass_props(df, "C.1.2.2.3.1.2.3", input), "invalid sign convention")
+})
+
+test_that("set_mass_props() properly diagnoses invalid sign convention indicator", {
+  input <- mp_set$"+"
+  input$poi_conv = "plus"
+  df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
+  expect_error(set_mass_props(df, "C.1.2.2.3.1.2.3", input), "invalid sign convention")
+})
+
+test_that("set_mass_props() properly diagnoses logical sign convention indicator", {
+  input <- mp_set$"+"
+  input$poi_conv = TRUE
+  df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))
+  expect_error(set_mass_props(df, "C.1.2.2.3.1.2.3", input), "invalid sign convention")
+})
+
 test_that("combine_mass_props() works for non-point masses", {
   leaves <- test_table[which(!is.na(test_table$mass)), "id"]
   vl <- Map(f = function(id) get_mass_props(test_table, id), leaves)
