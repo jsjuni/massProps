@@ -1,6 +1,6 @@
 Package: massProps
 Title: Compute Mass Properties and Uncertainties of Tree Structures
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: 
     person(given=c("James", "Steven"), family="Jenkins",
       email = "sjenkins@studioj.us",
