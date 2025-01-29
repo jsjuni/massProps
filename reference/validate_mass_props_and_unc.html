@@ -51,7 +51,14 @@ conjunction of <code><a href="validate_mass_props.html">validate_mass_props()</a
 
 
 <dl><dt id="arg-mpu">mpu<a class="anchor" aria-label="anchor" href="#arg-mpu"></a></dt>
-<dd><p>mass properties and uncertainty object</p></dd>
+<dd><p>Mass properties and uncertainties list containing the following named elements</p><ul><li><p><code>mass</code> mass (numeric)</p></li>
+<li><p><code>center_mass</code> center of mass (3-dimensional numeric)</p></li>
+<li><p><code>inertia</code> Inertia tensor (3x3 numeric matrix)</p></li>
+<li><p><code>point</code> Logical indicating point mass, i.e., negligible inertia</p></li>
+<li><p><code>sigma_mass</code> mass uncertainty</p></li>
+<li><p><code>sigma_center_mass</code> center of mass uncertainty (3-dimensional numeric)</p></li>
+<li><p><code>sigma_inertia</code> Inertia tensor uncertainty (3x3 numeric matrix)</p></li>
+</ul></dd>
 
 </dl></div>
     <div class="section level2">
@@ -64,6 +71,7 @@ conjunction of <code><a href="validate_mass_props.html">validate_mass_props()</a
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mpu</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mass_props_and_unc.html">get_mass_props_and_unc</a></span><span class="op">(</span><span class="va">sawe_table</span>, <span class="st">"Widget"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">validate_mass_props_and_unc</span><span class="op">(</span><span class="va">mpu</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

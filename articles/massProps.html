@@ -143,7 +143,7 @@ that the inertia tensor should be excluded from computations.&lt;/p&gt;'><sup>2<
 </ul>
 </div>
 <div class="section level5">
-<h5 id="required-columns-for-mass-properties-uncertainty">Required Columns for Mass Properties Uncertainty<a class="anchor" aria-label="anchor" href="#required-columns-for-mass-properties-uncertainty"></a>
+<h5 id="required-columns-for-mass-properties-uncertainties">Required Columns for Mass Properties Uncertainties<a class="anchor" aria-label="anchor" href="#required-columns-for-mass-properties-uncertainties"></a>
 </h5>
 <p>The following columns are required for uncertainty calculations:</p>
 <ul>
@@ -254,8 +254,8 @@ zero)</p></li>
 <span><span class="co">#&gt; 10 P.6    A.3    2 -1  1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
 <span><span class="co">#&gt; 11 P.7    A.3    2 -1 -1  1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
 <span><span class="co">#&gt; 12 P.8    A.3    2 -1 -1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span></code></pre></div>
-<p>The input may also contain uncertainty data. This example is from the
-Society of Allied Weight Engineers:</p>
+<p>The input may also contain uncertainties data. This example is from
+the Society of Allied Weight Engineers:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sawe_input</span></span>
 <span><span class="co">#&gt;         id  mass    Cx    Cy    Cz     Ixx     Iyy      Izz    Ixy      Ixz</span></span>
@@ -336,12 +336,13 @@ center of mass by its
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
 components. Symbols for moments
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>I</mi><mrow><mi>X</mi><mi>X</mi></mrow></msub><annotation encoding="application/x-tex">I_{XX}</annotation></semantics></math>)
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>I</mi><mrow><mi>x</mi><mi>x</mi></mrow></msub><annotation encoding="application/x-tex">I_{xx}</annotation></semantics></math>)
 and products
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>I</mi><mrow><mi>X</mi><mi>Y</mi></mrow></msub><annotation encoding="application/x-tex">I_{XY}</annotation></semantics></math>)
-of inertia are conventional. Variables with subscripts designate
-properties of parts; those without designate properties of aggregates.
-The letter
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>I</mi><mrow><mi>x</mi><mi>y</mi></mrow></msub><annotation encoding="application/x-tex">I_{xy}</annotation></semantics></math>)
+of inertia are conventional. Variables with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+subscripts designate properties of parts; those without designate
+properties of aggregates. The letter
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math>
 denotes uncertainty.
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>w</mi></msub><annotation encoding="application/x-tex">\sigma_w</annotation></semantics></math>,
@@ -461,19 +462,19 @@ be that of part
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>.
 The equations for products of inertia above clearly follow the positive
 integral convention, so</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>I</mi><mrow><mi>X</mi><mi>X</mi></mrow></msub></mtd><mtd columnalign="center" style="text-align: center"><mo>−</mo><msub><mi>I</mi><mrow><mi>X</mi><mi>Y</mi></mrow></msub></mtd><mtd columnalign="center" style="text-align: center"><mo>−</mo><msub><mi>I</mi><mrow><mi>X</mi><mi>Z</mi></mrow></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mo>−</mo><msub><mi>I</mi><mrow><mi>X</mi><mi>Y</mi></mrow></msub></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>I</mi><mrow><mi>Y</mi><mi>Y</mi></mrow></msub></mtd><mtd columnalign="center" style="text-align: center"><mo>−</mo><msub><mi>I</mi><mrow><mi>Y</mi><mi>Z</mi></mrow></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mo>−</mo><msub><mi>I</mi><mrow><mi>X</mi><mi>Z</mi></mrow></msub></mtd><mtd columnalign="center" style="text-align: center"><mo>−</mo><msub><mi>I</mi><mrow><mi>Y</mi><mi>Z</mi></mrow></msub></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>I</mi><mrow><mi>Z</mi><mi>Z</mi></mrow></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>I</mi><mrow><mi>x</mi><mi>x</mi></mrow></msub></mtd><mtd columnalign="center" style="text-align: center"><mo>−</mo><msub><mi>I</mi><mrow><mi>x</mi><mi>y</mi></mrow></msub></mtd><mtd columnalign="center" style="text-align: center"><mo>−</mo><msub><mi>I</mi><mrow><mi>x</mi><mi>z</mi></mrow></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mo>−</mo><msub><mi>I</mi><mrow><mi>x</mi><mi>y</mi></mrow></msub></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>I</mi><mrow><mi>y</mi><mi>y</mi></mrow></msub></mtd><mtd columnalign="center" style="text-align: center"><mo>−</mo><msub><mi>I</mi><mrow><mi>y</mi><mi>z</mi></mrow></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mo>−</mo><msub><mi>I</mi><mrow><mi>x</mi><mi>z</mi></mrow></msub></mtd><mtd columnalign="center" style="text-align: center"><mo>−</mo><msub><mi>I</mi><mrow><mi>y</mi><mi>z</mi></mrow></msub></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>I</mi><mrow><mi>z</mi><mi>z</mi></mrow></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">
 I =
 \left[ \begin{matrix}
- I_{XX} &amp; -I_{XY} &amp; -I_{XZ} \\
--I_{XY} &amp;  I_{YY} &amp; -I_{YZ} \\
--I_{XZ} &amp; -I_{YZ} &amp;  I_{ZZ} 
+ I_{xx} &amp; -I_{xy} &amp; -I_{xz} \\
+-I_{xy} &amp;  I_{yy} &amp; -I_{yz} \\
+-I_{xz} &amp; -I_{yz} &amp;  I_{zz} 
 \end{matrix}
 \right]
 </annotation></semantics></math></p>
 <p>and similarly for
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>I</mi><mi>i</mi></msub><annotation encoding="application/x-tex">I_i</annotation></semantics></math>.</p>
 <p>Noting the repeated appearance of terms of the form
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mover><mi>x</mi><mo accent="true">‾</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">({x}_i - \bar{x})</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mover><mi>x</mi><mo accent="true">‾</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mover><mi>y</mi><mo accent="true">‾</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">({x}_i - \bar{x})({y}_i - \bar{y})</annotation></semantics></math>,
 we form the outer product</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><menclose notation="box"><mtable><mtr><mtd columnalign="right" style="text-align: right"><msub><mi>𝐝</mi><mi>i</mi></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mover><mi>x</mi><mo accent="true">‾</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="1.0em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mover><mi>y</mi><mo accent="true">‾</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="1.0em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>z</mi><mi>i</mi></msub><mo>−</mo><mover><mi>z</mi><mo accent="true">‾</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mi>T</mi></msup></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><mi>𝐐</mi><mi>i</mi></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mi>𝐝</mi><mi>i</mi></msub><msup><msub><mi>𝐝</mi><mi>i</mi></msub><mi>T</mi></msup></mtd></mtr></mtable></menclose><annotation encoding="application/x-tex">
 \boxed{
@@ -935,7 +936,7 @@ are:</p>
 <p>This agrees with the computed result.</p>
 </div>
 <div class="section level4">
-<h4 id="moments-of-inertia-uncertainty">Moments of Inertia Uncertainty<a class="anchor" aria-label="anchor" href="#moments-of-inertia-uncertainty"></a>
+<h4 id="moments-of-inertia-uncertainties-1">Moments of Inertia Uncertainties<a class="anchor" aria-label="anchor" href="#moments-of-inertia-uncertainties-1"></a>
 </h4>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sigma_moi</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">sigma_I</span>, <span class="va">mass</span>, <span class="va">sigma_mass</span>, <span class="va">v1</span>, <span class="va">v2</span>, <span class="va">c1</span>, <span class="va">c2</span>, <span class="va">sigma_v1</span>, <span class="va">sigma_v2</span><span class="op">)</span> <span class="op">{</span></span>
@@ -958,7 +959,7 @@ are:</p>
 <p>This agrees with the computed result.</p>
 </div>
 <div class="section level4">
-<h4 id="products-of-inertia-uncertainty">Products of Inertia Uncertainty<a class="anchor" aria-label="anchor" href="#products-of-inertia-uncertainty"></a>
+<h4 id="products-of-inertia-uncertainties-1">Products of Inertia Uncertainties<a class="anchor" aria-label="anchor" href="#products-of-inertia-uncertainties-1"></a>
 </h4>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sigma_poi</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">sigma_I</span>, <span class="va">mass</span>, <span class="va">sigma_mass</span>, <span class="va">v1</span>, <span class="va">v2</span>, <span class="va">c1</span>, <span class="va">c2</span>, <span class="va">sigma_v1</span>, <span class="va">sigma_v2</span><span class="op">)</span> <span class="op">{</span></span>
@@ -1038,10 +1039,10 @@ were taken with and without input validation:</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Times reported are in seconds.</p>
 <pre><code>                    test replications elapsed user.self sys.self
-4 mp          validation            1   0.954     0.936    0.019
-3 mp       no validation            1   0.724     0.710    0.014
-2 mp + unc    validation            1   1.621     1.596    0.025
-1 mp + unc no validation            1   1.121     1.098    0.023</code></pre>
+4 mp          validation            1   0.840     0.824    0.016
+3 mp       no validation            1   0.604     0.594    0.011
+2 mp + unc    validation            1   1.479     1.454    0.026
+1 mp + unc no validation            1   0.993     0.974    0.019</code></pre>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

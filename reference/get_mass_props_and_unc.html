@@ -51,22 +51,27 @@ get_mass_props() and get_mass_props_unc()."></head><body>
 
 
 <dl><dt id="arg-df">df<a class="anchor" aria-label="anchor" href="#arg-df"></a></dt>
-<dd><p>data frame</p></dd>
+<dd><p>A data frame with (at least) these columns: <code>id</code>, <code>mass</code>, <code>Cx</code>,
+<code>Cy</code>, <code>Cz</code>, <code>Ixx</code>, <code>Iyy</code>, <code>Izz</code>, <code>Ixy</code>, <code>Ixz</code>, <code>Iyz</code>, <code>POIconv</code>, <code>Ipoint</code>,
+<code>sigma_mass</code>, <code>sigma_Cx</code>, <code>sigma_Cy</code>, <code>sigma_Cz</code>,<code>sigma_Ixy</code>, <code>sigma_Ixz</code>,
+<code>sigma_Iyz</code>.</p></dd>
 
 
 <dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
-<dd><p>id value of the desired row</p></dd>
+<dd><p>The <code>id</code> value of the desired row.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>list with the following named elements:</p><ul><li><p><code>mass</code> mass (numeric)</p></li>
-<li><p><code>center_mass</code> center of mass (3-dimensional numeric)</p></li>
-<li><p><code>inertia</code> Inertia tensor (3x3 numeric matrix)</p></li>
-<li><p><code>point</code> Logical indicating point mass, i.e., negligible inertia</p></li>
-<li><p><code>sigma_mass</code> mass uncertainty</p></li>
-<li><p><code>sigma_center_mass</code> center of mass uncertainty (3-dimensional numeric)</p></li>
-<li><p><code>sigma_inertia</code> Inertia tensor uncertainty (3x3 numeric matrix)</p></li>
+    <p>A list with the following named elements:</p><ul><li><p><code>mass</code> Numeric mass.</p></li>
+<li><p><code>center_mass</code> Numeric 3-vector center of mass.</p></li>
+<li><p><code>point</code> Logical indicating point mass. The inertia of point masses is excluded from calculations.</p></li>
+<li><p><code>inertia</code> Numeric 3x3 matrix inertia tensor. The signs of the off-diagonal elements of the inertia tensor
+are determined by <code>POIconv</code>. For example, the \(xy\) element of the inertia
+tensor is <code>Ixy</code> if <code>POIconv</code> is "-"; it is -<code>Ixy</code> if <code>POIconv</code> is "+".</p></li>
+<li><p><code>sigma_mass</code> Numeric mass uncertainty.</p></li>
+<li><p><code>sigma_center_mass</code> Numeric 3-vector center of mass uncertainties.</p></li>
+<li><p><code>sigma_inertia</code> Numeric 3x3 matrix inertia tensor uncertainties.</p></li>
 </ul></div>
 
     <div class="section level2">
@@ -101,6 +106,7 @@ get_mass_props() and get_mass_props_unc()."></head><body>
 <span class="r-out co"><span class="r-pr">#&gt;</span> y 0.02191471 0.36942277 0.02242524</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> z 0.02146982 0.02242524 0.37416478</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
