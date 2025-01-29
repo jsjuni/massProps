@@ -25,6 +25,6 @@ The updated data frame
 non-leaf vertex element is the aggregation of those of its child elements.
 }
 \examples{
-rollup_mass_props(mp_tree, mp_table)
+rollup_mass_props(mp_tree, mp_table)[1:100, ]
 
 }

@@ -800,7 +800,7 @@ validate_mass_props_and_unc_table <- function(tree, df) {
 #' @export
 #'
 #' @examples
-#' rollup_mass_props(mp_tree, mp_table)
+#' rollup_mass_props(mp_tree, mp_table)[1:100, ]
 #'
 rollup_mass_props <- function(tree, df, validate_df = validate_mass_props_table, ...) {
   rollup(tree, df, update_mass_props, validate_df, ...)
@@ -826,7 +826,7 @@ rollup_mass_props <- function(tree, df, validate_df = validate_mass_props_table,
 #'
 #' @examples
 #' mp_ru <- rollup_mass_props(mp_tree, mp_table)
-#' rollup_mass_props_unc(mp_tree, mp_ru)
+#' rollup_mass_props_unc(mp_tree, mp_ru)[1:100, ]
 
 rollup_mass_props_unc <- function(tree, df, validate_df = validate_mass_props_and_unc_table, ...) {
   rollup(tree, df, update_mass_props_unc, validate_df, ...)
@@ -852,7 +852,7 @@ rollup_mass_props_unc <- function(tree, df, validate_df = validate_mass_props_an
 #' @export
 #'
 #' @examples
-#' rollup_mass_props_and_unc(mp_tree, mp_table)
+#' rollup_mass_props_and_unc(mp_tree, mp_table)[1:100, ]
 rollup_mass_props_and_unc <- function(tree, df, validate_df = validate_mass_props_and_unc_table, ...) {
   rollup(tree, df, update_mass_props_and_unc, validate_df, ...)
 }

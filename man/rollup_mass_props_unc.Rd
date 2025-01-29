@@ -35,5 +35,5 @@ the mass properties rollup itself.
 }
 \examples{
 mp_ru <- rollup_mass_props(mp_tree, mp_table)
-rollup_mass_props_unc(mp_tree, mp_ru)
+rollup_mass_props_unc(mp_tree, mp_ru)[1:100, ]
 }
