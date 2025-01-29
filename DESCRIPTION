@@ -1,5 +1,5 @@
 Package: massProps
-Title: Computing Mass Properties of Aggregates
+Title: Compute Mass Properties and Uncertainties of Tree Structures
 Version: 0.1.0
 Authors@R: 
     person(given=c("James", "Steven"), family="Jenkins",
