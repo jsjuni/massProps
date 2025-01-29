@@ -1,5 +1,5 @@
 Package: massProps
-Title: Compute Mass Properties and Uncertainties of Tree Structures
+Title: Calculate Mass Properties and Uncertainties of Tree Structures
 Version: 0.2.0
 Authors@R: 
     person(given=c("James", "Steven"), family="Jenkins",
@@ -7,7 +7,7 @@ Authors@R:
       role = c("aut", "cre", "cph"),
       comment = c(ORCID = "0000-0002-0725-0884")
     )
-Description: The 'massProps' package extends 'rollupTree' with functions to recursively calculate mass properties (and optionally, their uncertainties) for arbitrary decomposition trees. R. L. Zimmerman, J. H. Nakai. (2005) <https://www.sawe.org/product/paper-3360/>).
+Description: Recursively calculates mass properties (mass, center of mass,  moments and products of inertia, and optionally, their uncertainties) for arbitrary decomposition trees. R. L. Zimmerman, J. H. Nakai. (2005) <https://www.sawe.org/product/paper-3360/>).
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
