@@ -7,17 +7,22 @@
 validate_mass_props_and_unc_table(tree, df)
 }
 \arguments{
-\item{tree}{An \code{igraph} tree with edges from child to parent}
+\item{tree}{An 'igraph' tree whose vertices are named as the values of the \code{id}
+column of \code{df} and whose directed edges point from child id to parent id.}
 
-\item{df}{A data frame to validate}
+\item{df}{A data frame  with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint},
+\code{sigma_mass}, \code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz}, \code{sigma_Ixx}, \code{sigma_Iyy},
+\code{sigma_Izz}, \code{sigma_Ixy}, \code{sigma_Ixz}, \code{sigma_Iyz}.}
 }
 \value{
 TRUE if valid, stops with an error otherwise
 }
 \description{
 \code{validate_mass_props_and_unc()} calls
-\code{validate_mass_props_table()} and further ensures that the mass properties uncertainties of every leaf element
-of the table are valid.
+\code{validate_mass_props_table()} and further applies the checks of
+\code{validate_mass_props_and_unc()} to every row of the data frame corresponding
+to a leaf vertex of the tree.
 }
 \examples{
 validate_mass_props_and_unc_table(mp_tree, mp_table)

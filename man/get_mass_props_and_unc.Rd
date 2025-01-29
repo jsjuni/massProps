@@ -7,20 +7,25 @@
 get_mass_props_and_unc(df, id)
 }
 \arguments{
-\item{df}{data frame}
+\item{df}{A data frame with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint},
+\code{sigma_mass}, \code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz},\code{sigma_Ixy}, \code{sigma_Ixz},
+\code{sigma_Iyz}.}
 
-\item{id}{id value of the desired row}
+\item{id}{The \code{id} value of the desired row.}
 }
 \value{
-list with the following named elements:
+A list with the following named elements:
 \itemize{
-\item \code{mass} mass (numeric)
-\item \code{center_mass} center of mass (3-dimensional numeric)
-\item \code{inertia} Inertia tensor (3x3 numeric matrix)
-\item \code{point} Logical indicating point mass, i.e., negligible inertia
-\item \code{sigma_mass} mass uncertainty
-\item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
-\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
+\item \code{mass} Numeric mass.
+\item \code{center_mass} Numeric 3-vector center of mass.
+\item \code{point} Logical indicating point mass. The inertia of point masses is excluded from calculations.
+\item \code{inertia} Numeric 3x3 matrix inertia tensor. The signs of the off-diagonal elements of the inertia tensor
+are determined by \code{POIconv}. For example, the \eqn{xy} element of the inertia
+tensor is \code{Ixy} if \code{POIconv} is "-"; it is -\code{Ixy} if \code{POIconv} is "+".
+\item \code{sigma_mass} Numeric mass uncertainty.
+\item \code{sigma_center_mass} Numeric 3-vector center of mass uncertainties.
+\item \code{sigma_inertia} Numeric 3x3 matrix inertia tensor uncertainties.
 }
 }
 \description{
@@ -29,4 +34,5 @@ list with the following named elements:
 }
 \examples{
 get_mass_props_and_unc(mp_table, "C.1.2.2.3.1.2.3")
+
 }

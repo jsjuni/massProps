@@ -2,30 +2,30 @@
 % Please edit documentation in R/massprops.R
 \name{set_poi_conv_plus}
 \alias{set_poi_conv_plus}
-\title{Set POI convention for mass properties object to "+"}
+\title{Set POI sign convention for mass properties list to "+"}
 \usage{
-set_poi_conv_plus(ds, target, v)
+set_poi_conv_plus(ds, target, mp)
 }
 \arguments{
-\item{ds}{Ignored}
+\item{ds}{Ignored.}
 
-\item{target}{Ignored}
+\item{target}{Ignored.}
 
-\item{v}{A mass properties object}
+\item{mp}{A mass properties list.}
 }
 \value{
-The mass properties object with the POI convention set to "+"
+The input mass properties list with the named element \code{poi_conv} set to "+"
 }
 \description{
-\code{set_poi_conv_plus()} sets the products of inertia convention for a
-mass properties object to "+". This does not affect the values of the
-object, but it determines how products of inertia are saved to a
-data set.
+\code{set_poi_conv_plus()} sets the products of inertia sign convention for a
+mass properties list to "+". This convention determines how products of inertia are
+saved to a data set.
 
 The signature of \code{set_poi_conv_plus()} is such that it can be passed as an \code{override} argument
 to \code{update_mass_props()} and \code{update_mass_props_and_unc()}, thus ensuring
-that all calculated POI values follow the positive integral convention.
+that calculated POI values are saved using the positive integral convention.
 }
 \examples{
 set_poi_conv_plus(NULL, NULL, get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+
 }

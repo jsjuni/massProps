@@ -7,21 +7,28 @@
 validate_mass_props_unc(mp)
 }
 \arguments{
-\item{mp}{mass properties and uncertainties object}
+\item{mp}{Mass properties and uncertainties list containing the following named elements
+\itemize{
+\item \code{point} Logical indicating point mass, i.e., negligible inertia
+\item \code{sigma_mass} mass uncertainty
+\item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
+\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
+}}
 }
 \value{
 TRUE if valid, stops otherwise
 }
 \description{
-\code{validate_mass_props_unc()}
-ensures that the following are true:
+\code{validate_mass_props_unc()} ensures that a mass properties and uncertainties
+list satisfies the following constraints:
 \itemize{
-\item mass uncertainty is non-missing and non-negative
-\item center of mass uncertainty is a 3-vector of non-missing non-negative values
-\item for non-point masses, the inertia tensor uncertainty is a 3x3 matrix of non-missing non-negative values
+\item \code{sigma_mass} is non-missing and non-negative
+\item \code{sigma_center_mass} is a 3-vector of non-missing non-negative values
+\item if \code{point} is FALSE, the \code{sigma_inertia} contains no missing or negative values
 }
 }
 \examples{
 mp <- get_mass_props_and_unc(sawe_table, "Widget")
 validate_mass_props_unc(mp)
+
 }

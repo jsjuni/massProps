@@ -4,27 +4,29 @@
 \alias{set_mass_props_and_unc}
 \title{Set mass properties and uncertainties for a row in a data frame}
 \usage{
-set_mass_props_and_unc(df, id, v)
+set_mass_props_and_unc(df, id, mpu)
 }
 \arguments{
-\item{df}{data frame}
+\item{df}{A data frame with an \code{id} column.}
 
-\item{id}{id value of the desired row}
+\item{id}{The \code{id} value of the desired row.}
 
-\item{v}{list containing the following named elements:
+\item{mpu}{A list containing the following named elements:
 \itemize{
-\item \code{mass} mass (numeric)
-\item \code{center_mass} center of mass (3-dimensional numeric)
-\item \code{inertia} Inertia tensor (3x3 numeric matrix)
-\item \code{point} Logical indicating point mass, i.e., negligible inertia
-\item \code{poi_conv} Enumeration c("+", "-") indicating sign convention for products of inertia
-\item \code{sigma_mass} mass uncertainty
-\item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
-\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
+\item \code{mass} Numeric mass.
+\item \code{center_mass} Numeric 3-vector center of mass.
+\item \code{point} Logical indicating point mass. The inertia of point masses is excluded from calculations.
+\item \code{poi_conv} Enumeration c("+", "-") indicating sign convention for products of inertia.
+\item \code{inertia} Numeric 3x3 matrix inertia tensor. The signs of the products of inertia
+are determined by \code{POIconv}. For example, \code{Ixy} is the \eqn{xy} element of the inertia
+tensor if \code{POIconv} is "-"; it is the additive inverse of that value if \code{POIconv} is "+".
+\item \code{sigma_mass} Numeric mass uncertainty.
+\item \code{sigma_center_mass} Numeric 3-vector center of mass uncertainties.
+\item \code{sigma_inertia} Numeric 3x3 matrix inertia tensor uncertainties.
 }}
 }
 \value{
-updated data frame
+The updated data frame.
 }
 \description{
 \code{set_mass_props_and_unc()} is a convenience wrapper that combines the results of
@@ -33,4 +35,5 @@ updated data frame
 \examples{
 mpu <- c(get_mass_props_and_unc(sawe_table, "Widget"), poi_conv = "+")
 set_mass_props_and_unc(sawe_table, "Combined", mpu)
+
 }

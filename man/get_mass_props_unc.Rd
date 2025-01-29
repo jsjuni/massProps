@@ -7,24 +7,24 @@
 get_mass_props_unc(df, id)
 }
 \arguments{
-\item{df}{data frame}
+\item{df}{A data frame  with (at least) these columns: \code{id}, \code{sigma_mass},
+\code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz}, \code{sigma_Ixx}, \code{sigma_Iyy}, \code{sigma_Izz},
+\code{sigma_Ixy}, \code{sigma_Ixz}, \code{sigma_Iyz}.}
 
-\item{id}{id value of the desired row}
+\item{id}{The \code{id} value of the desired row.}
 }
 \value{
-list with the following named elements:
+A list with the following named elements:
 \itemize{
-\item \code{sigma_mass} mass uncertainty
-\item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
-\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
-\item \code{point} Logical indicating point mass, i.e., negligible inertia
+\item \code{sigma_mass} Numeric mass uncertainty.
+\item \code{sigma_center_mass} Numeric 3-vector center of mass uncertainties.
+\item \code{sigma_inertia} Numeric 3x3 matrix inertia tensor uncertainties.
 }
 }
 \description{
-\code{get_mass_props_unc()} gets mass properties uncertainties for a specified row in a data frame
-with (at least) these columns: \code{id}, \code{sigma_mass}, \code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz},
-\code{sigma_Ixx}, \code{sigma_Iyy}, \code{sigma_Izz}, \code{sigma_Ixy}, \code{sigma_Ixz}, \code{sigma_Iyz}.
+\code{get_mass_props_unc()} creates a mass properties uncertainties list from a selected row in a data frame.
 }
 \examples{
 get_mass_props_unc(mp_table, "C.1.2.2.3.1.2.3")
+
 }

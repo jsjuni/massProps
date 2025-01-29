@@ -61,7 +61,7 @@ The Mass Property Table must contain the following columns. Other columns may ex
 
 [^2]: The same algebraic result can be achieved by setting all moments and products of inertia to zero, but `rollup_mass_props()` by default ensures that all leaf items in the tree have mass properties that correspond to physically-realizable objects. A zero inertia tensor will fail this check. Rather than relax the check (which is essential for trustworthy results), a `TRUE` value for `Ipoint` indicates that the inertia tensor should be excluded from computations.
 
-#### Required Columns for Mass Properties Uncertainty
+#### Required Columns for Mass Properties Uncertainties
 
 The following columns are required for uncertainty calculations:
 
@@ -129,7 +129,7 @@ Then we can compute mass properties for non-leaf elements by calling `rollup_mas
 rollup_mass_props(test_tree, test_table)
 ```
 
-The input may also contain uncertainty data. This example is from the Society of Allied Weight Engineers:
+The input may also contain uncertainties data. This example is from the Society of Allied Weight Engineers:
 
 ```{r echo = FALSE}
 na_mass_props_and_unc <- function(d, t, v) {
@@ -211,7 +211,7 @@ The author has intentionally made no effort to micro-optimize for performance. I
 
 In this section, we state the reference equations [@zimmerman:05:sawe] and show, where applicable, how those equations can be rewritten in more concise form. The form of the equations actually implemented is displayed within a box, e.g. $\boxed{F = ma}$.
 
-The reference uses the word *weight* and the symbol $w$ in equations. We interpret weight as mass. The reference refers to center of mass by its $x$, $y$, and $z$ components. Symbols for moments ($I_{XX}$) and products ($I_{XY}$) of inertia are conventional. Variables with subscripts designate properties of parts; those without designate properties of aggregates. The letter $\sigma$ denotes uncertainty. $\sigma_w$, for example, is the mass uncertainty.
+The reference uses the word *weight* and the symbol $w$ in equations. We interpret weight as mass. The reference refers to center of mass by its $x$, $y$, and $z$ components. Symbols for moments ($I_{xx}$) and products ($I_{xy}$) of inertia are conventional. Variables with $i$ subscripts designate properties of parts; those without designate properties of aggregates. The letter $\sigma$ denotes uncertainty. $\sigma_w$, for example, is the mass uncertainty.
 
 ## Mass Properties
 
@@ -324,16 +324,16 @@ Let $I$ be the inertia tensor of the aggregate and $I_i$ be that of part $i$. Th
 $$
 I =
 \left[ \begin{matrix}
- I_{XX} & -I_{XY} & -I_{XZ} \\
--I_{XY} &  I_{YY} & -I_{YZ} \\
--I_{XZ} & -I_{YZ} &  I_{ZZ} 
+ I_{xx} & -I_{xy} & -I_{xz} \\
+-I_{xy} &  I_{yy} & -I_{yz} \\
+-I_{xz} & -I_{yz} &  I_{zz} 
 \end{matrix}
 \right]
 $$
 
 and similarly for $I_i$.
 
-Noting the repeated appearance of terms of the form $({x}_i - \bar{x})$, we form the outer product
+Noting the repeated appearance of terms of the form $({x}_i - \bar{x})({y}_i - \bar{y})$, we form the outer product
 
 $$
 \boxed{
@@ -813,7 +813,7 @@ sigma_C
 
 This `r agree(isTRUE(all.equal(sigma_C, c(sigma_Cx = sawe_result$sigma_Cx, sigma_Cy = sawe_result$sigma_Cy, sigma_Cz = sawe_result$sigma_Cz))))` with the computed result.
 
-### Moments of Inertia Uncertainty
+### Moments of Inertia Uncertainties
 
 ```{r}
 sigma_moi <- function(sigma_I, mass, sigma_mass, v1, v2, c1, c2, sigma_v1, sigma_v2) {
@@ -840,7 +840,7 @@ sigma_MOI
 
 This `r agree(isTRUE(all.equal(sigma_MOI, c(sigma_Ixx = sawe_result$sigma_Ixx, sigma_Iyy = sawe_result$sigma_Iyy, sigma_Izz = sawe_result$sigma_Izz))))` with the computed result.
 
-### Products of Inertia Uncertainty
+### Products of Inertia Uncertainties
 
 ```{r}
 sigma_poi <- function(sigma_I, mass, sigma_mass, v1, v2, c1, c2, sigma_v1, sigma_v2) {
@@ -929,10 +929,10 @@ Times reported are in seconds.
 
 ```         
                     test replications elapsed user.self sys.self
-4 mp          validation            1   0.954     0.936    0.019
-3 mp       no validation            1   0.724     0.710    0.014
-2 mp + unc    validation            1   1.621     1.596    0.025
-1 mp + unc no validation            1   1.121     1.098    0.023
+4 mp          validation            1   0.840     0.824    0.016
+3 mp       no validation            1   0.604     0.594    0.011
+2 mp + unc    validation            1   1.479     1.454    0.026
+1 mp + unc no validation            1   0.993     0.974    0.019
 ```
 
 # References

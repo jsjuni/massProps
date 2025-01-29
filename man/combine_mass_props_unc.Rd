@@ -4,21 +4,45 @@
 \alias{combine_mass_props_unc}
 \title{Combine mass properties uncertainties}
 \usage{
-combine_mass_props_unc(vl, r)
+combine_mass_props_unc(mpl, amp)
 }
 \arguments{
-\item{vl}{list of mass properties and uncertainties lists}
+\item{mpl}{A list of mass properties and uncertainties lists, each of which contains
+the following named elements:
+\itemize{
+\item \code{mass} Numeric mass.
+\item \code{center_mass} Numeric 3-vector center of mass.
+\item \code{point} Logical indicating point mass. The inertia of point masses is excluded from calculations.
+\item \code{inertia} Numeric 3x3 matrix inertia tensor.
+\item \code{sigma_mass} mass uncertainty
+\item \code{sigma_center_mass} center of mass uncertainty (3-dimensional numeric)
+\item \code{sigma_inertia} Inertia tensor uncertainty (3x3 numeric matrix)
+}}
 
-\item{r}{mass properties previously combined}
+\item{amp}{A named list of mass properties for the aggregate containing the following
+named elements:
+\itemize{
+\item \code{mass} Numeric mass.
+\item \code{center_mass} Numeric 3-vector center of mass.
+\item \code{point} Logical indicating point mass. The inertia of point masses is excluded from calculations.
+\item \code{inertia} Numeric 3x3 matrix inertia tensor.
+}}
 }
 \value{
-combined mass properties and uncertainties
+The mass properties and uncertainties of the aggregate. A list with the same elements as
+members of \code{mpl}.
 }
 \description{
-Combine mass properties uncertainties
+\code{combine_mass_prop_unc()} calculates the mass properties uncertainties of an aggregate from
+the mass properties and uncertainties of its constituents and the mass properties of the aggregate.
+}
+\details{
+See vignette("massProps", package = "massProps") for details on the algorithms
+employed.
 }
 \examples{
 leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
-vl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
-combine_mass_props_unc(vl, r = get_mass_props(sawe_table, "Combined"))
+mpl <- Map(f = function(id) get_mass_props_and_unc(sawe_table, id), leaves)
+combine_mass_props_unc(mpl, amp = get_mass_props(sawe_table, "Combined"))
+
 }

@@ -2,25 +2,25 @@
 % Please edit documentation in R/massprops.R
 \name{set_poi_conv_from_target}
 \alias{set_poi_conv_from_target}
-\title{Set POI convention for mass properties object to match the target item}
+\title{Set POI convention for mass properties list to match a target item}
 \usage{
-set_poi_conv_from_target(df, target, v)
+set_poi_conv_from_target(df, target, mp)
 }
 \arguments{
-\item{df}{A data frame with column \code{id}}
+\item{df}{A data frame with columns \code{id} and \code{POIconv}.}
 
-\item{target}{ID value for the target item}
+\item{target}{The \code{id} value of the target row.}
 
-\item{v}{A mass properties object}
+\item{mp}{A mass properties list.}
 }
 \value{
-The mass properties object with the POI convention set to that of the target item
+The mass properties list with the named element \code{poi_conv} set to the
+\code{POIconv} column of the target row in the data frame.
 }
 \description{
-\code{set_poi_conv_from_target()} sets the products of inertia convention for a
-mass properties object to that of the target item in the mass properties table. This does not affect the values of
-object, but it determines how products of inertia are saved to the
-data frame.
+\code{set_poi_conv_from_target()} sets the products of inertia sign convention for a
+mass properties list to that of a target item in a mass properties table. This convention
+determines how products of inertia are saved to the data frame.
 
 The signature \verb{of set_poi_conv_from_target()} is such that it can be passed as an \code{override} argument
 to \code{update_mass_props()} and \code{update_mass_props_and_unc()}, thus ensuring
@@ -28,4 +28,5 @@ that all calculated POI values follow the negative integral convention of the ta
 }
 \examples{
 set_poi_conv_from_target(mp_table, "C.1.2.2.3.2.1", get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+
 }

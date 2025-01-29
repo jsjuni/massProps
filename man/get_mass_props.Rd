@@ -7,24 +7,26 @@
 get_mass_props(df, id)
 }
 \arguments{
-\item{df}{data frame}
+\item{df}{A data frame with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
 
-\item{id}{id value of the desired row}
+\item{id}{The \code{id} value of the desired row.}
 }
 \value{
-list with the following named elements:
+A list with the following named elements:
 \itemize{
-\item \code{mass} mass (numeric)
-\item \code{center_mass} center of mass (3-dimensional numeric)
-\item \code{inertia} Inertia tensor (3x3 numeric matrix)
-\item \code{point} Logical indicating point mass, i.e., negligible inertia
+\item \code{mass} Numeric mass.
+\item \code{center_mass} Numeric 3-vector center of mass.
+\item \code{point} Logical indicating point mass. The inertia of point masses is excluded from calculations.
+\item \code{inertia} Numeric 3x3 matrix inertia tensor. The signs of the off-diagonal elements of the inertia tensor
+are determined by \code{POIconv}. For example, the \eqn{xy} element of the inertia
+tensor is \code{Ixy} if \code{POIconv} is "-"; it is -\code{Ixy} if \code{POIconv} is "+".
 }
 }
 \description{
-\code{get_mass_props()} gets mass properties for a specified row in a data frame
-with (at least) these columns: \code{id}, \code{mass}, \code{Cx}, \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy},
-\code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.
+\code{get_mass_props()} creates a mass properties list from a selected row in a data frame.
 }
 \examples{
 get_mass_props(mp_table, "C.1.2.2.3.1.2.3")
+
 }

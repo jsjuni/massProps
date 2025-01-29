@@ -7,25 +7,25 @@
 update_mass_props(df, target, sources, override = set_poi_conv_from_target)
 }
 \arguments{
-\item{df}{data frame}
+\item{df}{A data frame  with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
 
-\item{target}{id of the target row}
+\item{target}{The \code{id} value of the target row.}
 
-\item{sources}{ids of the source rows}
+\item{sources}{List of \code{id} values of the of the source rows.}
 
-\item{override}{override function, called as override(df, target, value)}
+\item{override}{An override function, called as override(df, target, value). The default override sets the POI sign convention
+of a computed aggregate to the \code{POIconv} column of the target row in the data frame.}
 }
 \value{
-updated data frame
+The updated data frame.
 }
 \description{
 \code{update_mass_props()} updates mass properties for a specified target row from
-specified source rows in a data frame
-with (at least) these columns: \code{id}, \code{mass}, \code{Cx}, \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy},
-\code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.
+specified source rows in a data frame.
 }
 \examples{
 leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))
-df <- update_mass_props(test_table, "A.3", leaves)
-get_mass_props(df, "A.3")
+update_mass_props(test_table, "A.3", leaves)
+
 }

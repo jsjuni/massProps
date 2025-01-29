@@ -2,7 +2,7 @@
 % Please edit documentation in R/massprops.R
 \name{rollup_mass_props_and_unc}
 \alias{rollup_mass_props_and_unc}
-\title{Roll Up Mass Properties and Uncertainties}
+\title{Roll up mass properties and uncertainties}
 \usage{
 rollup_mass_props_and_unc(
   tree,
@@ -12,13 +12,15 @@ rollup_mass_props_and_unc(
 )
 }
 \arguments{
-\item{tree}{An igraph directed graph that is a valid single-rooted in-tree with edges from child vertex to parent vertex.}
+\item{tree}{An 'igraph' tree whose vertices are named as the values of the \code{id}
+column of \code{df} and whose directed edges point from child id to parent id.}
 
-\item{df}{A mass properties and uncertainties table}
+\item{df}{A data frame  with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
 
 \item{validate_df}{A validator for the tree and table, default \code{validate_mass_props_and_unc_table()}}
 
-\item{...}{Other parameters passed \code{rollup()}}
+\item{...}{Other parameters passed to \code{rollupTree::rollup()}}
 }
 \value{
 The updated data frame
@@ -34,5 +36,5 @@ expects the mass properties in its input to have been rolled up, whereas \code{r
 the mass properties rollup itself.
 }
 \examples{
-rollup_mass_props_and_unc(sawe_tree, sawe_table)
+rollup_mass_props_and_unc(mp_tree, mp_table)
 }

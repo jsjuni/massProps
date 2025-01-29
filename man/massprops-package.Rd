@@ -4,9 +4,9 @@
 \name{massProps-package}
 \alias{massProps}
 \alias{massProps-package}
-\title{massProps: Computing Mass Properties of Aggregates}
+\title{massProps: Compute Mass Properties and Uncertainties of Tree Structures}
 \description{
-The 'massProps' package calculates mass properties and uncertainties for tree structures (e.g., assembly bill of materials).
+The 'massProps' package extends 'rollupTree' with functions to recursively calculate mass properties (and optionally, their uncertainties) for arbitrary decomposition trees. R. L. Zimmerman, J. H. Nakai. (2005) \url{https://www.sawe.org/product/paper-3360/}).
 }
 \seealso{
 Useful links:

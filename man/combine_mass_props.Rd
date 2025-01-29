@@ -4,19 +4,32 @@
 \alias{combine_mass_props}
 \title{Combine mass properties}
 \usage{
-combine_mass_props(vl)
+combine_mass_props(mpl)
 }
 \arguments{
-\item{vl}{list of mass properties lists}
+\item{mpl}{A list of mass properties lists, each of which contains the
+following named elements:
+\itemize{
+\item \code{mass} Numeric mass.
+\item \code{center_mass} Numeric 3-vector center of mass.
+\item \code{point} Logical indicating point mass. The inertia of point masses is excluded from calculations.
+\item \code{inertia} Numeric 3x3 matrix inertia tensor.
+}}
 }
 \value{
-Combined mass properties list
+Combined mass properties list with the same named elements.
 }
 \description{
-Combine mass properties
+\code{combine_mass_props()} calculates the mass properties of an aggregate from
+a list of constituent mass properties.
+}
+\details{
+See vignette("massProps", package = "massProps") for details on the algorithms
+employed.
 }
 \examples{
 leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))
-vl <- Map(f = function(id) get_mass_props(test_table, id), leaves)
-combine_mass_props(vl)
+mpl <- Map(f = function(id) get_mass_props(test_table, id), leaves)
+combine_mass_props(mpl)
+
 }

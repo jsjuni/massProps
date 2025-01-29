@@ -2,14 +2,16 @@
 % Please edit documentation in R/massprops.R
 \name{rollup_mass_props_fast}
 \alias{rollup_mass_props_fast}
-\title{Roll Up Mass Properties Without Input Validation}
+\title{Roll up mass properties without input validation}
 \usage{
 rollup_mass_props_fast(tree, df)
 }
 \arguments{
-\item{tree}{tree passed to \code{rollup()}}
+\item{tree}{An 'igraph' tree whose vertices are named as the values of the \code{id}
+column of \code{df} and whose directed edges point from child id to parent id.}
 
-\item{df}{mass properties and uncertainties table passed to \code{rollup()}}
+\item{df}{A data frame  with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
 }
 \value{
 The updated data frame
@@ -22,4 +24,5 @@ responsibility for validity of input. Its behavior when passed ill-formed input 
 }
 \examples{
 rollup_mass_props_fast(test_tree, test_table)
+
 }
