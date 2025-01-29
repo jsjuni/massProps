@@ -138,7 +138,10 @@ get_mass_props_and_unc <- function(df, id) {
 #'
 set_mass_props <- function(df, id, mp) {
   m <- mp$inertia
-  poi_factor <- if (mp$poi_conv == "-") 1 else -1
+  tryCatch(
+    poi_factor <- if (mp$poi_conv == "-") 1 else if (mp$poi_conv == "+") -1 else stop(),
+    error = function(e) stop("invalid sign convention")
+  )
   df |> df_set_by_id(id, "mass", mp$mass) |>
 
     df_set_by_id(id, "Cx", mp$center_mass[1]) |>
