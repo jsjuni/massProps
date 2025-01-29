@@ -142,21 +142,29 @@ set_mass_props <- function(df, id, mp) {
     poi_factor <- if (mp$poi_conv == "-") 1 else if (mp$poi_conv == "+") -1 else stop(),
     error = function(e) stop("invalid sign convention")
   )
-  df |> df_set_by_id(id, "mass", mp$mass) |>
+  values <- list(
+    mass = mp$mass,
 
-    df_set_by_id(id, "Cx", mp$center_mass[1]) |>
-    df_set_by_id(id, "Cy", mp$center_mass[2]) |>
-    df_set_by_id(id, "Cz", mp$center_mass[3]) |>
+    Cx = mp$center_mass[1],
+    Cy = mp$center_mass[2],
+    Cz = mp$center_mass[3],
 
-    df_set_by_id(id, "Ixx", m["x", "x"]) |>
-    df_set_by_id(id, "Iyy", m["y", "y"]) |>
-    df_set_by_id(id, "Izz", m["z", "z"]) |>
-    df_set_by_id(id, "Ixy", poi_factor * (m["x", "y"] + m["y", "x"]) / 2.0) |>
-    df_set_by_id(id, "Ixz", poi_factor * (m["x", "z"] + m["z", "x"]) / 2.0) |>
-    df_set_by_id(id, "Iyz", poi_factor * (m["y", "z"] + m["z", "y"]) / 2.0) |>
+    Ixx = m["x", "x"],
+    Iyy = m["y", "y"],
+    Izz = m["z", "z"],
 
-    df_set_by_id(id, "POIconv", mp$poi_conv) |>
-    df_set_by_id(id, "Ipoint", mp$point)
+    Ixy = poi_factor * (m["x", "y"] + m["y", "x"]) / 2.0,
+    Ixz = poi_factor * (m["x", "z"] + m["z", "x"]) / 2.0,
+    Iyz = poi_factor * (m["y", "z"] + m["z", "y"]) / 2.0,
+
+    POIconv = mp$poi_conv,
+    Ipoint = mp$point
+  )
+  Reduce(
+    f = function(d, n) df_set_by_id(d, id, n, values[[n]]),
+    x = names(values),
+    init = df
+  )
 }
 
 #' Set mass properties uncertainties for a row in a data frame
@@ -179,20 +187,26 @@ set_mass_props <- function(df, id, mp) {
 #' set_mass_props_unc(sawe_table, "Combined", get_mass_props_unc(sawe_table, "Widget"))
 #'
 set_mass_props_unc <- function(df, id, mpu) {
-  df |>
+  values <- list(
+    sigma_mass = mpu$sigma_mass,
 
-    df_set_by_id(id, "sigma_mass", mpu$sigma_mass) |>
+    sigma_Cx = mpu$sigma_center_mass[1],
+    sigma_Cy = mpu$sigma_center_mass[2],
+    sigma_Cz = mpu$sigma_center_mass[3],
 
-    df_set_by_id(id, "sigma_Cx", mpu$sigma_center_mass[1]) |>
-    df_set_by_id(id, "sigma_Cy", mpu$sigma_center_mass[2]) |>
-    df_set_by_id(id, "sigma_Cz", mpu$sigma_center_mass[3]) |>
+    sigma_Ixx = mpu$sigma_inertia["x", "x"],
+    sigma_Iyy = mpu$sigma_inertia["y", "y"],
+    sigma_Izz = mpu$sigma_inertia["z", "z"],
 
-    df_set_by_id(id, "sigma_Ixx", mpu$sigma_inertia["x", "x"]) |>
-    df_set_by_id(id, "sigma_Iyy", mpu$sigma_inertia["y", "y"]) |>
-    df_set_by_id(id, "sigma_Izz", mpu$sigma_inertia["z", "z"]) |>
-    df_set_by_id(id, "sigma_Ixy", mpu$sigma_inertia["x", "y"]) |>
-    df_set_by_id(id, "sigma_Ixz", mpu$sigma_inertia["x", "z"]) |>
-    df_set_by_id(id, "sigma_Iyz", mpu$sigma_inertia["y", "z"])
+    sigma_Ixy = (mpu$sigma_inertia["x", "y"] + mpu$sigma_inertia["y", "x"]) / 2.0,
+    sigma_Ixz = (mpu$sigma_inertia["x", "z"] + mpu$sigma_inertia["z", "x"]) / 2.0,
+    sigma_Iyz = (mpu$sigma_inertia["y", "z"] + mpu$sigma_inertia["z", "y"]) / 2.0
+  )
+  Reduce(
+    f = function(d, n) df_set_by_id(d, id, n, values[[n]]),
+    x = names(values),
+    init = df
+  )
 }
 
 #' Set mass properties and uncertainties for a row in a data frame
@@ -223,7 +237,7 @@ set_mass_props_unc <- function(df, id, mpu) {
 #' set_mass_props_and_unc(sawe_table, "Combined", mpu)
 #'
 set_mass_props_and_unc <- function(df, id, mpu) {
-  set_mass_props(df, id, mpu) |> set_mass_props_unc(id, mpu)
+  set_mass_props_unc(set_mass_props(df, id, mpu), id, mpu)
 }
 
 #' Combine mass properties
@@ -388,7 +402,7 @@ combine_mass_props_unc <- function(mpl, amp) {
 #' combine_mass_props_and_unc(mpl)
 #'
 combine_mass_props_and_unc <- function(mpl) {
-  combine_mass_props(mpl) |> combine_mass_props_unc(mpl, amp = _)
+  combine_mass_props_unc(mpl, amp = combine_mass_props(mpl))
 }
 
 #' Set POI sign convention for mass properties list to "+"
