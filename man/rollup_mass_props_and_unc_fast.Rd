@@ -18,7 +18,7 @@ The updated data frame
 }
 \description{
 \code{rollup_mass_props_and_unc_fast()} performs the same operation as \code{rollup_mass_props_and_unc()}
-but omits input validation. It is somewhat faster than  \code{rollup_mass_props_and_unc()} but should
+but omits input validation. It is somewhat faster than \code{rollup_mass_props_and_unc()} but should
 be used with caution and only under circumstances in which the caller assumes
 responsibility for validity of input. Its behavior when passed ill-formed input is unspecified.
 }
