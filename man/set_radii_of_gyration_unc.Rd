@@ -2,13 +2,24 @@
 % Please edit documentation in R/radii.R
 \name{set_radii_of_gyration_unc}
 \alias{set_radii_of_gyration_unc}
-\title{Title}
+\title{Set radii of gyration uncertainties for a row in a data frame}
 \usage{
-set_radii_of_gyration_unc(df, id, mp)
+set_radii_of_gyration_unc(df, id, rgu)
 }
 \arguments{
-\item{mp}{}
+\item{df}{A data frame with an \code{id} column.}
+
+\item{id}{The \code{id} value of the desired row.}
+
+\item{mpu}{A list with the following named elements:
+\itemize{
+\item \code{sigma_radii_gyration} Numeric 3x3 matrix radii of gyration uncertainties.
+}}
+}
+\value{
+The updated data frame.
 }
 \description{
-Title
+\code{set_radii_of_gyration_unc()} sets radii of gyration uncertainties for a
+selected row in a data frame with an \code{id} column.
 }

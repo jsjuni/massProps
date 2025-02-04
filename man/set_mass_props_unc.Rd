@@ -22,7 +22,7 @@ set_mass_props_unc(df, id, mpu)
 The updated data frame.
 }
 \description{
-\code{set_mass_props_unc()} sets mass properties and uncertainties for a
+\code{set_mass_props_unc()} sets mass properties uncertainties for a
 selected row in a data frame with an \code{id} column.
 }
 \examples{
