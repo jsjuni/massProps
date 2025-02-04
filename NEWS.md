@@ -1,7 +1,7 @@
 # massProps (development version)
 
-# massProps 0.2.0
+* Numeric subscripts replaced with symbolic (e.g., [1] -> ["x"]) (#25).
 
-# massProps 0.1.0
+# massProps 0.2.0
 
 * Initial CRAN submission.

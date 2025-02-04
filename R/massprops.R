@@ -145,9 +145,9 @@ set_mass_props <- function(df, id, mp) {
   values <- list(
     mass = mp$mass,
 
-    Cx = mp$center_mass[1],
-    Cy = mp$center_mass[2],
-    Cz = mp$center_mass[3],
+    Cx = mp$center_mass["x"],
+    Cy = mp$center_mass["y"],
+    Cz = mp$center_mass["z"],
 
     Ixx = m["x", "x"],
     Iyy = m["y", "y"],
@@ -190,9 +190,9 @@ set_mass_props_unc <- function(df, id, mpu) {
   values <- list(
     sigma_mass = mpu$sigma_mass,
 
-    sigma_Cx = mpu$sigma_center_mass[1],
-    sigma_Cy = mpu$sigma_center_mass[2],
-    sigma_Cz = mpu$sigma_center_mass[3],
+    sigma_Cx = mpu$sigma_center_mass["x"],
+    sigma_Cy = mpu$sigma_center_mass["y"],
+    sigma_Cz = mpu$sigma_center_mass["z"],
 
     sigma_Ixx = mpu$sigma_inertia["x", "x"],
     sigma_Iyy = mpu$sigma_inertia["y", "y"],
