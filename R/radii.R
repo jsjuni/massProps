@@ -18,8 +18,7 @@
 #' test_table_rollup <- rollup_mass_props(test_tree, test_table)
 #' add_radii_of_gyration(test_table_rollup)
 add_radii_of_gyration <- function(df) {
-  moment <- c("Ixx", "Iyy", "Izz")
-  names(moment) <- c("kx", "ky", "kz")
+  moment <- c(kx = "Ixx", ky = "Iyy", kz = "Izz")
   Reduce(
     f = function(d, i) Reduce(
       f = function(dd, r) df_set_by_id(dd, i, r, sqrt(df_get_by_id(dd, i, moment[r]) / df_get_by_id(dd, i, "mass"))),
