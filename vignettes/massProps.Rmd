@@ -228,7 +228,7 @@ $$
 The corresponding `R` code is
 
 ``` r
-  r$mass <- Reduce(`+`, Map(f = function(v) v$mass, vl))
+  amp$mass <- Reduce(`+`, Map(f = function(mp) mp$mass, mpl))
 ```
 
 In this and the following code snippets, the variable `vl` is a list of input mass property sets, the variable `v` is a formal parameter of an anonymous function applied to each member of `vl`, and `r` is the resulting mass property set. The line above is an `R` functional programming idiom for "set the mass value of the result to the sum of the mass values of the inputs".
@@ -265,7 +265,7 @@ $$
 The corresponding `R` code is
 
 ``` r
-  r$center_mass <- Reduce(`+`, Map(f = function(v) v$mass * v$center_mass, vl)) / r$mass
+  amp$center_mass <- Reduce(`+`, Map(f = function(mp) mp$mass * mp$center_mass, mpl)) / amp$mass
 ```
 
 ### Inertia Tensor
@@ -411,13 +411,14 @@ $$
 The corresponding `R` code is
 
 ``` r
-  r$inertia <- Reduce(`+`, Map(
-    f  = function(v) {
-      d <- r$center_mass - v$center_mass
-      M <- outer(d, d) - sum(d^2) * diag(3)
-      if (v$point) -v$mass * M else v$inertia - v$mass * M
+  amp$inertia <- Reduce(`+`, Map(
+    f  = function(mp) {
+      d <- amp$center_mass - mp$center_mass
+      Q <- outer(d, d)
+      M <- Q - sum(diag(Q)) * diag(3)
+      if (mp$point) -mp$mass * M else mp$inertia - mp$mass * M
     },
-    vl
+    mpl
   ))
 ```
 
@@ -436,7 +437,7 @@ $$
 The corresponding `R` code is
 
 ``` r
-  r$sigma_mass = sqrt(Reduce(`+`, Map(f = function(v) v$sigma_mass^2, vl)))
+  amp$sigma_mass = sqrt(Reduce(`+`, Map(f = function(v) v$sigma_mass^2, mpl)))
 ```
 
 ### Center of Mass Uncertainty
@@ -478,13 +479,13 @@ $$
 The corresponding `R` code is
 
 ``` r
-  r$sigma_center_mass = sqrt(Reduce(`+`, Map(
+  amp$sigma_center_mass = sqrt(Reduce(`+`, Map(
     f = function(v) {
       (v$mass * v$sigma_center_mass)^2 +
-        (v$sigma_mass * (v$center_mass - r$center_mass))^2
+        (v$sigma_mass * (v$center_mass - amp$center_mass))^2
     },
-    vl
-  ))) / r$mass
+    mpl
+  ))) / amp$mass
 ```
 
 ### Inertia Tensor Uncertainty
@@ -667,22 +668,24 @@ $$
 The corresponding `R` code is
 
 ``` r
-  r$sigma_inertia = sqrt(Reduce(`+`, Map(
+  amp$sigma_inertia = sqrt(Reduce(`+`, Map(
     f = function(v) {
 
-      d <- v$center_mass - r$center_mass
+      d <- v$center_mass - amp$center_mass
 
       P <- outer(d, v$sigma_center_mass)
       p <- as.list(diag(P))
 
+      Q <- outer(d, d)
+
       M1 <-   P  - diag(c(p$x - 2 * p$y, p$y - 2 * p$x, p$z - 2 * p$x))
       M2 <- t(P) - diag(c(p$x - 2 * p$z, p$y - 2 * p$z, p$z - 2 * p$y))
-      M3 <- outer(d, d) - sum(diag(d^2)) * diag(3)
-
+      M3 <- Q - sum(diag(Q)) * diag(3)
       M4 <- v$mass^2 * (M1^2 + M2^2) + (v$sigma_mass * M3)^2
+
       if (v$point) M4 else v$sigma_inertia^2 + M4
     },
-    vl
+    mpl
   )))
 ```
 
