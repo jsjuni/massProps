@@ -689,6 +689,72 @@ The corresponding `R` code is
   )))
 ```
 
+## Radii of Gyration and Their Uncertainties
+
+By definition:
+
+$$
+\begin{align}
+k_x = \sqrt{I_{xx} / m} \\
+k_y = \sqrt{I_{yy} / m} \\
+k_z = \sqrt{I_{zz} / m} \\
+\end{align}
+$$
+Let
+
+$$
+\boxed{
+\begin{align}
+\boldsymbol{k} & = (k_x \quad k_y \quad k_z)^T \\
+\boldsymbol{I} & = (I_{xx} \quad I_{yy} \quad I_{zz})^T
+\end{align}
+}
+$$
+Then
+
+$$
+\boxed{
+\boldsymbol{k} = \sqrt{ \boldsymbol{I} / m }
+}
+$$
+The SAWE reference gives equations for uncertainties of radii of gyration in recursive form, but as these radii are simply functions of moments of inertia and mass, we should be able to express their uncertainties in terms of uncertainties of moments of inertia and mass. Following standard uncertainty propagation technique:
+
+$$
+\begin{align}
+{\sigma_\boldsymbol{k}}^2 & = \left( \frac{\partial \boldsymbol{k}}{\partial \boldsymbol{I}} \right)^2 {\sigma_\boldsymbol{I}}^2 + \left( \frac{\partial \boldsymbol{k}}{\partial m} \right)^2 {\sigma_m}^2 + \left( \frac{\partial \boldsymbol{k}}{\partial \boldsymbol{I}} \right) \left( \frac{\partial \boldsymbol{k}}{\partial m} \right) \sigma_{\boldsymbol{I}m} \\
+  & = \left( \frac{1}{2 \sqrt{m \boldsymbol{I}}} \right)^2 {\sigma_\boldsymbol{I}}^2 + \left(\frac{- \sqrt{\boldsymbol{I}}}{2 m^{3/2}}\right)^2 {\sigma_m}^2 +  \left( \frac{1}{2 \sqrt{m \boldsymbol{I}}} \right) \left(\frac{- \sqrt{\boldsymbol{I}}}{2 m^{3/2}}\right) \sigma_{\boldsymbol{I}m} \\
+  & = \frac{1}{4 m \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 m^3} {\sigma_m}^2 - \frac{1}{4 m^2} \sigma_\boldsymbol{I} \sigma_m \rho_{\boldsymbol{I}m} \\
+\end{align}
+$$
+where $\rho_{Im}$ is the correlation coefficient of $I$ and $m$. We can choose to assume that $I$ and $m$ are independent, and therefore $rho_{Im} = 0$, but we can also reason as follows: all else being equal, as the mass of a composite increases, its moments of inertia increase as well. Therefore $\rho_{Im} \ge 0$. Subject to that constraint, it is clear that the most conservative (i.e., the largest) estimate of ${\sigma_k}^2$ is achieved for $\rho_{Im} = 0$, in which case we have
+
+$$
+\begin{align}
+{\sigma_\boldsymbol{k}}^2 & = \frac{1}{4 m \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 m^3} {\sigma_m}^2 \\
+\end{align}
+$$
+
+
+Let
+
+$$
+\boxed{
+\begin{align}
+\sigma_\boldsymbol{k} & = (\sigma_{k_x} \quad \sigma_{k_y} \quad \sigma_{k_z})^T \\
+\sigma_\boldsymbol{I} & = (\sigma_{I_{XX}} \quad \sigma_{I_{YY}} \quad \sigma_{I_{ZZ}})^T
+\end{align}
+}
+$$
+Recalling that arithmetic operations on vectors are element-wise, we can write the expression for radii of gyration uncertainty in vector form:
+
+$$
+\boxed{
+\begin{align}
+{\sigma_\boldsymbol{k}} & = \frac{1}{2} \sqrt{ \frac{1}{m \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{m^3} {\sigma_m}^2 }
+\end{align}
+}
+$$
+
 # Testing and Validation
 
 ## Comparison With Independently-Calculated Results
