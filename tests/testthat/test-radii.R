@@ -21,11 +21,11 @@ test_that("get_mass_props_and_unc_and_radii() works", {
 })
 
 test_that("set_radii_of_gyration_unc() works", {
-  mp <- list(sigma_k = c(x = 31, y = 59, z = 83))
+  mp <- list(sigma_radii_gyration = c(x = 31, y = 59, z = 83))
   actual <- set_radii_of_gyration_unc(mp_table, "C.1", mp)
   row <- which(actual$id == "C.1")
 
-  expect_equal(unname(actual[row, "sigma_kx"]), unname(mp$sigma_k["x"]))
-  expect_equal(unname(actual[row, "sigma_ky"]), unname(mp$sigma_k["y"]))
-  expect_equal(unname(actual[row, "sigma_kz"]), unname(mp$sigma_k["z"]))
+  expect_equal(unname(actual[row, "sigma_kx"]), unname(mp$sigma_radii_gyration["x"]))
+  expect_equal(unname(actual[row, "sigma_ky"]), unname(mp$sigma_radii_gyration["y"]))
+  expect_equal(unname(actual[row, "sigma_kz"]), unname(mp$sigma_radii_gyration["z"]))
 })

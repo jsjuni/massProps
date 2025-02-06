@@ -21,10 +21,13 @@ add_radii_of_gyration <- function(df) {
   Reduce(
     f = function(d, i) {
       rg <- get_mass_props(d, i)
-      rg$radius_gyration <- c(
-        x = sqrt(rg$inertia["x", "x"] / rg$mass),
-        y = sqrt(rg$inertia["y", "y"] / rg$mass),
-        z = sqrt(rg$inertia["z", "z"] / rg$mass)
+      rg$radii_gyration <- Reduce(
+        f = function(v, d) {
+          v[d] = sqrt(rg$inertia[d, d] / rg$mass)
+          v
+        },
+        x = c("x", "y", "z"),
+        init = c()
       )
       set_radii_of_gyration(d, i, rg)
     },
@@ -33,6 +36,24 @@ add_radii_of_gyration <- function(df) {
   )
 }
 
+add_radii_of_gyration_unc <- function(df) {
+  Reduce(
+    f = function(d, i) {
+      rgu <- get_mass_props_and_unc(d, i)
+      rgu$sigma_radii_gyration <- Reduce(
+        f = function(v, d) {
+          v[d] = sqrt(rgu$sigma_inertia[d, d]^2 / (rgu$mass * rgu$inertia[d, d]) + (rgu$inertia[d, d] * rgu$sigma_mass^2) / rgu$mass^3) / 2
+          v
+        },
+        x = c("x", "y", "z"),
+        init = c()
+      )
+      set_radii_of_gyration_unc(d, i, rgu)
+    },
+    x = df_get_ids(df),
+    init = df
+  )
+}
 #' Get mass properties and uncertainties and radii of gyration
 #'
 #' @description
@@ -119,9 +140,9 @@ get_mass_props_and_unc_and_radii_and_unc <- function(df, id) {
 #' @examples
 set_radii_of_gyration <- function(df, id, rgu) {
   values <- list(
-    kx = rgu$radius_gyration["x"],
-    ky = rgu$radius_gyration["y"],
-    kz = rgu$radius_gyration["z"]
+    kx = rgu$radii_gyration["x"],
+    ky = rgu$radii_gyration["y"],
+    kz = rgu$radii_gyration["z"]
   )
   Reduce(
     f = function(d, n) df_set_by_id(d, id, n, values[[n]]),
@@ -145,9 +166,9 @@ set_radii_of_gyration <- function(df, id, rgu) {
 #' @examples
 set_radii_of_gyration_unc <- function(df, id, rgu) {
   values <- list(
-    sigma_kx = rgu$sigma_k["x"],
-    sigma_ky = rgu$sigma_k["y"],
-    sigma_kz = rgu$sigma_k["z"]
+    sigma_kx = rgu$sigma_radii_gyration["x"],
+    sigma_ky = rgu$sigma_radii_gyration["y"],
+    sigma_kz = rgu$sigma_radii_gyration["z"]
   )
   Reduce(
     f = function(d, n) df_set_by_id(d, id, n, values[[n]]),
