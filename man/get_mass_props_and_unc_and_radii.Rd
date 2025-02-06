@@ -37,4 +37,5 @@ and radii of gyration list from a selected row in a data frame.
 mp_table_rollup <- rollup_mass_props_and_unc(mp_tree, mp_table)
 radii_table <- add_radii_of_gyration(mp_table_rollup)
 get_mass_props_and_unc_and_radii(radii_table, "C.1")
+
 }

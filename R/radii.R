@@ -17,6 +17,7 @@
 #' @examples
 #' test_table_rollup <- rollup_mass_props(test_tree, test_table)
 #' add_radii_of_gyration(test_table_rollup)
+#'
 add_radii_of_gyration <- function(df) {
   Reduce(
     f = function(d, i) {
@@ -56,6 +57,7 @@ add_radii_of_gyration <- function(df) {
 #' @examples
 #' sawe_table_rollup <- rollup_mass_props(sawe_tree, sawe_table)
 #' add_radii_of_gyration_unc(add_radii_of_gyration(sawe_table_rollup))
+#'
 add_radii_of_gyration_unc <- function(df) {
   Reduce(
     f = function(d, i) {
@@ -104,6 +106,7 @@ add_radii_of_gyration_unc <- function(df) {
 #' mp_table_rollup <- rollup_mass_props_and_unc(mp_tree, mp_table)
 #' radii_table <- add_radii_of_gyration(mp_table_rollup)
 #' get_mass_props_and_unc_and_radii(radii_table, "C.1")
+#'
 get_mass_props_and_unc_and_radii <- function(df, id) {
   l <- get_mass_props_and_unc(df, id)
   l$radii_gyration = sapply(c(x = "kx", y = "ky", z = "kz"), FUN=function(p) df_get_by_id(df, id, p))
@@ -138,6 +141,9 @@ get_mass_props_and_unc_and_radii <- function(df, id) {
 #' @export
 #'
 #' @examples
+#' mp_table_rollup <- rollup_mass_props_and_unc(mp_tree, mp_table)
+#' radii_and_unc_table <- add_radii_of_gyration_unc(add_radii_of_gyration(mp_table_rollup))
+#' get_mass_props_and_unc_and_radii_and_unc(radii_and_unc_table, "C.1")
 #'
 get_mass_props_and_unc_and_radii_and_unc <- function(df, id) {
   l <- get_mass_props_and_unc_and_radii(df, id)
@@ -157,7 +163,11 @@ get_mass_props_and_unc_and_radii_and_unc <- function(df, id) {
 #'
 #' @returns The updated data frame.
 #'
+#' @export
+#'
 #' @examples
+#' rgl <- list(radii_gyration = c(x = 1, y = 2, z = 3))
+#' set_radii_of_gyration(mp_table, "C.1", rgl)
 set_radii_of_gyration <- function(df, id, rg) {
   values <- list(
     kx = rg$radii_gyration["x"],
@@ -183,7 +193,12 @@ set_radii_of_gyration <- function(df, id, rg) {
 #'
 #' @returns The updated data frame.
 #'
+#' @export
+#'
 #' @examples
+#' rgul <- list(sigma_radii_gyration = c(x = 1, y = 2, z = 3))
+#' set_radii_of_gyration_unc(mp_table, "C.1", rgul)
+#'
 set_radii_of_gyration_unc <- function(df, id, rgu) {
   values <- list(
     sigma_kx = rgu$sigma_radii_gyration["x"],

@@ -24,4 +24,5 @@ they are not recursively-defined, and do not require a rollup method.
 \examples{
 test_table_rollup <- rollup_mass_props(test_tree, test_table)
 add_radii_of_gyration(test_table_rollup)
+
 }

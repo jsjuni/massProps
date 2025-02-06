@@ -27,4 +27,5 @@ they are not recursively-defined, and do not require a rollup method.
 \examples{
 sawe_table_rollup <- rollup_mass_props(sawe_tree, sawe_table)
 add_radii_of_gyration_unc(add_radii_of_gyration(sawe_table_rollup))
+
 }
