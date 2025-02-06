@@ -10,7 +10,7 @@
 #' @inheritParams get_mass_props
 #'
 #' @returns A data frame with the same columns as `df`, plus
-#' radii of gyration in columns `kx1, `ky`, and `kz`.`
+#' radii of gyration in columns `kx`, `ky`, and `kz`.`
 #'
 #' @export
 #'
@@ -36,6 +36,26 @@ add_radii_of_gyration <- function(df) {
   )
 }
 
+#' Add radii of gyration uncertainties
+#'
+#' @description
+#' `add_radii_of_gyration_unc()` adds calculated radii of gyration uncertainties to a data frame
+#' of rolled-up mass properties and uncertainties.
+#'
+#' Radii of gyration uncertainties are calculated directly from moments of inertia and mass
+#' and their uncertainties;
+#' they are not recursively-defined, and do not require a rollup method.
+#'
+#' @inheritParams get_mass_props_and_unc
+#'
+#' @returns A data frame with the same columns as `df`, plus
+#' radii of gyration in columns `sigma_kx`, `sigma_ky`, and `sigma_kz`.`
+#'
+#' @export
+#'
+#' @examples
+#' sawe_table_rollup <- rollup_mass_props(sawe_tree, sawe_table)
+#' add_radii_of_gyration_unc(add_radii_of_gyration(sawe_table_rollup))
 add_radii_of_gyration_unc <- function(df) {
   Reduce(
     f = function(d, i) {
@@ -138,11 +158,11 @@ get_mass_props_and_unc_and_radii_and_unc <- function(df, id) {
 #' @returns The updated data frame.
 #'
 #' @examples
-set_radii_of_gyration <- function(df, id, rgu) {
+set_radii_of_gyration <- function(df, id, rg) {
   values <- list(
-    kx = rgu$radii_gyration["x"],
-    ky = rgu$radii_gyration["y"],
-    kz = rgu$radii_gyration["z"]
+    kx = rg$radii_gyration["x"],
+    ky = rg$radii_gyration["y"],
+    kz = rg$radii_gyration["z"]
   )
   Reduce(
     f = function(d, n) df_set_by_id(d, id, n, values[[n]]),
@@ -157,7 +177,7 @@ set_radii_of_gyration <- function(df, id, rgu) {
 #' selected row in a data frame with an `id` column.
 #'
 #' @inheritParams set_mass_props
-#' @param mpu
+#' @param rgu
 #' A list with the following named elements:
 #' - `sigma_radii_gyration` Numeric 3x3 matrix radii of gyration uncertainties.
 #'
@@ -174,82 +194,5 @@ set_radii_of_gyration_unc <- function(df, id, rgu) {
     f = function(d, n) df_set_by_id(d, id, n, values[[n]]),
     x = names(values),
     init = df
-  )
-}
-
-#' Combine radii of gyration uncertainties
-#'
-#' @description
-#' `combine_radii_of_gyration_unc()` calculates the radii of gyration uncertainties of an aggregate from
-#' the mass properties and uncertainties and radii of gyration of its constituents and the mass properties
-#' and radii of gyration of the aggregate.
-#'
-#' @details
-#' See vignette("massProps", package = "massProps") for details on the algorithms
-#' employed.
-#'
-#' @param mpl A list of mass properties and uncertainties lists, each of which contains
-#' the following named elements:
-#' - `mass` Numeric mass.
-#' - `center_mass` Numeric 3-vector center of mass.
-#' - `sigma_mass` mass uncertainty
-#' - `sigma_center_mass` center of mass uncertainty (3-dimensional numeric)
-#' - `radii_gyration` Numeric 3-vector radii of gyration.
-#' @param amp A named list of mass properties for the aggregate containing the following
-#' named elements:
-#' - `mass` Numeric mass.
-#' - `center_mass` Numeric 3-vector center of mass.
-#' - `radii_gyration` Numeric 3-vector radii of gyration.
-#'
-#' @returns The radii of gyration uncertainties of the aggregate. A list with the following named elements:
-#' - `sigma_radii_gyration` Numeric 3-vector radii of gyration uncertainties.
-#'
-#' @export
-#'
-#' @examples
-combine_radii_of_gyration_unc <- function(mpl, amp) {
-  ak2 <- amp$radii_gyration^2
-  amp$sigma_k <- sqrt(Reduce(`+`, Map(
-    f = function(v) {
-      k2 <- v$radii_gyration^2
-
-      d <- v$center_mass - amp$center_mass
-      d2 <- d^2
-
-      p <- 2 * v$mass * d * v$sigma_center_mass
-
-      q <- d2 - sum(d2)
-
-      m1 <- (k2 - ak2 - q) * v$sigma_mass
-      m2 <- c(p["y"], p["x"], p["x"])
-      m3 <- c(p["z"], p["z"], p["y"])
-      m4 <- 2 * v$mass * v$radii_gyration * v$sigma_radii_gyration
-
-      m1^2 + m2^2 + m3^2 + m4^2
-    },
-    mpl
-  ) / (2 * amp$k * amp$mass)))
-}
-
-#' Title
-#'
-#' @param df
-#' @param target
-#' @param sources
-#' @param ...
-#'
-#' @returns
-#' @export
-#'
-#' @examples
-update_radii_of_gyration_unc <- function(df, target, sources, ...) {
-  update_prop(
-    df,
-    target = target,
-    sources = sources,
-    set = get_mass_props_and_unc_and_radii,
-    get = set_radii_of_gyration_unc,
-    combine = function(l) { combine_radii_of_gyration_unc(l, amp = get_mass_props_and_unc_and_radii(df, target))},
-    ...
   )
 }

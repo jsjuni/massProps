@@ -12,7 +12,7 @@ add_radii_of_gyration(df)
 }
 \value{
 A data frame with the same columns as \code{df}, plus
-radii of gyration in columns \verb{kx1, }ky\verb{, and }kz\code{.}
+radii of gyration in columns \code{kx}, \code{ky}, and \code{kz}.`
 }
 \description{
 \code{add_radii_of_gyration()} adds calculated radii of gyration to a data frame

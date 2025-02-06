@@ -11,7 +11,7 @@ set_radii_of_gyration_unc(df, id, rgu)
 
 \item{id}{The \code{id} value of the desired row.}
 
-\item{mpu}{A list with the following named elements:
+\item{rgu}{A list with the following named elements:
 \itemize{
 \item \code{sigma_radii_gyration} Numeric 3x3 matrix radii of gyration uncertainties.
 }}
