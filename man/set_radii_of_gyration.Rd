@@ -25,5 +25,5 @@ selected row in a data frame with an \code{id} column.
 }
 \examples{
 rgl <- list(radii_gyration = c(x = 1, y = 2, z = 3))
-set_radii_of_gyration(mp_table, "C.1", rgl)
+set_radii_of_gyration(mp_table, "C.1", rgl)[1:5, ]
 }

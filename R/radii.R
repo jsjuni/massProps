@@ -167,7 +167,7 @@ get_mass_props_and_unc_and_radii_and_unc <- function(df, id) {
 #'
 #' @examples
 #' rgl <- list(radii_gyration = c(x = 1, y = 2, z = 3))
-#' set_radii_of_gyration(mp_table, "C.1", rgl)
+#' set_radii_of_gyration(mp_table, "C.1", rgl)[1:5, ]
 set_radii_of_gyration <- function(df, id, rg) {
   values <- list(
     kx = rg$radii_gyration["x"],
@@ -197,7 +197,7 @@ set_radii_of_gyration <- function(df, id, rg) {
 #'
 #' @examples
 #' rgul <- list(sigma_radii_gyration = c(x = 1, y = 2, z = 3))
-#' set_radii_of_gyration_unc(mp_table, "C.1", rgul)
+#' set_radii_of_gyration_unc(mp_table, "C.1", rgul)[1:5, ]
 #'
 set_radii_of_gyration_unc <- function(df, id, rgu) {
   values <- list(
