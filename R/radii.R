@@ -18,13 +18,16 @@
 #' test_table_rollup <- rollup_mass_props(test_tree, test_table)
 #' add_radii_of_gyration(test_table_rollup)
 add_radii_of_gyration <- function(df) {
-  moment <- c(kx = "Ixx", ky = "Iyy", kz = "Izz")
   Reduce(
-    f = function(d, i) Reduce(
-      f = function(dd, r) df_set_by_id(dd, i, r, sqrt(df_get_by_id(dd, i, moment[r]) / df_get_by_id(dd, i, "mass"))),
-      x = names(moment),
-      init = d
-    ),
+    f = function(d, i) {
+      rg <- get_mass_props(d, i)
+      rg$radius_gyration <- c(
+        x = sqrt(rg$inertia["x", "x"] / rg$mass),
+        y = sqrt(rg$inertia["y", "y"] / rg$mass),
+        z = sqrt(rg$inertia["z", "z"] / rg$mass)
+      )
+      set_radii_of_gyration(d, i, rg)
+    },
     x = df_get_ids(df),
     init = df
   )
@@ -101,6 +104,32 @@ get_mass_props_and_unc_and_radii_and_unc <- function(df, id) {
   l
 }
 
+#' Set radii of gyration for a row in a data frame
+#'
+#' `set_radii_of_gyration()` sets radii of gyration for a
+#' selected row in a data frame with an `id` column.
+#'
+#' @inheritParams set_mass_props
+#' @param rg
+#' A list with the following named elements:
+#' - `radii_gyration` Numeric 3x3 matrix radii of gyration.
+#'
+#' @returns The updated data frame.
+#'
+#' @examples
+set_radii_of_gyration <- function(df, id, rgu) {
+  values <- list(
+    kx = rgu$radius_gyration["x"],
+    ky = rgu$radius_gyration["y"],
+    kz = rgu$radius_gyration["z"]
+  )
+  Reduce(
+    f = function(d, n) df_set_by_id(d, id, n, values[[n]]),
+    x = names(values),
+    init = df
+  )
+}
+
 #' Set radii of gyration uncertainties for a row in a data frame
 #'
 #' `set_radii_of_gyration_unc()` sets radii of gyration uncertainties for a
@@ -112,6 +141,8 @@ get_mass_props_and_unc_and_radii_and_unc <- function(df, id) {
 #' - `sigma_radii_gyration` Numeric 3x3 matrix radii of gyration uncertainties.
 #'
 #' @returns The updated data frame.
+#'
+#' @examples
 set_radii_of_gyration_unc <- function(df, id, rgu) {
   values <- list(
     sigma_kx = rgu$sigma_k["x"],
