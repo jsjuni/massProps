@@ -960,13 +960,14 @@ This `r agree(isTRUE(all.equal(sigma_POI, c(sigma_Ixy = sawe_result$sigma_Ixy, s
 ### Radii of Gyration Uncertainties
 
 ```{r}
-sigma_rog <- function(m, I, sigma_m, sigma_I) {
-  sqrt(sigma_I^2 / (m * I) + (I * sigma_m^2) / m^3) / 2
+sigma_rog <- function(m, I, sigma_m, sigma_I, rho_Im) {
+  sqrt(sigma_I^2 / (4 * m * I) + (I * sigma_m^2) / (4 * m^3) + (rho_Im * sigma_m * sigma_I) / (2 * m^2))
 }
+rho_Im <- 0
 sigma_ROG <- c(
-  sigma_kx = sigma_rog(sawe_result$mass, sawe_result$Ixx, sawe_result$sigma_mass, sawe_result$sigma_Ixx),
-  sigma_ky = sigma_rog(sawe_result$mass, sawe_result$Iyy, sawe_result$sigma_mass, sawe_result$sigma_Iyy),
-  sigma_kz = sigma_rog(sawe_result$mass, sawe_result$Izz, sawe_result$sigma_mass, sawe_result$sigma_Izz)
+  sigma_kx = sigma_rog(sawe_result$mass, sawe_result$Ixx, sawe_result$sigma_mass, sawe_result$sigma_Ixx, rho_Im),
+  sigma_ky = sigma_rog(sawe_result$mass, sawe_result$Iyy, sawe_result$sigma_mass, sawe_result$sigma_Iyy, rho_Im),
+  sigma_kz = sigma_rog(sawe_result$mass, sawe_result$Izz, sawe_result$sigma_mass, sawe_result$sigma_Izz, rho_Im)
 )
 ```
 
