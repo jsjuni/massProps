@@ -399,8 +399,7 @@ $$
 - 
 w_i \boldsymbol{M}_i \right)
 }
-$$
-where
+$$ where
 
 $$
 \boxed{
@@ -699,8 +698,7 @@ k_x = \sqrt{I_{xx} / m} \\
 k_y = \sqrt{I_{yy} / m} \\
 k_z = \sqrt{I_{zz} / m} \\
 \end{align}
-$$
-Let
+$$ Let
 
 $$
 \boxed{
@@ -709,31 +707,15 @@ $$
 \boldsymbol{I} & = (I_{xx} \quad I_{yy} \quad I_{zz})^T
 \end{align}
 }
-$$
-Then
+$$ Then
 
 $$
 \boxed{
 \boldsymbol{k} = \sqrt{ \boldsymbol{I} / m }
 }
 $$
-The SAWE reference gives equations for uncertainties of radii of gyration in recursive form, but as these radii are simply functions of moments of inertia and mass, we should be able to express their uncertainties in terms of uncertainties of moments of inertia and mass. Following standard uncertainty propagation technique:
 
-$$
-\begin{align}
-{\sigma_\boldsymbol{k}}^2 & = \left( \frac{\partial \boldsymbol{k}}{\partial \boldsymbol{I}} \right)^2 {\sigma_\boldsymbol{I}}^2 + \left( \frac{\partial \boldsymbol{k}}{\partial m} \right)^2 {\sigma_m}^2 + \left( \frac{\partial \boldsymbol{k}}{\partial \boldsymbol{I}} \right) \left( \frac{\partial \boldsymbol{k}}{\partial m} \right) \sigma_{\boldsymbol{I}m} \\
-  & = \left( \frac{1}{2 \sqrt{m \boldsymbol{I}}} \right)^2 {\sigma_\boldsymbol{I}}^2 + \left(\frac{- \sqrt{\boldsymbol{I}}}{2 m^{3/2}}\right)^2 {\sigma_m}^2 +  \left( \frac{1}{2 \sqrt{m \boldsymbol{I}}} \right) \left(\frac{- \sqrt{\boldsymbol{I}}}{2 m^{3/2}}\right) \sigma_{\boldsymbol{I}m} \\
-  & = \frac{1}{4 m \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 m^3} {\sigma_m}^2 - \frac{1}{4 m^2} \sigma_\boldsymbol{I} \sigma_m \rho_{\boldsymbol{I}m} \\
-\end{align}
-$$
-where $\rho_{\boldsymbol{I}m}$ is the correlation coefficient of $\boldsymbol{I}$ and $m$. We can choose to assume that $\boldsymbol{I}$ and $m$ are independent, and therefore $\rho_{\boldsymbol{I}m} = 0$, but we can also reason as follows: all else being equal, as the mass of a composite increases, its moments of inertia increase as well. Therefore $\rho_{\boldsymbol{I}m} \ge 0$. Subject to that constraint, it is clear that the most conservative (i.e., the largest) estimate of ${\sigma_\boldsymbol{k}}^2$ is achieved for $\rho_{\boldsymbol{I}m} = 0$, in which case we have
-
-$$
-\begin{align}
-{\sigma_\boldsymbol{k}}^2 & = \frac{1}{4 m \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 m^3} {\sigma_m}^2 \\
-\end{align}
-$$
-
+The SAWE reference gives equations for uncertainties of radii of gyration in recursive form, but as these radii are simply functions of moments of inertia and mass, we should be able to express their uncertainties in terms of uncertainties of moments of inertia and mass by applying standard uncertainty propagation theory.
 
 Let
 
@@ -745,7 +727,23 @@ $$
 \end{align}
 }
 $$
-Recalling that arithmetic operations on vectors are element-wise, we can write the expression for radii of gyration uncertainty in vector form:
+Then
+
+$$
+\begin{align}
+{\sigma_\boldsymbol{k}}^2 & = \left( \frac{\partial \boldsymbol{k}}{\partial \boldsymbol{I}} \right)^2 {\sigma_\boldsymbol{I}}^2 + \left( \frac{\partial \boldsymbol{k}}{\partial m} \right)^2 {\sigma_m}^2 + \left( \frac{\partial \boldsymbol{k}}{\partial \boldsymbol{I}} \right) \left( \frac{\partial \boldsymbol{k}}{\partial m} \right) \sigma_{\boldsymbol{I}m} \\
+  & = \left( \frac{1}{2 \sqrt{m \boldsymbol{I}}} \right)^2 {\sigma_\boldsymbol{I}}^2 + \left(\frac{- \sqrt{\boldsymbol{I}}}{2 m^{3/2}}\right)^2 {\sigma_m}^2 +  \left( \frac{1}{2 \sqrt{m \boldsymbol{I}}} \right) \left(\frac{- \sqrt{\boldsymbol{I}}}{2 m^{3/2}}\right) \sigma_{\boldsymbol{I}m} \\
+  & = \frac{1}{4 m \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 m^3} {\sigma_m}^2 - \frac{1}{4 m^2} \sigma_\boldsymbol{I} \sigma_m \rho_{\boldsymbol{I}m} \\
+\end{align}
+$$
+where $\sigma_{\boldsymbol{I}m}$ is the covariance between $\boldsymbol{I}$ and $m$ and $\rho_{\boldsymbol{I}m}$ is their correlation coefficient. We can choose to assume that $\boldsymbol{I}$ and $m$ are independent, and therefore $\rho_{\boldsymbol{I}m} = 0$, but we can also reason as follows: all else being equal, as the mass of a composite increases, its moments of inertia increase as well. Therefore $\rho_{\boldsymbol{I}m} \ge 0$. Subject to that constraint, it is clear that the most conservative (i.e., the largest) estimate of ${\sigma_\boldsymbol{k}}^2$ is achieved for $\rho_{\boldsymbol{I}m} = 0$, in which case we have
+
+$$
+\begin{align}
+{\sigma_\boldsymbol{k}}^2 & = \frac{1}{4 m \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 m^3} {\sigma_m}^2 \\
+\end{align}
+$$
+Therefore,
 
 $$
 \boxed{
@@ -982,7 +980,7 @@ This `r agree(isTRUE(all.equal(sigma_ROG, c(sigma_kx = sawe_result$sigma_kx, sig
 
 ## Comparison With Published Results
 
-The SAWE reference provides computed results for their example. These results match those within a tolerance of 0.2%. The small differences are likely because their actual input values were not identical to the truncated values published in the article.
+The SAWE reference provides computed results for their example (excluding radii of gyration and their uncertainties). These results match those within a tolerance of 0.2%. The small differences are likely because their actual input values were not identical to the truncated values published in the article.
 
 # Performance Evaluation
 
