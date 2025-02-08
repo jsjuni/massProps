@@ -64,7 +64,12 @@ add_radii_of_gyration_unc <- function(df) {
       rgu <- get_mass_props_and_unc(d, i)
       rgu$sigma_radii_gyration <- Reduce(
         f = function(v, d) {
-          v[d] = sqrt(rgu$sigma_inertia[d, d]^2 / (rgu$mass * rgu$inertia[d, d]) + (rgu$inertia[d, d] * rgu$sigma_mass^2) / rgu$mass^3) / 2
+          rho_Im <- 0 # placeholder
+          v[d] = sqrt(
+            rgu$sigma_inertia[d, d]^2 / (rgu$mass * rgu$inertia[d, d]) +
+              (rgu$inertia[d, d] * rgu$sigma_mass^2) / rgu$mass^3 +
+              (2 * rgu$sigma_inertia[d, d] * rgu$sigma_mass * rho_Im) / rgu$mass^2
+          ) / 2
           v
         },
         x = c("x", "y", "z"),
@@ -76,6 +81,7 @@ add_radii_of_gyration_unc <- function(df) {
     init = df
   )
 }
+
 #' Get mass properties and uncertainties and radii of gyration
 #'
 #' @description
