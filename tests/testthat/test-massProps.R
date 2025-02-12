@@ -593,4 +593,3 @@ test_that("rollup_mass_props_and_unc_fast() works", {
   invalid_table$"sigma_mass" <- NA
   expect_error(rollup_mass_props_and_unc(sawe_tree, invalid_table), "mass uncertainty missing")
 })
-
