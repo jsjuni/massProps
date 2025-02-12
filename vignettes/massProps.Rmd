@@ -231,7 +231,7 @@ The corresponding `R` code is
   amp$mass <- Reduce(`+`, Map(f = function(mp) mp$mass, mpl))
 ```
 
-In this and the following code snippets, the variable `vl` is a list of input mass property sets, the variable `v` is a formal parameter of an anonymous function applied to each member of `vl`, and `r` is the resulting mass property set. The line above is an `R` functional programming idiom for "set the mass value of the result to the sum of the mass values of the inputs".
+In this and the following code snippets, the variable `mpl` is a list of input mass property sets, the variable `mp` is a formal parameter of an anonymous function applied to each member of `mpl`, and `amp` is the resulting aggregate mass property set. The line above is an `R` functional programming idiom for "set the mass value of the result to the sum of the mass values of the inputs".
 
 ### Center of Mass
 
@@ -736,7 +736,7 @@ $$
   & \approx \frac{1}{4 m \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 m^3} {\sigma_m}^2 - \frac{1}{2 m^2} \sigma_\boldsymbol{I} \sigma_m \rho_{\boldsymbol{I}m} \\
 \end{align}
 $$
-where $\sigma_{\boldsymbol{I}m}$ is the covariance between $\boldsymbol{I}$ and $m$ and $\rho_{\boldsymbol{I}m}$ is their correlation coefficient. We can choose to assume that $\boldsymbol{I}$ and $m$ are independent, and therefore $\rho_{\boldsymbol{I}m} = 0$, but we can also reason that, all else being equal, as the mass of a composite increases, its moments of inertia do not decrease. Therefore $\rho_{\boldsymbol{I}m} \ge 0$. Subject to that constraint and the fact that $\sigma_\boldsymbol{I} \sigma_m m^{-2} \gt 0$, it is clear that the most conservative (i.e., the largest) estimate of ${\sigma_\boldsymbol{k}}^2$ is achieved for $\rho_{\boldsymbol{I}m} = 0$, in which case we have
+where $\sigma_{\boldsymbol{I}m}$ is the covariance between $\boldsymbol{I}$ and $m$ and $\rho_{\boldsymbol{I}m}$ is their correlation coefficient. We can choose to assume that $\boldsymbol{I}$ and $m$ are independent, and therefore $\rho_{\boldsymbol{I}m} = 0$, but we can also note that, all else being equal, as the mass of a composite increases, its moments of inertia do not decrease. Therefore $\rho_{\boldsymbol{I}m} \ge 0$. Subject to that constraint and the fact that $\sigma_\boldsymbol{I} \sigma_m m^{-2} \gt 0$, it is clear that the most conservative (i.e., the largest) estimate of ${\sigma_\boldsymbol{k}}^2$ is achieved for $\rho_{\boldsymbol{I}m} = 0$, in which case we have
 
 $$
 \begin{align}
