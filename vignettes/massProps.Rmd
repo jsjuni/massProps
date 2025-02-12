@@ -631,15 +631,13 @@ $$
 Finally,
 
 $$
+\boxed{
 \boldsymbol{\sigma_I} = \sqrt{
 \sum_{i=1}^{n} {\left\{
 {\boldsymbol{\sigma_I}}_i^2 
-+ w_i^2 \left(
-{{\boldsymbol{M}_1}_i}^2 + {{\boldsymbol{M}_2}_i}^2
-\right) 
-+ \left( \sigma_{w_i} {\boldsymbol{M}_3}_i
-\right)^2
++{\boldsymbol{M}_4}_i
 \right\}}
+}
 }
 $$
 
@@ -660,7 +658,12 @@ $$
 0 & {p_Y}_i - 2 {p_Z}_i & 0 \\
 0 & 0 & {p_Z}_i - 2 {p_Y}_i \\
 \end{bmatrix} \\
-{\boldsymbol{M}_3}_i & = \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3
+{\boldsymbol{M}_3}_i & = \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3 \\
+{\boldsymbol{M}_4}_i & =  w_i^2 \left(
+{{\boldsymbol{M}_1}_i}^2 + {{\boldsymbol{M}_2}_i}^2
+\right) 
++ \left( \sigma_{w_i} {\boldsymbol{M}_3}_i
+\right)^2
 \end{align}
 }
 $$
