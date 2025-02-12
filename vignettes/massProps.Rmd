@@ -694,9 +694,9 @@ By definition:
 
 $$
 \begin{align}
-k_x = \sqrt{I_{xx} / m} \\
-k_y = \sqrt{I_{yy} / m} \\
-k_z = \sqrt{I_{zz} / m} \\
+k_x & = \sqrt{I_{xx} / m} \\
+k_y & = \sqrt{I_{yy} / m} \\
+k_z & = \sqrt{I_{zz} / m} \\
 \end{align}
 $$ Let
 
@@ -736,7 +736,7 @@ $$
   & \approx \frac{1}{4 m \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 m^3} {\sigma_m}^2 - \frac{1}{2 m^2} \sigma_\boldsymbol{I} \sigma_m \rho_{\boldsymbol{I}m} \\
 \end{align}
 $$
-where $\sigma_{\boldsymbol{I}m}$ is the covariance between $\boldsymbol{I}$ and $m$ and $\rho_{\boldsymbol{I}m}$ is their correlation coefficient. We can choose to assume that $\boldsymbol{I}$ and $m$ are independent, and therefore $\rho_{\boldsymbol{I}m} = 0$, but we can also reason as follows: all else being equal, as the mass of a composite increases, its moments of inertia do not decrease. Therefore $\rho_{\boldsymbol{I}m} \ge 0$. Subject to that constraint and the fact that $\sigma_\boldsymbol{I} \sigma_m m^{-2} \gt 0$, it is clear that the most conservative (i.e., the largest) estimate of ${\sigma_\boldsymbol{k}}^2$ is achieved for $\rho_{\boldsymbol{I}m} = 0$, in which case we have
+where $\sigma_{\boldsymbol{I}m}$ is the covariance between $\boldsymbol{I}$ and $m$ and $\rho_{\boldsymbol{I}m}$ is their correlation coefficient. We can choose to assume that $\boldsymbol{I}$ and $m$ are independent, and therefore $\rho_{\boldsymbol{I}m} = 0$, but we can also reason that, all else being equal, as the mass of a composite increases, its moments of inertia do not decrease. Therefore $\rho_{\boldsymbol{I}m} \ge 0$. Subject to that constraint and the fact that $\sigma_\boldsymbol{I} \sigma_m m^{-2} \gt 0$, it is clear that the most conservative (i.e., the largest) estimate of ${\sigma_\boldsymbol{k}}^2$ is achieved for $\rho_{\boldsymbol{I}m} = 0$, in which case we have
 
 $$
 \begin{align}
