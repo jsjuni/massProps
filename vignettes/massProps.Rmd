@@ -211,7 +211,7 @@ The author has intentionally made no effort to micro-optimize for performance. I
 
 In this section, we state the reference equations [@zimmerman:05:sawe] and show, where applicable, how those equations can be rewritten in more concise form. The form of the equations actually implemented is displayed within a box, e.g. $\boxed{F = ma}$.
 
-The reference uses the word *weight* and the symbol $w$ in equations. We interpret weight as mass. The reference refers to center of mass by its $x$, $y$, and $z$ components. Symbols for moments ($I_{xx}$) and products ($I_{xy}$) of inertia are conventional. Variables with $i$ subscripts designate properties of parts; those without designate properties of aggregates. The letter $\sigma$ denotes uncertainty. $\sigma_w$, for example, is the mass uncertainty.
+The reference uses the word *weight* and the symbol $w$ in equations. We interpret weight as mass. The reference refers to center of mass by its $x$, $y$, and $z$ components. Symbols for moments ($I_{XX}$) and products ($I_{XY}$) of inertia are conventional. Variables with $i$ subscripts designate properties of parts; those without designate properties of aggregates. The letter $\sigma$ denotes uncertainty. $\sigma_w$, for example, is the mass uncertainty.
 
 ## Mass Properties
 
@@ -274,32 +274,32 @@ The corresponding `R` code is
 
 $$
 \begin{align}
-I_{XX} & = 
+I_{XX} & =
   \sum_{i=1}^{n} \left[ {I_{XX}}_i
     + w_i \left( {y}_i^2 + {z}_i^2 \right)
   - w_i \left( \bar{y}^2 + \bar{z}^2 \right)
   \right]
- & = 
+ & =
 \sum_{i=1}^{n} \left\{ {I_{XX}}_i
   + w_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right]
   \right\}
  \\
-I_{YY} & = 
+I_{YY} & =
   \sum_{i=1}^{n} \left[ {I_{YY}}_i
     + w_i \left( {x}_i^2 + {z}_i^2 \right)
   - w_i \left( \bar{x}^2 + \bar{z}^2 \right)
   \right]
- & = 
+ & =
 \sum_{i=1}^{n} \left\{ {I_{YY}}_i
   + w_i \left[ \left( {x}_i - \bar{x} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right]
   \right\}
  \\
-I_{ZZ} & = 
+I_{ZZ} & =
   \sum_{i=1}^{n} \left[ {I_{ZZ}}_i
     + w_i \left( {x}_i^2 + {y}_i^2 \right)
   - w_i \left( \bar{x}^2 + \bar{y}^2 \right)
   \right]
- & = 
+ & =
 \sum_{i=1}^{n} \left\{ {I_{ZZ}}_i
   + w_i \left[ \left( {x}_i - \bar{x} \right)^2 + \left( {y}_i - \bar{y} \right)^2 \right]
   \right\}
@@ -324,9 +324,9 @@ Let $I$ be the inertia tensor of the aggregate and $I_i$ be that of part $i$. Th
 $$
 I =
 \left[ \begin{matrix}
- I_{xx} & -I_{xy} & -I_{xz} \\
--I_{xy} &  I_{yy} & -I_{yz} \\
--I_{xz} & -I_{yz} &  I_{zz} 
+ I_{XX} & -I_{XY} & -I_{XZ} \\
+-I_{XY} &  I_{YY} & -I_{YZ} \\
+-I_{XZ} & -I_{YZ} &  I_{ZZ}
 \end{matrix}
 \right]
 $$
@@ -384,9 +384,9 @@ w_i \begin{bmatrix}
 0                               & -({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 & 0                              \\
 0                               & 0                               &-({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 \\
 \end{bmatrix} \\
-& = 
+& =
 \boldsymbol{I}_i
-- 
+-
 w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{1}_3 \right)
 \end{align}
 $$
@@ -396,7 +396,7 @@ where $\boldsymbol{1}_3$ is the 3 ⨉ 3 identity matrix. Therefore
 $$
 \boxed{
 \boldsymbol{I} = \sum_{i=1}^{n} \left( \boldsymbol{I}_i
-- 
+-
 w_i \boldsymbol{M}_i \right)
 }
 $$
@@ -444,14 +444,14 @@ The corresponding `R` code is
 
 $$
 \begin{align}
-\sigma_x & = 
-  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_y}}_i)^2 + [{\sigma_w}_i ({y}_i - \bar{y})]^2 \right\} } 
+\sigma_X & =
+  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_Y}}_i)^2 + [{\sigma_w}_i ({y}_i - \bar{y})]^2 \right\} }
   \bigg/ \sum_{i=1}^{n}w_i \\
-\sigma_y & = 
-  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_y}}_i)^2 + [{\sigma_w}_i ({y}_i - \bar{y})]^2 \right\} }
+\sigma_Y & =
+  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_Y}}_i)^2 + [{\sigma_w}_i ({y}_i - \bar{y})]^2 \right\} }
  \bigg/ \sum_{i=1}^{n}w_i \\
-\sigma_z & = 
-  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_z}}_i)^2 + [{\sigma_w}_i ({z}_i - \bar{z})]^2 \right\} }
+\sigma_Z & =
+  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_Z}}_i)^2 + [{\sigma_w}_i ({z}_i - \bar{z})]^2 \right\} }
  \bigg/ \sum_{i=1}^{n}w_i \\
 \end{align}
 $$
@@ -461,8 +461,8 @@ As before, we create a 3-vector for center of mass uncertainties. Let
 $$
 \boxed{
 \begin{align}
-\boldsymbol{\sigma_c} & = (\sigma_x \quad \sigma_y \quad \sigma_z)^T \\
-{\boldsymbol{\sigma_c}}_i & = ({\sigma_x}_i \quad {\sigma_y}_i \quad {\sigma_z}_i)^T
+\boldsymbol{\sigma_c} & = (\sigma_X \quad \sigma_Y \quad \sigma_Z)^T \\
+{\boldsymbol{\sigma_c}}_i & = ({\sigma_X}_i \quad {\sigma_Y}_i \quad {\sigma_Z}_i)^T
 \end{align}
 }
 $$
@@ -471,7 +471,7 @@ If we construe (as `R` does) squaring and taking square roots of vectors element
 
 $$
 \boxed{
-\boldsymbol{\sigma_c} = \frac{1}{w} 
+\boldsymbol{\sigma_c} = \frac{1}{w}
   \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\boldsymbol{\sigma_c}}}_i)^2 + [{\sigma_w}_i ({\boldsymbol{c}}_i - \bar{\boldsymbol{c}})]^2 \right\}}
 }
 $$
@@ -530,7 +530,7 @@ $$
 \boxed{
 \begin{align}
 \boldsymbol{d}_i & = (({x}_i - \bar{x}) \quad ({y}_i - \bar{y}) \quad ({z}_i - \bar{z}))^T \\
-{\boldsymbol{\sigma_c}}_i & = ({\sigma_x}_i \quad {\sigma_y}_i \quad {\sigma_z}_i)^T \\
+{\boldsymbol{\sigma_c}}_i & = ({\sigma_X}_i \quad {\sigma_Y}_i \quad {\sigma_Z}_i)^T \\
 \boldsymbol{P}_i & = \boldsymbol{d}_i {\boldsymbol{\sigma_c}}_i^T \\
 \boldsymbol{Q}_i & = \boldsymbol{d}_i {\boldsymbol{d}_i}^T
 \end{align}
@@ -541,7 +541,7 @@ Then
 
 $$
 \begin{align}
-\boldsymbol{P}_i & = 
+\boldsymbol{P}_i & =
 \begin{bmatrix}
 (x_i - \bar{x})\sigma_{x_i} &({x}_i - \bar{x})\sigma_{y_i} &({x}_i - \bar{x})\sigma_{z_i} \\
 ({y}_i - \bar{y})\sigma_{x_i} & ({y}_i - \bar{y})\sigma_{y_i} & ({y}_i - \bar{y})\sigma_{z_i} \\
@@ -567,7 +567,7 @@ $$
 Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $P_i$. Let $\boldsymbol{1}_3$ be the 3 ⨉ 3 identity matrix. If we interpret squaring a matrix as the Hadamard (element-wise) product with itself, then $$
 \begin{align}
 \boldsymbol{s}_i^2 & = {\boldsymbol{\sigma_I}}_i^2 \\
-& + 
+& +
 \begin{bmatrix}
 2 w_i ({y}_i - \bar{y}) \sigma_{y_i} &   w_i({x}_i - \bar{x}) \sigma_{y_i} &   w_i({x}_i - \bar{x}) \sigma_{z_i} \\
   w_i({x}_i - \bar{x}) \sigma_{y_i} & 2 w_i({x}_i - \bar{x}) \sigma_{x_i} &   w_i ({y}_i - \bar{y}) \sigma_{z_i} \\
@@ -634,7 +634,7 @@ $$
 \boxed{
 \boldsymbol{\sigma_I} = \sqrt{
 \sum_{i=1}^{n} {\left\{
-{\boldsymbol{\sigma_I}}_i^2 
+{\boldsymbol{\sigma_I}}_i^2
 +{\boldsymbol{M}_4}_i
 \right\}}
 }
@@ -661,7 +661,7 @@ $$
 {\boldsymbol{M}_3}_i & = \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3 \\
 {\boldsymbol{M}_4}_i & =  w_i^2 \left(
 {{\boldsymbol{M}_1}_i}^2 + {{\boldsymbol{M}_2}_i}^2
-\right) 
+\right)
 + \left( \sigma_{w_i} {\boldsymbol{M}_3}_i
 \right)^2
 \end{align}
@@ -892,30 +892,30 @@ no <- (nv - nl) * 20
 
 Benchmarks were taken on a platform with these CPU characteristics:
 
-```         
+```
 Python Version: 3.12.7.final.0 (64 bit)
 Cpuinfo Version: 9.0.0
-Vendor ID Raw: 
-Hardware Raw: 
+Vendor ID Raw:
+Hardware Raw:
 Brand Raw: Apple M3
-Hz Advertised Friendly: 
+Hz Advertised Friendly:
 Hz Actual Friendly: 2.4000 GHz
-Hz Advertised: 
+Hz Advertised:
 Hz Actual: (2400000000, 0)
 Arch: ARM_8
 Bits: 64
 Count: 8
 Arch String Raw: arm64
-L1 Data Cache Size: 
-L1 Instruction Cache Size: 
-L2 Cache Size: 
-L2 Cache Line Size: 
-L2 Cache Associativity: 
-L3 Cache Size: 
-Stepping: 
-Model: 
+L1 Data Cache Size:
+L1 Instruction Cache Size:
+L2 Cache Size:
+L2 Cache Line Size:
+L2 Cache Associativity:
+L3 Cache Size:
+Stepping:
+Model:
 Family: 6
-Processor Type: 
+Processor Type:
 Flags: acpi, aes, apic, clfsh, cmov, cx16, cx8, de, ds, dscpl, dtse64, est, fpu, fxsr, htt, mca, mce, mmx, mon, msr, mtrr, pae, pat, pbe, pclmulqdq, pdcm, pge, pse, pse36, seglim64, sep, ss, sse, sse2, sse3, sse4.1, sse4.2, ssse3, tm, tm2, tpr, tsc, vme, vmx
 ```
 
@@ -933,7 +933,7 @@ benchmark('mp + unc no validation' = rollup_mass_props_and_unc_fast(mp_tree, mp_
 
 Times reported are in seconds.
 
-```         
+```
                     test replications elapsed user.self sys.self
 4 mp          validation            1   0.840     0.824    0.016
 3 mp       no validation            1   0.604     0.594    0.011
