@@ -694,9 +694,9 @@ By definition:
 
 $$
 \begin{align}
-k_x & = \sqrt{I_{xx} / m} \\
-k_y & = \sqrt{I_{yy} / m} \\
-k_z & = \sqrt{I_{zz} / m} \\
+k_x & = \sqrt{I_{xx} / w} \\
+k_y & = \sqrt{I_{yy} / w} \\
+k_z & = \sqrt{I_{zz} / w} \\
 \end{align}
 $$ Let
 
@@ -711,7 +711,7 @@ $$ Then
 
 $$
 \boxed{
-\boldsymbol{k} = \sqrt{ \boldsymbol{I} / m }
+\boldsymbol{k} = \sqrt{ \boldsymbol{I} / w }
 }
 $$
 
@@ -731,16 +731,16 @@ Then
 
 $$
 \begin{align}
-{\sigma_\boldsymbol{k}}^2 & \approx \left( \frac{\partial \boldsymbol{k}}{\partial \boldsymbol{I}} \right)^2 {\sigma_\boldsymbol{I}}^2 + \left( \frac{\partial \boldsymbol{k}}{\partial m} \right)^2 {\sigma_m}^2 + 2  \frac{\partial \boldsymbol{k}}{\partial \boldsymbol{I}} \frac{\partial \boldsymbol{k}}{\partial m} \sigma_{\boldsymbol{I}m} \\
-  & \approx \left( \frac{1}{2 \sqrt{m \boldsymbol{I}}} \right)^2 {\sigma_\boldsymbol{I}}^2 + \left(\frac{- \sqrt{\boldsymbol{I}}}{2 m^{3/2}}\right)^2 {\sigma_m}^2 + 2 \left( \frac{1}{2 \sqrt{m \boldsymbol{I}}} \right) \left(\frac{- \sqrt{\boldsymbol{I}}}{2 m^{3/2}}\right) \sigma_{\boldsymbol{I}m} \\
-  & \approx \frac{1}{4 m \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 m^3} {\sigma_m}^2 - \frac{1}{2 m^2} \sigma_\boldsymbol{I} \sigma_m \rho_{\boldsymbol{I}m} \\
+{\sigma_\boldsymbol{k}}^2 & \approx \left( \frac{\partial \boldsymbol{k}}{\partial \boldsymbol{I}} \right)^2 {\sigma_\boldsymbol{I}}^2 + \left( \frac{\partial \boldsymbol{k}}{\partial w} \right)^2 {\sigma_w}^2 + 2  \frac{\partial \boldsymbol{k}}{\partial \boldsymbol{I}} \frac{\partial \boldsymbol{k}}{\partial w} \sigma_{\boldsymbol{I}w} \\
+  & \approx \left( \frac{1}{2 \sqrt{w \boldsymbol{I}}} \right)^2 {\sigma_\boldsymbol{I}}^2 + \left(\frac{- \sqrt{\boldsymbol{I}}}{2 w^{3/2}}\right)^2 {\sigma_w}^2 + 2 \left( \frac{1}{2 \sqrt{w \boldsymbol{I}}} \right) \left(\frac{- \sqrt{\boldsymbol{I}}}{2 w^{3/2}}\right) \sigma_{\boldsymbol{I}w} \\
+  & \approx \frac{1}{4 w \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 w^3} {\sigma_w}^2 - \frac{1}{2 w^2} \sigma_\boldsymbol{I} \sigma_w \rho_{\boldsymbol{I}w} \\
 \end{align}
 $$
-where $\sigma_{\boldsymbol{I}m}$ is the covariance between $\boldsymbol{I}$ and $m$ and $\rho_{\boldsymbol{I}m}$ is their correlation coefficient. We can choose to assume that $\boldsymbol{I}$ and $m$ are independent, and therefore $\rho_{\boldsymbol{I}m} = 0$, but we can also note that, all else being equal, as the mass of a composite increases, its moments of inertia do not decrease. Therefore $\rho_{\boldsymbol{I}m} \ge 0$. Subject to that constraint and the fact that $\sigma_\boldsymbol{I} \sigma_m m^{-2} \gt 0$, it is clear that the most conservative (i.e., the largest) estimate of ${\sigma_\boldsymbol{k}}^2$ is achieved for $\rho_{\boldsymbol{I}m} = 0$, in which case we have
+where $\sigma_{\boldsymbol{I}w}$ is the covariance between $\boldsymbol{I}$ and $w$ and $\rho_{\boldsymbol{I}w}$ is their correlation coefficient. We can choose to assume that $\boldsymbol{I}$ and $w$ are independent, and therefore $\rho_{\boldsymbol{I}w} = 0$, but we can also note that, all else being equal, as the mass of a composite increases, its moments of inertia do not decrease. Therefore $\rho_{\boldsymbol{I}w} \ge 0$. Subject to that constraint and the fact that $\sigma_\boldsymbol{I} \sigma_w w^{-2} \gt 0$, it is clear that the most conservative (i.e., the largest) estimate of ${\sigma_\boldsymbol{k}}^2$ is achieved for $\rho_{\boldsymbol{I}w} = 0$, in which case we have
 
 $$
 \begin{align}
-{\sigma_\boldsymbol{k}}^2 & \approx \frac{1}{4 m \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 m^3} {\sigma_m}^2 \\
+{\sigma_\boldsymbol{k}}^2 & \approx \frac{1}{4 w \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 w^3} {\sigma_w}^2 \\
 \end{align}
 $$
 Therefore,
@@ -748,7 +748,7 @@ Therefore,
 $$
 \boxed{
 \begin{align}
-{\sigma_\boldsymbol{k}} & = \frac{1}{2} \sqrt{ \frac{1}{m \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{m^3} {\sigma_m}^2 }
+{\sigma_\boldsymbol{k}} & = \frac{1}{2} \sqrt{ \frac{1}{w \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{w^3} {\sigma_w}^2 }
 \end{align}
 }
 $$
