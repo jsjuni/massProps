@@ -57,7 +57,7 @@ The Mass Property Table must contain the following columns. Other columns may ex
 
 -   `Ipoint` logical indicator that this item is considered a point mass (i.e., its inertia contribution is negligible)[^2]
 
-[^1]: In the negative convention, for example, $I_{XY} \equiv -\int xy \rho \thinspace dV$. In the positive convention, $I_{XY} \equiv \int xy \rho \thinspace dV$.
+[^1]: In the negative convention, for example, $\Ixy \equiv -\int xy \rho \thinspace dV$. In the positive convention, $\Ixy \equiv \int xy \rho \thinspace dV$.
 
 [^2]: The same algebraic result can be achieved by setting all moments and products of inertia to zero, but `rollup_mass_props()` by default ensures that all leaf items in the tree have mass properties that correspond to physically-realizable objects. A zero inertia tensor will fail this check. Rather than relax the check (which is essential for trustworthy results), a `TRUE` value for `Ipoint` indicates that the inertia tensor should be excluded from computations.
 
@@ -185,6 +185,13 @@ The author has intentionally made no effort to micro-optimize for performance. I
 
 \newcommand{\sumwivi}[1]{\sum_{i=1}^{n}{w_i}{{#1}_i}}
 
+\newcommand{\Ixx}{I_{XX}}
+\newcommand{\Iyy}{I_{YY}}
+\newcommand{\Izz}{I_{ZZ}}
+\newcommand{\Ixy}{I_{XY}}
+\newcommand{\Ixz}{I_{XZ}}
+\newcommand{\Iyz}{I_{YZ}}
+
 \newcommand{\moia}[3]{
   \sum_{i=1}^{n} \left[ {I_{#1}}_i
     + w_i \left( {#2}_i^2 + {#3}_i^2 \right)
@@ -211,7 +218,7 @@ The author has intentionally made no effort to micro-optimize for performance. I
 
 In this section, we state the reference equations [@zimmerman:05:sawe] and show, where applicable, how those equations can be rewritten in more concise form. The form of the equations actually implemented is displayed within a box, e.g. $\boxed{F = ma}$.
 
-The reference uses the word *weight* and the symbol $w$ in equations. We interpret weight as mass. The reference refers to center of mass by its $x$, $y$, and $z$ components. Symbols for moments ($I_{xx}$) and products ($I_{xy}$) of inertia are conventional. Variables with $i$ subscripts designate properties of parts; those without designate properties of aggregates. The letter $\sigma$ denotes uncertainty. $\sigma_w$, for example, is the mass uncertainty.
+The reference uses the word *weight* and the symbol $w$ in equations. We interpret weight as mass. The reference refers to center of mass by its $x$, $y$, and $z$ components. Symbols for moments ($\Ixx$) and products ($\Ixy$) of inertia are conventional. Variables with $i$ subscripts designate properties of parts; those without designate properties of aggregates. The letter $\sigma$ denotes uncertainty. $\sigma_w$, for example, is the mass uncertainty.
 
 ## Mass Properties
 
@@ -274,33 +281,33 @@ The corresponding `R` code is
 
 $$
 \begin{align}
-I_{XX} & = 
-  \sum_{i=1}^{n} \left[ {I_{XX}}_i
+\Ixx & =
+  \sum_{i=1}^{n} \left[ {\Ixx}_i
     + w_i \left( {y}_i^2 + {z}_i^2 \right)
   - w_i \left( \bar{y}^2 + \bar{z}^2 \right)
   \right]
- & = 
-\sum_{i=1}^{n} \left\{ {I_{XX}}_i
+ & =
+\sum_{i=1}^{n} \left\{ {\Ixx}_i
   + w_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right]
   \right\}
  \\
-I_{YY} & = 
-  \sum_{i=1}^{n} \left[ {I_{YY}}_i
+\Iyy & =
+  \sum_{i=1}^{n} \left[ {\Iyy}_i
     + w_i \left( {x}_i^2 + {z}_i^2 \right)
   - w_i \left( \bar{x}^2 + \bar{z}^2 \right)
   \right]
- & = 
-\sum_{i=1}^{n} \left\{ {I_{YY}}_i
+ & =
+\sum_{i=1}^{n} \left\{ {\Iyy}_i
   + w_i \left[ \left( {x}_i - \bar{x} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right]
   \right\}
  \\
-I_{ZZ} & = 
-  \sum_{i=1}^{n} \left[ {I_{ZZ}}_i
+\Izz & =
+  \sum_{i=1}^{n} \left[ {\Izz}_i
     + w_i \left( {x}_i^2 + {y}_i^2 \right)
   - w_i \left( \bar{x}^2 + \bar{y}^2 \right)
   \right]
- & = 
-\sum_{i=1}^{n} \left\{ {I_{ZZ}}_i
+ & =
+\sum_{i=1}^{n} \left\{ {\Izz}_i
   + w_i \left[ \left( {x}_i - \bar{x} \right)^2 + \left( {y}_i - \bar{y} \right)^2 \right]
   \right\}
  \\
@@ -311,9 +318,9 @@ $$
 
 $$
 \begin{align}
-I_{XY} & = \sum_{i=1}^{n} \left[ {I_{XY}}_i + w_i {{x}_i}{{y}_i} -w_i (\bar{x}\bar{y})\right] & = \sum_{i=1}^{n} \left[ {I_{XY}}_i + w_i ({x}_i - \bar{x})({y}_i - \bar{y})\right] \\
-I_{XZ} & = \sum_{i=1}^{n} \left[ {I_{XZ}}_i + w_i {{x}_i}{{z}_i} -w_i (\bar{x}\bar{z})\right] & = \sum_{i=1}^{n} \left[ {I_{XZ}}_i + w_i ({x}_i - \bar{x})({z}_i - \bar{z})\right] \\
-I_{YZ} & = \sum_{i=1}^{n} \left[ {I_{YZ}}_i + w_i {{y}_i}{{z}_i} -w_i (\bar{y}\bar{z})\right] & = \sum_{i=1}^{n} \left[ {I_{YZ}}_i + w_i ({y}_i - \bar{y})({z}_i - \bar{z})\right] \\
+\Ixy & = \sum_{i=1}^{n} \left[ {\Ixy}_i + w_i {{x}_i}{{y}_i} -w_i (\bar{x}\bar{y})\right] & = \sum_{i=1}^{n} \left[ {\Ixy}_i + w_i ({x}_i - \bar{x})({y}_i - \bar{y})\right] \\
+\Ixz & = \sum_{i=1}^{n} \left[ {\Ixz}_i + w_i {{x}_i}{{z}_i} -w_i (\bar{x}\bar{z})\right] & = \sum_{i=1}^{n} \left[ {\Ixz}_i + w_i ({x}_i - \bar{x})({z}_i - \bar{z})\right] \\
+\Iyz & = \sum_{i=1}^{n} \left[ {\Iyz}_i + w_i {{y}_i}{{z}_i} -w_i (\bar{y}\bar{z})\right] & = \sum_{i=1}^{n} \left[ {\Iyz}_i + w_i ({y}_i - \bar{y})({z}_i - \bar{z})\right] \\
 \end{align}
 $$
 
@@ -324,9 +331,9 @@ Let $I$ be the inertia tensor of the aggregate and $I_i$ be that of part $i$. Th
 $$
 I =
 \left[ \begin{matrix}
- I_{xx} & -I_{xy} & -I_{xz} \\
--I_{xy} &  I_{yy} & -I_{yz} \\
--I_{xz} & -I_{yz} &  I_{zz} 
+ \Ixx & -\Ixy & -\Ixz \\
+-\Ixy &  \Iyy & -\Iyz \\
+-\Ixz & -\Iyz &  \Izz
 \end{matrix}
 \right]
 $$
@@ -384,9 +391,9 @@ w_i \begin{bmatrix}
 0                               & -({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 & 0                              \\
 0                               & 0                               &-({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 \\
 \end{bmatrix} \\
-& = 
+& =
 \boldsymbol{I}_i
-- 
+-
 w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{1}_3 \right)
 \end{align}
 $$
@@ -396,7 +403,7 @@ where $\boldsymbol{1}_3$ is the 3 ⨉ 3 identity matrix. Therefore
 $$
 \boxed{
 \boldsymbol{I} = \sum_{i=1}^{n} \left( \boldsymbol{I}_i
-- 
+-
 w_i \boldsymbol{M}_i \right)
 }
 $$ where
@@ -443,14 +450,14 @@ The corresponding `R` code is
 
 $$
 \begin{align}
-\sigma_x & = 
-  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_y}}_i)^2 + [{\sigma_w}_i ({y}_i - \bar{y})]^2 \right\} } 
+\sigma_\bar{x} & =
+  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_\bar{x}}}_i)^2 + [{\sigma_w}_i ({x}_i - \bar{x})]^2 \right\} }
   \bigg/ \sum_{i=1}^{n}w_i \\
-\sigma_y & = 
-  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_y}}_i)^2 + [{\sigma_w}_i ({y}_i - \bar{y})]^2 \right\} }
+\sigma_\bar{y} & =
+  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_\bar{y}}}_i)^2 + [{\sigma_w}_i ({y}_i - \bar{y})]^2 \right\} }
  \bigg/ \sum_{i=1}^{n}w_i \\
-\sigma_z & = 
-  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_z}}_i)^2 + [{\sigma_w}_i ({z}_i - \bar{z})]^2 \right\} }
+\sigma_\bar{z} & =
+  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_\bar{z}}}_i)^2 + [{\sigma_w}_i ({z}_i - \bar{z})]^2 \right\} }
  \bigg/ \sum_{i=1}^{n}w_i \\
 \end{align}
 $$
@@ -460,8 +467,8 @@ As before, we create a 3-vector for center of mass uncertainties. Let
 $$
 \boxed{
 \begin{align}
-\boldsymbol{\sigma_c} & = (\sigma_x \quad \sigma_y \quad \sigma_z)^T \\
-{\boldsymbol{\sigma_c}}_i & = ({\sigma_x}_i \quad {\sigma_y}_i \quad {\sigma_z}_i)^T
+\boldsymbol{\sigma_c} & = (\sigma_\bar{x} \quad \sigma_\bar{y} \quad \sigma_\bar{z})^T \\
+{\boldsymbol{\sigma_c}}_i & = ({\sigma_\bar{x}}_i \quad {\sigma_\bar{y}}_i \quad {\sigma_\bar{z}}_i)^T
 \end{align}
 }
 $$
@@ -470,7 +477,7 @@ If we construe (as `R` does) squaring and taking square roots of vectors element
 
 $$
 \boxed{
-\boldsymbol{\sigma_c} = \frac{1}{w} 
+\boldsymbol{\sigma_c} = \frac{1}{w}
   \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\boldsymbol{\sigma_c}}}_i)^2 + [{\sigma_w}_i ({\boldsymbol{c}}_i - \bar{\boldsymbol{c}})]^2 \right\}}
 }
 $$
@@ -493,14 +500,14 @@ The corresponding `R` code is
 
 $$
 \begin{align}
-\sigma_{I_{XX}} & = \sqrt{ \sum_{i=1}^n \big\{
-  \sigma_{{I_{XX}}_i}^2 + \big[ 2 w_i ({y}_i - \bar{y}) \sigma_{{y}_i} \big]^2 + \big[ 2 w_i ({z}_i - \bar{z}) \sigma_{{z}_i} \big]^2 + \big[ \big(({y}_i - \bar{y})^2 + ({z}_i - \bar{z})^2 \big)\sigma_{w_i}\big]^2 \big\} }
+\sigma_{\Ixx} & = \sqrt{ \sum_{i=1}^n \big\{
+  \sigma_{{\Ixx}_i}^2 + \big[ 2 w_i ({y}_i - \bar{y}) \sigma_{{y}_i} \big]^2 + \big[ 2 w_i ({z}_i - \bar{z}) \sigma_{{z}_i} \big]^2 + \big[ \big(({y}_i - \bar{y})^2 + ({z}_i - \bar{z})^2 \big)\sigma_{w_i}\big]^2 \big\} }
  \\
-\sigma_{I_{YY}} & = \sqrt{ \sum_{i=1}^n \big\{
-  \sigma_{{I_{YY}}_i}^2 + \big[ 2 w_i ({x}_i - \bar{x}) \sigma_{{x}_i} \big]^2 + \big[ 2 w_i ({z}_i - \bar{z}) \sigma_{{z}_i} \big]^2 + \big[ \big(({x}_i - \bar{x})^2 + ({z}_i - \bar{z})^2 \big)\sigma_{w_i}\big]^2 \big\} }
+\sigma_{\Iyy} & = \sqrt{ \sum_{i=1}^n \big\{
+  \sigma_{{\Iyy}_i}^2 + \big[ 2 w_i ({x}_i - \bar{x}) \sigma_{{x}_i} \big]^2 + \big[ 2 w_i ({z}_i - \bar{z}) \sigma_{{z}_i} \big]^2 + \big[ \big(({x}_i - \bar{x})^2 + ({z}_i - \bar{z})^2 \big)\sigma_{w_i}\big]^2 \big\} }
  \\
-\sigma_{I_{ZZ}} & = \sqrt{ \sum_{i=1}^n \big\{
-  \sigma_{{I_{ZZ}}_i}^2 + \big[ 2 w_i ({x}_i - \bar{x}) \sigma_{{x}_i} \big]^2 + \big[ 2 w_i ({y}_i - \bar{y}) \sigma_{{y}_i} \big]^2 + \big[ \big(({x}_i - \bar{x})^2 + ({y}_i - \bar{y})^2 \big)\sigma_{w_i}\big]^2 \big\} }
+\sigma_{\Izz} & = \sqrt{ \sum_{i=1}^n \big\{
+  \sigma_{{\Izz}_i}^2 + \big[ 2 w_i ({x}_i - \bar{x}) \sigma_{{x}_i} \big]^2 + \big[ 2 w_i ({y}_i - \bar{y}) \sigma_{{y}_i} \big]^2 + \big[ \big(({x}_i - \bar{x})^2 + ({y}_i - \bar{y})^2 \big)\sigma_{w_i}\big]^2 \big\} }
  \\
 \end{align}
 $$
@@ -509,14 +516,14 @@ $$
 
 $$
 \begin{align}
-\sigma_{I_{XY}} & = \sqrt{ \sum_{i=1}^n \big\{
-  \sigma_{{I_{XY}}_i}^2 + \big[ ({x}_i - \bar{x}) w_i \sigma_{{y}_i}\big]^2 + \big[  ({x}_i - \bar{x})({y}_i - \bar{y})\sigma_{w_i} \big]^2 + \big[ ({y}_i - \bar{y})  w_i \sigma_{{x}_i} \big]^2 \big\} }
+\sigma_{\Ixy} & = \sqrt{ \sum_{i=1}^n \big\{
+  \sigma_{{\Ixy}_i}^2 + \big[ ({x}_i - \bar{x}) w_i \sigma_{{y}_i}\big]^2 + \big[  ({x}_i - \bar{x})({y}_i - \bar{y})\sigma_{w_i} \big]^2 + \big[ ({y}_i - \bar{y})  w_i \sigma_{{x}_i} \big]^2 \big\} }
  \\
-\sigma_{I_{XZ}} & = \sqrt{ \sum_{i=1}^n \big\{
-  \sigma_{{I_{XZ}}_i}^2 + \big[ ({x}_i - \bar{x}) w_i \sigma_{{z}_i}\big]^2 + \big[  ({x}_i - \bar{x})({z}_i - \bar{z})\sigma_{w_i} \big]^2 + \big[ ({z}_i - \bar{z})  w_i \sigma_{{x}_i} \big]^2 \big\} }
+\sigma_{\Ixz} & = \sqrt{ \sum_{i=1}^n \big\{
+  \sigma_{{\Ixz}_i}^2 + \big[ ({x}_i - \bar{x}) w_i \sigma_{{z}_i}\big]^2 + \big[  ({x}_i - \bar{x})({z}_i - \bar{z})\sigma_{w_i} \big]^2 + \big[ ({z}_i - \bar{z})  w_i \sigma_{{x}_i} \big]^2 \big\} }
  \\
-\sigma_{I_{YZ}} & = \sqrt{ \sum_{i=1}^n \big\{
-  \sigma_{{I_{YZ}}_i}^2 + \big[ ({y}_i - \bar{y}) w_i \sigma_{{z}_i}\big]^2 + \big[  ({y}_i - \bar{y})({z}_i - \bar{z})\sigma_{w_i} \big]^2 + \big[ ({z}_i - \bar{z})  w_i \sigma_{{y}_i} \big]^2 \big\} }
+\sigma_{\Iyz} & = \sqrt{ \sum_{i=1}^n \big\{
+  \sigma_{{\Iyz}_i}^2 + \big[ ({y}_i - \bar{y}) w_i \sigma_{{z}_i}\big]^2 + \big[  ({y}_i - \bar{y})({z}_i - \bar{z})\sigma_{w_i} \big]^2 + \big[ ({z}_i - \bar{z})  w_i \sigma_{{y}_i} \big]^2 \big\} }
  \\
 \end{align}
 $$
@@ -529,7 +536,7 @@ $$
 \boxed{
 \begin{align}
 \boldsymbol{d}_i & = (({x}_i - \bar{x}) \quad ({y}_i - \bar{y}) \quad ({z}_i - \bar{z}))^T \\
-{\boldsymbol{\sigma_c}}_i & = ({\sigma_x}_i \quad {\sigma_y}_i \quad {\sigma_z}_i)^T \\
+{\boldsymbol{\sigma_c}}_i & = ({\sigma_\bar{x}}_i \quad {\sigma_\bar{y}}_i \quad {\sigma_\bar{z}}_i)^T \\
 \boldsymbol{P}_i & = \boldsymbol{d}_i {\boldsymbol{\sigma_c}}_i^T \\
 \boldsymbol{Q}_i & = \boldsymbol{d}_i {\boldsymbol{d}_i}^T
 \end{align}
@@ -540,7 +547,7 @@ Then
 
 $$
 \begin{align}
-\boldsymbol{P}_i & = 
+\boldsymbol{P}_i & =
 \begin{bmatrix}
 (x_i - \bar{x})\sigma_{x_i} &({x}_i - \bar{x})\sigma_{y_i} &({x}_i - \bar{x})\sigma_{z_i} \\
 ({y}_i - \bar{y})\sigma_{x_i} & ({y}_i - \bar{y})\sigma_{y_i} & ({y}_i - \bar{y})\sigma_{z_i} \\
@@ -566,7 +573,7 @@ $$
 Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $P_i$. Let $\boldsymbol{1}_3$ be the 3 ⨉ 3 identity matrix. If we interpret squaring a matrix as the Hadamard (element-wise) product with itself, then $$
 \begin{align}
 \boldsymbol{s}_i^2 & = {\boldsymbol{\sigma_I}}_i^2 \\
-& + 
+& +
 \begin{bmatrix}
 2 w_i ({y}_i - \bar{y}) \sigma_{y_i} &   w_i({x}_i - \bar{x}) \sigma_{y_i} &   w_i({x}_i - \bar{x}) \sigma_{z_i} \\
   w_i({x}_i - \bar{x}) \sigma_{y_i} & 2 w_i({x}_i - \bar{x}) \sigma_{x_i} &   w_i ({y}_i - \bar{y}) \sigma_{z_i} \\
@@ -630,15 +637,13 @@ $$
 Finally,
 
 $$
+\boxed{
 \boldsymbol{\sigma_I} = \sqrt{
 \sum_{i=1}^{n} {\left\{
-{\boldsymbol{\sigma_I}}_i^2 
-+ w_i^2 \left(
-{{\boldsymbol{M}_1}_i}^2 + {{\boldsymbol{M}_2}_i}^2
-\right) 
-+ \left( \sigma_{w_i} {\boldsymbol{M}_3}_i
-\right)^2
+{\boldsymbol{\sigma_I}}_i^2
++{\boldsymbol{M}_4}_i
 \right\}}
+}
 }
 $$
 
@@ -647,19 +652,24 @@ where
 $$
 \boxed{
 \begin{align}
-{\boldsymbol{M}_1}_i & = \boldsymbol{P}_i -
+{\boldsymbol{M}_1}_i & = \boldsymbol{P}_i - 
 \begin{bmatrix}
-{p_X}_i - 2 {p_Y}_i & 0 & 0 \\
-0 & {p_Y}_i - 2 {p_X}_i & 0 \\
-0 & 0 & {p_Z}_i - 2  {p_X}_i \\
+{p_X}_i - 2{p_Y}_i & 0 & 0 \\
+0 & {p_Y}_i - 2{p_X}_i & 0 \\
+0 & 0 & 2{p_Z}_i - 2{p_X}_i \\
 \end{bmatrix} \\
 {\boldsymbol{M}_2}_i & = \boldsymbol{P}_i^T -
 \begin{bmatrix}
- {p_X}_i - 2{p_Z}_i & 0 & 0 \\
-0 & {p_Y}_i - 2 {p_Z}_i & 0 \\
-0 & 0 & {p_Z}_i - 2 {p_Y}_i \\
+{p_X}_i - 2{p_Z}_i & 0 & 0 \\
+0 & {p_Y}_i - 2{p_Z}_i & 0 \\
+0 & 0 & 2{p_Z}_i - 2{p_Y}_i \\
 \end{bmatrix} \\
-{\boldsymbol{M}_3}_i & = \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3
+{\boldsymbol{M}_3}_i & = \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3 \\
+{\boldsymbol{M}_4}_i & =  w_i^2 \left(
+{{\boldsymbol{M}_1}_i}^2 + {{\boldsymbol{M}_2}_i}^2
+\right)
++ \left( \sigma_{w_i} {\boldsymbol{M}_3}_i
+\right)^2
 \end{align}
 }
 $$
@@ -673,13 +683,13 @@ The corresponding `R` code is
       d <- v$center_mass - amp$center_mass
 
       P <- outer(d, v$sigma_center_mass)
-      p <- as.list(diag(P))
+      p <- diag(P)
 
       Q <- outer(d, d)
 
-      M1 <-   P  - diag(c(p$x - 2 * p$y, p$y - 2 * p$x, p$z - 2 * p$x))
-      M2 <- t(P) - diag(c(p$x - 2 * p$z, p$y - 2 * p$z, p$z - 2 * p$y))
-      M3 <- Q - sum(diag(Q)) * diag(3)
+      M1 <-   P  - diag(p - 2 * p[c("y", "x", "x")])
+      M2 <- t(P) - diag(p - 2 * p[c("z", "z", "y")])
+      M3 <-   Q  - sum(diag(Q)) * diag(3)
       M4 <- v$mass^2 * (M1^2 + M2^2) + (v$sigma_mass * M3)^2
 
       if (v$point) M4 else v$sigma_inertia^2 + M4
@@ -998,30 +1008,30 @@ no <- (nv - nl) * 20
 
 Benchmarks were taken on a platform with these CPU characteristics:
 
-```         
+```
 Python Version: 3.12.7.final.0 (64 bit)
 Cpuinfo Version: 9.0.0
-Vendor ID Raw: 
-Hardware Raw: 
+Vendor ID Raw:
+Hardware Raw:
 Brand Raw: Apple M3
-Hz Advertised Friendly: 
+Hz Advertised Friendly:
 Hz Actual Friendly: 2.4000 GHz
-Hz Advertised: 
+Hz Advertised:
 Hz Actual: (2400000000, 0)
 Arch: ARM_8
 Bits: 64
 Count: 8
 Arch String Raw: arm64
-L1 Data Cache Size: 
-L1 Instruction Cache Size: 
-L2 Cache Size: 
-L2 Cache Line Size: 
-L2 Cache Associativity: 
-L3 Cache Size: 
-Stepping: 
-Model: 
+L1 Data Cache Size:
+L1 Instruction Cache Size:
+L2 Cache Size:
+L2 Cache Line Size:
+L2 Cache Associativity:
+L3 Cache Size:
+Stepping:
+Model:
 Family: 6
-Processor Type: 
+Processor Type:
 Flags: acpi, aes, apic, clfsh, cmov, cx16, cx8, de, ds, dscpl, dtse64, est, fpu, fxsr, htt, mca, mce, mmx, mon, msr, mtrr, pae, pat, pbe, pclmulqdq, pdcm, pge, pse, pse36, seglim64, sep, ss, sse, sse2, sse3, sse4.1, sse4.2, ssse3, tm, tm2, tpr, tsc, vme, vmx
 ```
 
@@ -1039,7 +1049,7 @@ benchmark('mp + unc no validation' = rollup_mass_props_and_unc_fast(mp_tree, mp_
 
 Times reported are in seconds.
 
-```         
+```
                     test replications elapsed user.self sys.self
 4 mp          validation            1   0.840     0.824    0.016
 3 mp       no validation            1   0.604     0.594    0.011

@@ -359,13 +359,13 @@ combine_mass_props_unc <- function(mpl, amp) {
       d <- v$center_mass - amp$center_mass
 
       P <- outer(d, v$sigma_center_mass)
-      p <- as.list(diag(P))
+      p <- diag(P)
 
       Q <- outer(d, d)
 
-      M1 <-   P  - diag(c(p$x - 2 * p$y, p$y - 2 * p$x, p$z - 2 * p$x))
-      M2 <- t(P) - diag(c(p$x - 2 * p$z, p$y - 2 * p$z, p$z - 2 * p$y))
-      M3 <- Q - sum(diag(Q)) * diag(3)
+      M1 <-   P  - diag(p - 2 * p[c("y", "x", "x")])
+      M2 <- t(P) - diag(p - 2 * p[c("z", "z", "y")])
+      M3 <-   Q  - sum(diag(Q)) * diag(3)
       M4 <- v$mass^2 * (M1^2 + M2^2) + (v$sigma_mass * M3)^2
 
       if (v$point) M4 else v$sigma_inertia^2 + M4
