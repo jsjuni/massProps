@@ -198,22 +198,26 @@ The author has intentionally made no effort to micro-optimize for performance. I
   - w_i \left( \bar{#2}^2 + \bar{#3}^2 \right)
   \right]
 }
+
 \newcommand{\moib}[3]{
 \sum_{i=1}^{n} \left\{ {I_{#1}}_i
   + w_i \left[ \left( {#2}_i - \bar{#2} \right)^2 + \left( {#3}_i - \bar{#3} \right)^2 \right]
   \right\}
 }
+
 \newcommand{\di}[1]{({#1}_i - \bar{#1})}
+
 \newcommand{\poia}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i {{#2}_i}{{#3}_i} -w_i (\bar{#2}\bar{#3})\right]}
 \newcommand{\poib}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i \di{#2}\di{#3}\right]}
-\newcommand{\sigmacm}[2]{
-  \sqrt{ \sum_{i=1}^n \big\{ (w_i {{#1}}_i)^2 + [{\sigma_w}_i \di{#2}]^2 \big\}}
+\newcommand{\sigmacm}[1]{
+  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_\bar{#1}}}_i)^2 + [{\sigma_w}_i \di{#1}]^2 \right\} }
+  \bigg/ \sum_{i=1}^{n}w_i \\
 }
-\newcommand{\sigmamoi}[3]{\sqrt{ \sum_{i=1}^n \big\{
-  \sigma_{{I_{#1}}_i}^2 + \big[ 2 w_i \di{#2} \sigma_{{#2}_i} \big]^2 + \big[ 2 w_i \di{#3} \sigma_{{#3}_i} \big]^2 + \big[ \big(\di{#2}^2 + \di{#3}^2 \big)\sigma_{w_i}\big]^2 \big\} }
+\newcommand{\sigmamoi}[3]{\sqrt{ \sum_{i=1}^n \left\{
+  \sigma_{{I_{#1}}_i}^2 + \left[ 2 w_i \di{#2} \sigma_{{#2}_i} \right]^2 + \left[ 2 w_i \di{#3} \sigma_{{#3}_i} \right]^2 + \left[ \left(\di{#2}^2 + \di{#3}^2 \right)\sigma_{w_i}\right]^2 \right\} }
 }
-\newcommand{\sigmapoi}[3]{\sqrt{ \sum_{i=1}^n \big\{
-  \sigma_{{I_{#1}}_i}^2 + \big[ \di{#2} w_i \sigma_{{#3}_i}\big]^2 + \big[  \di{#2}\di{#3}\sigma_{w_i} \big]^2 + \big[ \di{#3}  w_i \sigma_{{#2}_i} \big]^2 \big\} }
+\newcommand{\sigmapoi}[3]{\sqrt{ \sum_{i=1}^n \left\{
+  \sigma_{{I_{#1}}_i}^2 + \left[ \di{#2} w_i \sigma_{{#3}_i}\right]^2 + \left[ \di{#2}\di{#3}\sigma_{w_i} \right]^2 + \left[ \di{#3}  w_i \sigma_{{#2}_i} \right]^2 \right\} }
 }
 
 In this section, we state the reference equations [@zimmerman:05:sawe] and show, where applicable, how those equations can be rewritten in more concise form. The form of the equations actually implemented is displayed within a box, e.g. $\boxed{F = ma}$.
@@ -281,36 +285,9 @@ The corresponding `R` code is
 
 $$
 \begin{align}
-\Ixx & =
-  \sum_{i=1}^{n} \left[ {\Ixx}_i
-    + w_i \left( {y}_i^2 + {z}_i^2 \right)
-  - w_i \left( \bar{y}^2 + \bar{z}^2 \right)
-  \right]
- & =
-\sum_{i=1}^{n} \left\{ {\Ixx}_i
-  + w_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right]
-  \right\}
- \\
-\Iyy & =
-  \sum_{i=1}^{n} \left[ {\Iyy}_i
-    + w_i \left( {x}_i^2 + {z}_i^2 \right)
-  - w_i \left( \bar{x}^2 + \bar{z}^2 \right)
-  \right]
- & =
-\sum_{i=1}^{n} \left\{ {\Iyy}_i
-  + w_i \left[ \left( {x}_i - \bar{x} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right]
-  \right\}
- \\
-\Izz & =
-  \sum_{i=1}^{n} \left[ {\Izz}_i
-    + w_i \left( {x}_i^2 + {y}_i^2 \right)
-  - w_i \left( \bar{x}^2 + \bar{y}^2 \right)
-  \right]
- & =
-\sum_{i=1}^{n} \left\{ {\Izz}_i
-  + w_i \left[ \left( {x}_i - \bar{x} \right)^2 + \left( {y}_i - \bar{y} \right)^2 \right]
-  \right\}
- \\
+\Ixx & = \moia{XX}{y}{z}  & = \moib{XX}{y}{z} \\
+\Iyy & = \moia{YY}{x}{z}  & = \moib{YY}{x}{z} \\
+\Izz & = \moia{ZZ}{x}{y}  & = \moib{ZZ}{x}{y} \\
 \end{align}
 $$
 
@@ -318,9 +295,9 @@ $$
 
 $$
 \begin{align}
-\Ixy & = \sum_{i=1}^{n} \left[ {\Ixy}_i + w_i {{x}_i}{{y}_i} -w_i (\bar{x}\bar{y})\right] & = \sum_{i=1}^{n} \left[ {\Ixy}_i + w_i ({x}_i - \bar{x})({y}_i - \bar{y})\right] \\
-\Ixz & = \sum_{i=1}^{n} \left[ {\Ixz}_i + w_i {{x}_i}{{z}_i} -w_i (\bar{x}\bar{z})\right] & = \sum_{i=1}^{n} \left[ {\Ixz}_i + w_i ({x}_i - \bar{x})({z}_i - \bar{z})\right] \\
-\Iyz & = \sum_{i=1}^{n} \left[ {\Iyz}_i + w_i {{y}_i}{{z}_i} -w_i (\bar{y}\bar{z})\right] & = \sum_{i=1}^{n} \left[ {\Iyz}_i + w_i ({y}_i - \bar{y})({z}_i - \bar{z})\right] \\
+\Ixy & = \poia{XY}{x}{y} & = \poib{XY}{x}{y} \\
+\Ixz & = \poia{XZ}{x}{z} & = \poib{XZ}{x}{z} \\
+\Iyz & = \poia{YZ}{y}{z} & = \poib{YZ}{y}{z} \\
 \end{align}
 $$
 
@@ -340,12 +317,12 @@ $$
 
 and similarly for $I_i$.
 
-Noting the repeated appearance of terms of the form $({x}_i - \bar{x})({y}_i - \bar{y})$, we form the outer product
+Noting the repeated appearance of terms of the form $\di{x}\di{y}$, we form the outer product
 
 $$
 \boxed{
 \begin{align}
-\boldsymbol{d}_i & = (({x}_i - \bar{x}) \quad ({y}_i - \bar{y}) \quad ({z}_i - \bar{z}))^T \\
+\boldsymbol{d}_i & = (\di{x} \quad \di{y} \quad \di{z})^T \\
 \boldsymbol{Q}_i & = \boldsymbol{d}_i {\boldsymbol{d}_i}^T
 \end{align}
 }
@@ -355,9 +332,9 @@ $$
 \begin{align}
 \boldsymbol{Q}_i & =
 \begin{bmatrix}
-({x}_i - \bar{x})^2     & ({x}_i - \bar{x})({y}_i - \bar{y}) & ({x}_i - \bar{x})({z}_i - \bar{z}) \\
-({y}_i - \bar{y})({x}_i - \bar{x}) & ({y}_i - \bar{y})^2     & ({y}_i - \bar{y})({z}_i - \bar{z}) \\
-({z}_i - \bar{z})({x}_i - \bar{x}) & ({z}_i - \bar{z})({y}_i - \bar{y}) & ({z}_i - \bar{z})^2     \\
+\di{x}^2     & \di{x}\di{y} & \di{x}\di{z} \\
+\di{y}\di{x} & \di{y}^2     & \di{y}\di{z} \\
+\di{z}\di{x} & \di{z}\di{y} & \di{z}^2     \\
 \end{bmatrix}
 \end{align}
 $$
@@ -373,23 +350,23 @@ where $$
 \boldsymbol{s}_i & = \boldsymbol{I}_i \\
 & -
 w_i \begin{bmatrix}
--({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 & ({x}_i - \bar{x})({y}_i - \bar{y})         & ({x}_i - \bar{x})({z}_i - \bar{z})         \\
-({x}_i - \bar{x})({y}_i - \bar{y})         & -({x}_i - \bar{x})^2 - ({z}_i - \bar{z})^2 &  ({y}_i - \bar{y})({z}_i - \bar{z})        \\
-({x}_i - \bar{x})({z}_i - \bar{z})         & ({y}_i - \bar{y})({z}_i - \bar{z})         & -({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 \\
+-\di{y}^2 - \di{z}^2 & \di{x}\di{y}         & \di{x}\di{z}         \\
+\di{x}\di{y}         & -\di{x}^2 - \di{z}^2 &  \di{y}\di{z}        \\
+\di{x}\di{z}         & \di{y}\di{z}         & -\di{x}^2 - \di{y}^2 \\
 \end{bmatrix} \\
 & =
 \boldsymbol{I}_i \\
 & -
 w_i \begin{bmatrix}
-({x}_i - \bar{x})^2     & ({x}_i - \bar{x})({y}_i - \bar{y}) & ({x}_i - \bar{x})({z}_i - \bar{z}) \\
-({x}_i - \bar{x})({y}_i - \bar{y}) & ({y}_i - \bar{y})^2     & ({y}_i - \bar{y})({z}_i - \bar{z}) \\
-({x}_i - \bar{x})({z}_i - \bar{z}) & ({y}_i - \bar{y})({z}_i - \bar{z}) & ({z}_i - \bar{z})^2     \\
+\di{x}^2     & \di{x}\di{y} & \di{x}\di{z} \\
+\di{x}\di{y} & \di{y}^2     & \di{y}\di{z} \\
+\di{x}\di{z} & \di{y}\di{z} & \di{z}^2     \\
 \end{bmatrix} \\
 & -
 w_i \begin{bmatrix}
--({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 & 0                               & 0                              \\
-0                               & -({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 & 0                              \\
-0                               & 0                               &-({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 \\
+-\di{x}^2 - \di{y}^2 - \di{z}^2 & 0                               & 0                              \\
+0                               & -\di{x}^2 - \di{y}^2 - \di{z}^2 & 0                              \\
+0                               & 0                               &-\di{x}^2 - \di{y}^2 - \di{z}^2 \\
 \end{bmatrix} \\
 & =
 \boldsymbol{I}_i
@@ -451,15 +428,9 @@ The corresponding `R` code is
 
 $$
 \begin{align}
-\sigma_\bar{x} & =
-  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_\bar{x}}}_i)^2 + [{\sigma_w}_i ({x}_i - \bar{x})]^2 \right\} }
-  \bigg/ \sum_{i=1}^{n}w_i \\
-\sigma_\bar{y} & =
-  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_\bar{y}}}_i)^2 + [{\sigma_w}_i ({y}_i - \bar{y})]^2 \right\} }
- \bigg/ \sum_{i=1}^{n}w_i \\
-\sigma_\bar{z} & =
-  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_\bar{z}}}_i)^2 + [{\sigma_w}_i ({z}_i - \bar{z})]^2 \right\} }
- \bigg/ \sum_{i=1}^{n}w_i \\
+\sigma_\bar{x} & = \sigmacm{x} \\
+\sigma_\bar{y} & = \sigmacm{y} \\
+\sigma_\bar{z} & = \sigmacm{z} \\
 \end{align}
 $$
 
@@ -501,15 +472,9 @@ The corresponding `R` code is
 
 $$
 \begin{align}
-\sigma_{\Ixx} & = \sqrt{ \sum_{i=1}^n \big\{
-  \sigma_{{\Ixx}_i}^2 + \big[ 2 w_i ({y}_i - \bar{y}) \sigma_{{y}_i} \big]^2 + \big[ 2 w_i ({z}_i - \bar{z}) \sigma_{{z}_i} \big]^2 + \big[ \big(({y}_i - \bar{y})^2 + ({z}_i - \bar{z})^2 \big)\sigma_{w_i}\big]^2 \big\} }
- \\
-\sigma_{\Iyy} & = \sqrt{ \sum_{i=1}^n \big\{
-  \sigma_{{\Iyy}_i}^2 + \big[ 2 w_i ({x}_i - \bar{x}) \sigma_{{x}_i} \big]^2 + \big[ 2 w_i ({z}_i - \bar{z}) \sigma_{{z}_i} \big]^2 + \big[ \big(({x}_i - \bar{x})^2 + ({z}_i - \bar{z})^2 \big)\sigma_{w_i}\big]^2 \big\} }
- \\
-\sigma_{\Izz} & = \sqrt{ \sum_{i=1}^n \big\{
-  \sigma_{{\Izz}_i}^2 + \big[ 2 w_i ({x}_i - \bar{x}) \sigma_{{x}_i} \big]^2 + \big[ 2 w_i ({y}_i - \bar{y}) \sigma_{{y}_i} \big]^2 + \big[ \big(({x}_i - \bar{x})^2 + ({y}_i - \bar{y})^2 \big)\sigma_{w_i}\big]^2 \big\} }
- \\
+\sigma_{\Ixx} & = \sigmamoi{XX}{y}{z} \\
+\sigma_{\Iyy} & = \sigmamoi{YY}{x}{z} \\
+\sigma_{\Izz} & = \sigmamoi{ZZ}{x}{y} \\
 \end{align}
 $$
 
@@ -517,15 +482,9 @@ $$
 
 $$
 \begin{align}
-\sigma_{\Ixy} & = \sqrt{ \sum_{i=1}^n \big\{
-  \sigma_{{\Ixy}_i}^2 + \big[ ({x}_i - \bar{x}) w_i \sigma_{{y}_i}\big]^2 + \big[  ({x}_i - \bar{x})({y}_i - \bar{y})\sigma_{w_i} \big]^2 + \big[ ({y}_i - \bar{y})  w_i \sigma_{{x}_i} \big]^2 \big\} }
- \\
-\sigma_{\Ixz} & = \sqrt{ \sum_{i=1}^n \big\{
-  \sigma_{{\Ixz}_i}^2 + \big[ ({x}_i - \bar{x}) w_i \sigma_{{z}_i}\big]^2 + \big[  ({x}_i - \bar{x})({z}_i - \bar{z})\sigma_{w_i} \big]^2 + \big[ ({z}_i - \bar{z})  w_i \sigma_{{x}_i} \big]^2 \big\} }
- \\
-\sigma_{\Iyz} & = \sqrt{ \sum_{i=1}^n \big\{
-  \sigma_{{\Iyz}_i}^2 + \big[ ({y}_i - \bar{y}) w_i \sigma_{{z}_i}\big]^2 + \big[  ({y}_i - \bar{y})({z}_i - \bar{z})\sigma_{w_i} \big]^2 + \big[ ({z}_i - \bar{z})  w_i \sigma_{{y}_i} \big]^2 \big\} }
- \\
+\sigma_{\Ixy} & = \sigmapoi{XY}{x}{y} \\
+\sigma_{\Ixz} & = \sigmapoi{XZ}{x}{z} \\
+\sigma_{\Iyz} & = \sigmapoi{YZ}{y}{z} \\
 \end{align}
 $$
 
@@ -536,7 +495,7 @@ Let
 $$
 \boxed{
 \begin{align}
-\boldsymbol{d}_i & = (({x}_i - \bar{x}) \quad ({y}_i - \bar{y}) \quad ({z}_i - \bar{z}))^T \\
+\boldsymbol{d}_i & = (\di{x} \quad \di{y} \quad \di{z})^T \\
 {\boldsymbol{\sigma_c}}_i & = ({\sigma_\bar{x}}_i \quad {\sigma_\bar{y}}_i \quad {\sigma_\bar{z}}_i)^T \\
 \boldsymbol{P}_i & = \boldsymbol{d}_i {\boldsymbol{\sigma_c}}_i^T \\
 \boldsymbol{Q}_i & = \boldsymbol{d}_i {\boldsymbol{d}_i}^T
@@ -550,17 +509,17 @@ $$
 \begin{align}
 \boldsymbol{P}_i & =
 \begin{bmatrix}
-(x_i - \bar{x})\sigma_{x_i} &({x}_i - \bar{x})\sigma_{y_i} &({x}_i - \bar{x})\sigma_{z_i} \\
-({y}_i - \bar{y})\sigma_{x_i} & ({y}_i - \bar{y})\sigma_{y_i} & ({y}_i - \bar{y})\sigma_{z_i} \\
-({z}_i - \bar{z})\sigma_{x_i} & ({z}_i - \bar{z})\sigma_{y_i} & ({z}_i - \bar{z})\sigma_{z_i} \\
+\di{x}\sigma_{x_i} &\di{x}\sigma_{y_i} &\di{x}\sigma_{z_i} \\
+\di{y}\sigma_{x_i} & \di{y}\sigma_{y_i} & \di{y}\sigma_{z_i} \\
+\di{z}\sigma_{x_i} & \di{z}\sigma_{y_i} & \di{z}\sigma_{z_i} \\
 \end{bmatrix}
 \\
 \\
 \boldsymbol{Q}_i & =
 \begin{bmatrix}
-(x_i - \bar{x})^2 &({x}_i - \bar{x})({y}_i - \bar{y}) &({x}_i - \bar{x})({z}_i - \bar{z}) \\
-({y}_i - \bar{y})(x_i - \bar{x}) & ({y}_i - \bar{y})^2 & ({y}_i - \bar{y})({z}_i - \bar{z}) \\
-({z}_i - \bar{z})(x_i - \bar{x}) & ({z}_i - \bar{z})({y}_i - \bar{y}) & ({z}_i - \bar{z})^2 \\
+\di{x}^2 &\di{x}\di{y} &\di{x}\di{z} \\
+\di{y}\di{x} & \di{y}^2 & \di{y}\di{z} \\
+\di{z}\di{x} & \di{z}\di{y} & \di{z}^2 \\
 \end{bmatrix}
 \end{align}
 $$
@@ -576,37 +535,37 @@ Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $
 \boldsymbol{s}_i^2 & = {\boldsymbol{\sigma_I}}_i^2 \\
 & +
 \begin{bmatrix}
-2 w_i ({y}_i - \bar{y}) \sigma_{y_i} &   w_i({x}_i - \bar{x}) \sigma_{y_i} &   w_i({x}_i - \bar{x}) \sigma_{z_i} \\
-  w_i({x}_i - \bar{x}) \sigma_{y_i} & 2 w_i({x}_i - \bar{x}) \sigma_{x_i} &   w_i ({y}_i - \bar{y}) \sigma_{z_i} \\
-  w_i({x}_i - \bar{x}) \sigma_{z_i} &   w_i ({y}_i - \bar{y}) \sigma_{z_i} & 2 w_i({x}_i - \bar{x}) \sigma_{x_i}
+2 w_i \di{y} \sigma_{y_i} &   w_i\di{x} \sigma_{y_i} &   w_i\di{x} \sigma_{z_i} \\
+  w_i\di{x} \sigma_{y_i} & 2 w_i\di{x} \sigma_{x_i} &   w_i \di{y} \sigma_{z_i} \\
+  w_i\di{x} \sigma_{z_i} &   w_i \di{y} \sigma_{z_i} & 2 w_i\di{x} \sigma_{x_i}
 \end{bmatrix}^2 \\
 & +
 \begin{bmatrix}
-2 w_i ({z}_i - \bar{z}) \sigma_{z_i} &   w_i ({y}_i - \bar{y}) \sigma_{x_i} &   w_i ({z}_i - \bar{z}) \sigma_{x_i} \\
-  w_i ({y}_i - \bar{y}) \sigma_{x_i} & 2 w_i ({z}_i - \bar{z}) \sigma_{z_i} &   w_i ({z}_i - \bar{z}) \sigma_{y_i} \\
-  w_i ({z}_i - \bar{z}) \sigma_{x_i} &   w_i ({z}_i - \bar{z}) \sigma_{y_i} & 2 w_i ({y}_i - \bar{y}) \sigma_{y_i}
+2 w_i \di{z} \sigma_{z_i} &   w_i \di{y} \sigma_{x_i} &   w_i \di{z} \sigma_{x_i} \\
+  w_i \di{y} \sigma_{x_i} & 2 w_i \di{z} \sigma_{z_i} &   w_i \di{z} \sigma_{y_i} \\
+  w_i \di{z} \sigma_{x_i} &   w_i \di{z} \sigma_{y_i} & 2 w_i \di{y} \sigma_{y_i}
 \end{bmatrix}^2 \\
 & +
 \begin{bmatrix}
-(({y}_i - \bar{y})^2 + ({z}_i - \bar{z})^2)\sigma_{w_i} &({x}_i - \bar{x})({y}_i - \bar{y})\sigma_{w_i} &({x}_i - \bar{x})({z}_i - \bar{z})\sigma_{w_i} \\
-({y}_i - \bar{y})(x_i - \bar{x})\sigma_{w_i} & ((x_i - \bar{x})^2 + ({z}_i - \bar{z})^2)\sigma_{w_i} & ({y}_i - \bar{y})({z}_i - \bar{z})\sigma_{w_i} \\
-({z}_i - \bar{z})(x_i - \bar{x})\sigma_{w_i} & ({z}_i - \bar{z})({y}_i - \bar{y})\sigma_{w_i} & ((x_i - \bar{x})^2 + ({y}_i - \bar{y})^2)\sigma_{w_i} \\
+(\di{y}^2 + \di{z}^2)\sigma_{w_i} &\di{x}\di{y}\sigma_{w_i} &\di{x}\di{z}\sigma_{w_i} \\
+\di{y}\di{x}\sigma_{w_i} & (\di{x}^2 + \di{z}^2)\sigma_{w_i} & \di{y}\di{z}\sigma_{w_i} \\
+\di{z}\di{x}\sigma_{w_i} & \di{z}\di{y}\sigma_{w_i} & (\di{x}^2 + \di{y}^2)\sigma_{w_i} \\
 \end{bmatrix}^2 \\ \\
 & = {\boldsymbol{\sigma_I}}_i^2 \\
 & + w_i^2 \left(
 \boldsymbol{P}_i -
 \begin{bmatrix}
-(x_i - \bar{x})\sigma_{x_i} - 2 ({y}_i - \bar{y})\sigma_{y_i} & 0 & 0 \\
-0 & ({y}_i - \bar{y})\sigma_{y_i} - 2({x}_i - \bar{x})\sigma_{x_i} & 0 \\
-0 & 0 & ({z}_i - \bar{z})\sigma_{y_i} - 2({x}_i - \bar{x})\sigma_{x_i} \\
+\di{x}\sigma_{x_i} - 2 \di{y}\sigma_{y_i} & 0 & 0 \\
+0 & \di{y}\sigma_{y_i} - 2\di{x}\sigma_{x_i} & 0 \\
+0 & 0 & \di{z}\sigma_{y_i} - 2\di{x}\sigma_{x_i} \\
 \end{bmatrix}
 \right) ^2 \\
 & + w_i^2 \left(
 \boldsymbol{P}_i^T -
 \begin{bmatrix}
-(x_i - \bar{x})\sigma_{x_i} - 2 ({z}_i - \bar{z})\sigma_{y_i} & 0 & 0 \\
-0 & ({y}_i - \bar{y})\sigma_{y_i} - 2 ({z}_i - \bar{z})\sigma_{z_i} & 0 \\
-0 & 0 & ({z}_i - \bar{z})\sigma_{y_i} - 2 ({y}_i - \bar{y})\sigma_{y_i} \\
+\di{x}\sigma_{x_i} - 2 \di{z}\sigma_{y_i} & 0 & 0 \\
+0 & \di{y}\sigma_{y_i} - 2 \di{z}\sigma_{z_i} & 0 \\
+0 & 0 & \di{z}\sigma_{y_i} - 2 \di{y}\sigma_{y_i} \\
 \end{bmatrix}
 \right) ^2 \\
 & + \sigma_{w_i}^2 \left(
