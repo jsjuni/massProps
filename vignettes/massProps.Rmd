@@ -308,9 +308,9 @@ Let $I$ be the inertia tensor of the aggregate and $I_i$ be that of part $i$. Th
 $$
 I =
 \left[ \begin{matrix}
- \Ixx & -\Ixy & -\Ixz \\
--\Ixy &  \Iyy & -\Iyz \\
--\Ixz & -\Iyz &  \Izz
+\hphantom{-}\Ixx &            -\Ixy &             -\Ixz \\
+           -\Ixy & \hphantom{-}\Iyy &             -\Iyz \\
+           -\Ixz &            -\Iyz &  \hphantom{-}\Izz \\
 \end{matrix}
 \right]
 $$
