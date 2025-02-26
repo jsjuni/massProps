@@ -303,19 +303,18 @@ $$
 
 #### Matrix Formulation
 
-Let $I$ be the inertia tensor of the aggregate and $I_i$ be that of part $i$. The equations for products of inertia above clearly follow the positive integral convention, so
+Let $\boldsymbol{I}$ be the inertia tensor of the aggregate and $\boldsymbol{I}_i$ be that of part $i$. The equations for products of inertia above clearly follow the positive integral convention, so
 
 $$
-I =
-\left[ \begin{matrix}
-\hphantom{-}\Ixx &            -\Ixy &             -\Ixz \\
-           -\Ixy & \hphantom{-}\Iyy &             -\Iyz \\
-           -\Ixz &            -\Iyz &  \hphantom{-}\Izz \\
-\end{matrix}
-\right]
+\boldsymbol{I} =
+\left[ \begin{array}{rrr}
+\Ixx &            -\Ixy &             -\Ixz \\
+           -\Ixy & \Iyy &             -\Iyz \\
+           -\Ixz &            -\Iyz &  \Izz \\
+\end{array} \right]
 $$
 
-and similarly for $I_i$.
+and similarly for $\boldsymbol{I}_i$.
 
 Noting the repeated appearance of terms of the form $\di{x}\di{y}$, we form the outer product
 
@@ -375,7 +374,7 @@ w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{1}_3 \ri
 \end{align}
 $$
 
-where $\boldsymbol{1}_3$ is the 3 ⨉ 3 identity matrix. Therefore
+where $\mathrm{tr}(\boldsymbol{Q}_i)$ is the *trace* of $\boldsymbol{Q}_i$, i.e., the sum of its diagonal elements, and $\boldsymbol{1}_3$ is the 3⨉3 identity matrix. Therefore
 
 $$
 \boxed{
