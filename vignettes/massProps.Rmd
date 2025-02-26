@@ -192,6 +192,10 @@ The author has intentionally made no effort to micro-optimize for performance. I
 \newcommand{\Ixz}{I_{XZ}}
 \newcommand{\Iyz}{I_{YZ}}
 
+\newcommand{\kx}{k_X}
+\newcommand{\ky}{k_Y}
+\newcommand{\kz}{k_Z}
+
 \newcommand{\moia}[3]{
   \sum_{i=1}^{n} \left[ {I_{#1}}_i
     + w_i \left( {#2}_i^2 + {#3}_i^2 \right)
@@ -704,17 +708,17 @@ By definition:
 
 $$
 \begin{align}
-k_x & = \sqrt{I_{xx} / w} \\
-k_y & = \sqrt{I_{yy} / w} \\
-k_z & = \sqrt{I_{zz} / w} \\
+\kx & = \sqrt{\Ixx / w} \\
+\ky & = \sqrt{\Iyy / w} \\
+\kz & = \sqrt{\Izz / w} \\
 \end{align}
 $$ Let
 
 $$
 \boxed{
 \begin{align}
-\boldsymbol{k} & = (k_x \quad k_y \quad k_z)^T \\
-\boldsymbol{I} & = (I_{xx} \quad I_{yy} \quad I_{zz})^T
+\boldsymbol{k} & = (\kx \quad \ky \quad \kz)^T \\
+\boldsymbol{I} & = (\Ixx \quad \Iyy \quad \Izz)^T
 \end{align}
 }
 $$ Then
@@ -725,6 +729,13 @@ $$
 }
 $$
 
+The corresponding R code is
+
+``` r
+      rg <- get_mass_props(d, i)
+      rg$radii_gyration <- sqrt(diag(rg$inertia) / rg$mass)
+```
+
 The SAWE reference gives equations for uncertainties of radii of gyration in recursive form, but as these radii are simply functions of moments of inertia and mass, we should be able to express their uncertainties in terms of uncertainties of moments of inertia and mass by applying standard uncertainty propagation theory.
 
 Let
@@ -732,8 +743,8 @@ Let
 $$
 \boxed{
 \begin{align}
-\sigma_\boldsymbol{k} & = (\sigma_{k_x} \quad \sigma_{k_y} \quad \sigma_{k_z})^T \\
-\sigma_\boldsymbol{I} & = (\sigma_{I_{XX}} \quad \sigma_{I_{YY}} \quad \sigma_{I_{ZZ}})^T
+\sigma_\boldsymbol{k} & = (\sigma_{\kx} \quad \sigma_{\ky} \quad \sigma_{\kz})^T \\
+\sigma_\boldsymbol{I} & = (\sigma_{\Ixx} \quad \sigma_{\Iyy} \quad \sigma_{\Izz})^T
 \end{align}
 }
 $$
@@ -762,6 +773,16 @@ $$
 \end{align}
 }
 $$
+The corresponding R code is 
+
+``` r
+      rgu <- get_mass_props_and_unc(d, i)
+      w <- rgu$mass
+      sigma_w <- rgu$sigma_mass
+      I <- diag(rgu$inertia)
+      sigma_I <- diag(rgu$sigma_inertia)
+      rgu$sigma_radii_gyration <- sqrt(sigma_I^2 / (w * I) + (I * sigma_w^2) / w^3) / 2
+```
 
 # Testing and Validation
 

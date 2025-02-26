@@ -22,14 +22,7 @@ add_radii_of_gyration <- function(df) {
   Reduce(
     f = function(d, i) {
       rg <- get_mass_props(d, i)
-      rg$radii_gyration <- Reduce(
-        f = function(v, d) {
-          v[d] = sqrt(rg$inertia[d, d] / rg$mass)
-          v
-        },
-        x = c("x", "y", "z"),
-        init = c()
-      )
+      rg$radii_gyration <- sqrt(diag(rg$inertia) / rg$mass)
       set_radii_of_gyration(d, i, rg)
     },
     x = df_get_ids(df),
@@ -62,19 +55,11 @@ add_radii_of_gyration_unc <- function(df) {
   Reduce(
     f = function(d, i) {
       rgu <- get_mass_props_and_unc(d, i)
-      rgu$sigma_radii_gyration <- Reduce(
-        f = function(v, d) {
-          rho_Im <- 0 # placeholder
-          v[d] = sqrt(
-            rgu$sigma_inertia[d, d]^2 / (rgu$mass * rgu$inertia[d, d]) +
-              (rgu$inertia[d, d] * rgu$sigma_mass^2) / rgu$mass^3 +
-              (2 * rgu$sigma_inertia[d, d] * rgu$sigma_mass * rho_Im) / rgu$mass^2
-          ) / 2
-          v
-        },
-        x = c("x", "y", "z"),
-        init = c()
-      )
+      w <- rgu$mass
+      sigma_w <- rgu$sigma_mass
+      I <- diag(rgu$inertia)
+      sigma_I <- diag(rgu$sigma_inertia)
+      rgu$sigma_radii_gyration <- sqrt(sigma_I^2 / (w * I) + (I * sigma_w^2) / w^3) / 2
       set_radii_of_gyration_unc(d, i, rgu)
     },
     x = df_get_ids(df),
