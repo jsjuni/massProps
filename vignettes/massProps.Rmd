@@ -840,7 +840,7 @@ sawe_input
 Our computed result is
 
 ```{r}
-sawe_result <- rollup_radii_of_gyration_unc(
+sawe_result <- rollup_radii_of_gyration_unc(sawe_tree,
   add_radii_of_gyration(
     rollup_mass_props_and_unc(sawe_tree, sawe_table)[3, ]
   )
@@ -1053,7 +1053,7 @@ sigma_ROG
 This `r agree(isTRUE(all.equal(sigma_ROG, c(sigma_kx = sawe_result$sigma_kx, sigma_ky = sawe_result$sigma_ky, sigma_kz = sawe_result$sigma_kz))))` with the computed result.
 
 ```{r}
-result <- rollup_radii_of_gyration_unc(add_radii_of_gyration(rollup_mass_props_and_unc(sawe_tree, sawe_table)))
+result <- rollup_radii_of_gyration_unc(sawe_tree, add_radii_of_gyration(rollup_mass_props_and_unc(sawe_tree, sawe_table)))
 parts <- result[1:2, ]
 aggr <- result[3, ]
 sigma_rog_sawe_a <- function(k, kt, v1, c1, v2, c2, sigma_m, m, sigma_v1, sigma_v2, sigma_k) {

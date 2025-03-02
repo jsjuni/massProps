@@ -36,7 +36,7 @@ and radii of gyration and uncertainties list from a selected row in a data frame
 }
 \examples{
 mp_table_rollup <- rollup_mass_props_and_unc(mp_tree, mp_table)
-radii_and_unc_table <- add_radii_of_gyration_unc(add_radii_of_gyration(mp_table_rollup))
+radii_and_unc_table <- rollup_radii_of_gyration_unc(mt_tree, add_radii_of_gyration(mp_table_rollup))
 get_mass_props_and_unc_and_radii_and_unc(radii_and_unc_table, "C.1")
 
 }

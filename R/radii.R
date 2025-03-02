@@ -45,7 +45,7 @@ add_radii_of_gyration <- function(df) {
 #'      the aggregate mass and moments of inertia. The correction term depends on the mass, center of mass,
 #'      and mass uncertainty of each contributing element.
 #'
-#' @inheritParams get_mass_props_and_unc
+#' @inheritParams rollup_mass_props_and_unc
 #'
 #' @returns A data frame with the same columns as `df`, plus
 #' radii of gyration in columns `sigma_kx`, `sigma_ky`, and `sigma_kz`.`
@@ -54,9 +54,9 @@ add_radii_of_gyration <- function(df) {
 #'
 #' @examples
 #' sawe_table_rollup <- rollup_mass_props(sawe_tree, sawe_table)
-#' rollup_radii_of_gyration_unc(add_radii_of_gyration(sawe_table_rollup))
+#' rollup_radii_of_gyration_unc(sawe_tree, add_radii_of_gyration(sawe_table_rollup))
 #'
-rollup_radii_of_gyration_unc <- function(df) {
+rollup_radii_of_gyration_unc <- function(tree, df) {
   # Step 1
   Reduce(
     f = function(d, i) {
@@ -140,7 +140,7 @@ get_mass_props_and_unc_and_radii <- function(df, id) {
 #'
 #' @examples
 #' mp_table_rollup <- rollup_mass_props_and_unc(mp_tree, mp_table)
-#' radii_and_unc_table <- rolllup_radii_of_gyration_unc(add_radii_of_gyration(mp_table_rollup))
+#' radii_and_unc_table <- rollup_radii_of_gyration_unc(mt_tree, add_radii_of_gyration(mp_table_rollup))
 #' get_mass_props_and_unc_and_radii_and_unc(radii_and_unc_table, "C.1")
 #'
 get_mass_props_and_unc_and_radii_and_unc <- function(df, id) {

@@ -4,13 +4,14 @@
 \alias{rollup_radii_of_gyration_unc}
 \title{Roll up radii of gyration uncertainties}
 \usage{
-rollup_radii_of_gyration_unc(df)
+rollup_radii_of_gyration_unc(tree, df)
 }
 \arguments{
-\item{df}{A data frame with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
-\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint},
-\code{sigma_mass}, \code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz},\code{sigma_Ixy}, \code{sigma_Ixz},
-\code{sigma_Iyz}.}
+\item{tree}{An 'igraph' tree whose vertices are named as the values of the \code{id}
+column of \code{df} and whose directed edges point from child id to parent id.}
+
+\item{df}{A data frame  with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
 }
 \value{
 A data frame with the same columns as \code{df}, plus
@@ -32,6 +33,6 @@ and mass uncertainty of each contributing element.
 }
 \examples{
 sawe_table_rollup <- rollup_mass_props(sawe_tree, sawe_table)
-rollup_radii_of_gyration_unc(add_radii_of_gyration(sawe_table_rollup))
+rollup_radii_of_gyration_unc(sawe_tree, add_radii_of_gyration(sawe_table_rollup))
 
 }
