@@ -37,13 +37,8 @@ add_radii_of_gyration <- function(df) {
 #' of rolled-up mass properties and uncertainties.
 #'
 #' Radii of gyration uncertainties are calculated directly from moments of inertia and mass
-#' and their uncertainties; they are not recursively-defined. The algorithm proceeds in two steps:
-#'
-#'   1. Radii of gyration uncertainties are calculated for all elements. The calculation assumes uncertainties
-#'      in element mass and moments of inertia are uncorrelated, which we assume to be true.
-#'   1. A correction term is applied to aggregate elements based on the calculated covariance of
-#'      the aggregate mass and moments of inertia. The correction term depends on the mass, center of mass,
-#'      and mass uncertainty of each contributing element.
+#' and their uncertainties; they are not recursively-defined. Radii of gyration uncertainties
+#' for composite elements depend on uncertainties of their component elements.
 #'
 #' @inheritParams rollup_mass_props_and_unc
 #'
@@ -57,43 +52,28 @@ add_radii_of_gyration <- function(df) {
 #' rollup_radii_of_gyration_unc(sawe_tree, add_radii_of_gyration(sawe_table_rollup))
 #'
 rollup_radii_of_gyration_unc <- function(tree, df) {
-  # Step 1
-  d1 <- Reduce(
-    f = function(d, i) {
-      rgu <- get_mass_props_and_unc(d, i)
-      w <- rgu$mass
-      sigma_w <- rgu$sigma_mass
-      I <- diag(rgu$inertia)
-      sigma_I <- diag(rgu$sigma_inertia)
-      rgu$sigma_radii_gyration <- sqrt(sigma_I^2 / (w * I) + (I * sigma_w^2) / w^3) / 2
-      set_radii_of_gyration_unc(d, i, rgu)
-    },
-    x = df_get_ids(df),
-    init = df
-  )
-  # Step 2
   rollup(
     tree,
-    d1,
+    df,
     update = function(ds, target, sources) {
-      tmp <- get_mass_props_and_unc_and_radii_and_unc(ds, target)
-      if (length(sources) == 0)
-        ds
-      else {
-        c2 <- Reduce(
-          `+`,
-          Map(
-            f = function(s) {
-              smp <- get_mass_props_and_unc(ds, s)
-              d2 <- (smp$center_mass - tmp$center_mass)^2
-              smp$sigma_mass^2 * (sum(d2) - d2)
-            },
-            sources
-          )
-        )
-        tmp$sigma_radii_gyration <- sqrt(tmp$sigma_radii_gyration^2 - c2 / (2 * tmp$mass^2))
-        set_radii_of_gyration_unc(ds, target, tmp)
-      }
+      tmp <- get_mass_props_and_unc(ds, target)
+      I <- diag(tmp$inertia)
+      sigma_I <- diag(tmp$sigma_inertia)
+      t1 <- sigma_I^2 / (tmp$mass * I) + (I * tmp$sigma_mass^2) / tmp$mass^3
+      t2 <- Reduce(
+        `+`,
+        Map(
+          f = function(s) {
+            smp <- get_mass_props_and_unc(ds, s)
+            d2 <- (smp$center_mass - tmp$center_mass)^2
+            smp$sigma_mass^2 * (sum(d2) - d2)
+          },
+          sources
+        ),
+        init <- c(0, 0, 0)
+      ) * 2 / tmp$mass^2
+      tmp$sigma_radii_gyration <- sqrt(t1 - t2) / 2
+      set_radii_of_gyration_unc(ds, target, tmp)
     },
     validate_ds = validate_mass_props_and_unc_table
   )

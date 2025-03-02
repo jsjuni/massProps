@@ -22,14 +22,8 @@ radii of gyration in columns \code{sigma_kx}, \code{sigma_ky}, and \code{sigma_k
 of rolled-up mass properties and uncertainties.
 
 Radii of gyration uncertainties are calculated directly from moments of inertia and mass
-and their uncertainties; they are not recursively-defined. The algorithm proceeds in two steps:
-\enumerate{
-\item Radii of gyration uncertainties are calculated for all elements. The calculation assumes uncertainties
-in element mass and moments of inertia are uncorrelated, which we assume to be true.
-\item A correction term is applied to aggregate elements based on the calculated covariance of
-the aggregate mass and moments of inertia. The correction term depends on the mass, center of mass,
-and mass uncertainty of each contributing element.
-}
+and their uncertainties; they are not recursively-defined. Radii of gyration uncertainties
+for composite elements depend on uncertainties of their component elements.
 }
 \examples{
 sawe_table_rollup <- rollup_mass_props(sawe_tree, sawe_table)

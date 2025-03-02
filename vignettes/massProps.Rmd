@@ -763,8 +763,8 @@ Let $W$ and $X$ be random variables such that
 
 $$
 \begin{align}
-X & = \sum_{i=1}^{n} (w_i + {\epsilon_w}_i) \\
-Y & = \sum_{i=1}^{n} \left\{ {\Ixx}_i + {\epsilon_\Ixx}_i
+W & = \sum_{i=1}^{n} (w_i + {\epsilon_w}_i) \\
+X & = \sum_{i=1}^{n} \left\{ {\Ixx}_i + {\epsilon_\Ixx}_i
   + (w_i + {\epsilon_w}_i) \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right]
   \right\}
  \\
@@ -773,12 +773,12 @@ $$
 where $E[{\epsilon_w}_i {\epsilon_w}_j] = 0$ and $E[{\epsilon_\Ixx}_i {\epsilon_\Ixx}_j] = 0$ for all $i \neq j$ and $E[{\epsilon_w}_i {\epsilon_\Ixx}_j] = 0$ for all $i$ and $j$. It is clear from the linearity of $X$ and $Y$ in $w_i$ and $\Ixx_i$ that
 
 $$
-E[X] = E \left[\sum_{i=1}^{n} (w_i + {\epsilon_w}_i) \right] = w + \sum_{i=1}^{n} {\epsilon_w}_i = w
+E[W] = E \left[\sum_{i=1}^{n} (w_i + {\epsilon_w}_i) \right] = w + \sum_{i=1}^{n} {\epsilon_w}_i = w
 $$
 and
 $$
 \begin{align}
-E[Y] & = E \left[ \sum_{i=1}^{n} \left\{ {\Ixx}_i + {\epsilon_{\Ixx}}_i
+E[X] & = E \left[ \sum_{i=1}^{n} \left\{ {\Ixx}_i + {\epsilon_{\Ixx}}_i
   + (w_i + {\epsilon_w}_i) \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right] \right\} \right] \\
 & = \Ixx +  E \left[ \sum_{i=1}^{n} \left\{ {\epsilon_{\Ixx}}_i
   + {\epsilon_w}_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right] \right\} \right] \\
@@ -789,7 +789,7 @@ Therefore,
 
 $$
 \begin{align}
-\sigma_{\Ixx w} & = E \left[ \left( X - E[X] \right) \left( Y - E[Y] \right)\right] \\
+\sigma_{\Ixx w} & = E \left[ \left( W - E[W] \right) \left( X - E[X] \right)\right] \\
                 & = E \left[ \left( \sum_{i=1}^{n} {\epsilon_w}_i \right)
                     \left( \sum_{i=1}^{n} \left\{ {\epsilon_{\Ixx}}_i
                     + {\epsilon_w}_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right] \right\} \right) \right] \\
@@ -799,31 +799,56 @@ $$
 \end{align}
 $$
 
-We can choose to assume that $\boldsymbol{I}$ and $w$ are independent, and therefore $\rho_{\boldsymbol{I}w} = 0$, but we can also note that, all else being equal, as the mass of a composite increases, its moments of inertia do not decrease. Therefore $\rho_{\boldsymbol{I}w} \ge 0$. Subject to that constraint and the fact that $\sigma_\boldsymbol{I} \sigma_w w^{-2} \gt 0$, it is clear that the most conservative (i.e., the largest) estimate of ${\sigma_\boldsymbol{k}}^2$ is achieved for $\rho_{\boldsymbol{I}w} = 0$, in which case we have
-
-$$
-\begin{align}
-{\sigma_\boldsymbol{k}}^2 & \approx \frac{1}{4 w \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 w^3} {\sigma_w}^2 \\
-\end{align}
-$$
-Therefore,
+Exploiting symmetry, let
 
 $$
 \boxed{
 \begin{align}
-{\sigma_\boldsymbol{k}} & = \frac{1}{2} \sqrt{ \frac{1}{w \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{w^3} {\sigma_w}^2 }
+\boldsymbol{d}_i & = (({x}_i - \bar{x}) \quad ({y}_i - \bar{y}) \quad ({z}_i - \bar{z}))^T \\
+\boldsymbol{s}_i & = (\boldsymbol{d}_i^T\boldsymbol{d}_i \quad \boldsymbol{d}_i^T\boldsymbol{d}_i \quad \boldsymbol{d}_i^T\boldsymbol{d}_i)^T \\
 \end{align}
 }
 $$
+
+$$
+\begin{align}
+{\sigma_\boldsymbol{k}}^2 & \approx \frac{1}{4 w \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 w^3} {\sigma_w}^2 -
+  \frac{1}{2 w^2} \sum_{i=1}^{n} {\sigma_w}^2_i (\boldsymbol{s}_i - d^2 ) \\
+\end{align}
+$$
+Therefore, we define
+
+$$
+\boxed{
+\begin{align}
+{\sigma_\boldsymbol{k}} & = \frac{1}{2} \sqrt{ \frac{1}{w \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{w^3} {\sigma_w}^2
+-  \frac{2}{w^2} \sum_{i=1}^{n} {\sigma_w}^2_i (\boldsymbol{s}_i - \boldsymbol{d}_i^2 )
+}
+\end{align}
+}
+$$
+
 The corresponding R code is 
 
 ``` r
-      rgu <- get_mass_props_and_unc(d, i)
-      w <- rgu$mass
-      sigma_w <- rgu$sigma_mass
-      I <- diag(rgu$inertia)
-      sigma_I <- diag(rgu$sigma_inertia)
-      rgu$sigma_radii_gyration <- sqrt(sigma_I^2 / (w * I) + (I * sigma_w^2) / w^3) / 2
+      tmp <- get_mass_props_and_unc(ds, target)
+      I <- diag(tmp$inertia)
+      sigma_I <- diag(tmp$sigma_inertia)
+      t1 <- sigma_I^2 / (tmp$mass * I) + (I * tmp$sigma_mass^2) / tmp$mass^3
+      t2 <- Reduce(
+        `+`,
+        Map(
+          f = function(s) {
+            smp <- get_mass_props_and_unc(ds, s)
+            d2 <- (smp$center_mass - tmp$center_mass)^2
+            smp$sigma_mass^2 * (sum(d2) - d2)
+          },
+          sources
+        )
+      ) * 2 / tmp$mass^2
+      tmp$sigma_radii_gyration <- sqrt(t1 - t2) / 2
+      set_radii_of_gyration_unc(ds, target, tmp)
+    }
 ```
 
 # Testing and Validation
@@ -1055,7 +1080,7 @@ sigma_ROG
 
 This `r agree(isTRUE(all.equal(sigma_ROG, c(sigma_kx = sawe_result$sigma_kx, sigma_ky = sawe_result$sigma_ky, sigma_kz = sawe_result$sigma_kz))))` with the computed result.
 
-```{r}
+```{r echo = FALSE}
 result <- rollup_radii_of_gyration_unc(sawe_tree, add_radii_of_gyration(rollup_mass_props_and_unc(sawe_tree, sawe_table)))
 parts <- result[1:2, ]
 aggr <- result[3, ]
