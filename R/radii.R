@@ -72,10 +72,30 @@ rollup_radii_of_gyration_unc <- function(tree, df) {
     init = df
   )
   # Step 2
-  rollup(tree,
-         d1,
-         update = function(ds, target, sources) ds,
-         validate_ds = validate_mass_props_and_unc_table
+  rollup(
+    tree,
+    d1,
+    update = function(ds, target, sources) {
+      tmp <- get_mass_props_and_unc_and_radii_and_unc(ds, target)
+      if (length(sources) == 0)
+        ds
+      else {
+        c2 <- Reduce(
+          `+`,
+          Map(
+            f = function(s) {
+              smp <- get_mass_props_and_unc(ds, s)
+              d2 <- (smp$center_mass - tmp$center_mass)^2
+              smp$sigma_mass^2 * (sum(d2) - d2)
+            },
+            sources
+          )
+        )
+        tmp$sigma_radii_gyration <- sqrt(tmp$sigma_radii_gyration^2 - c2 / (2 * tmp$mass^2))
+        set_radii_of_gyration_unc(ds, target, tmp)
+      }
+    },
+    validate_ds = validate_mass_props_and_unc_table
   )
 }
 
