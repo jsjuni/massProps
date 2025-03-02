@@ -30,15 +30,20 @@ add_radii_of_gyration <- function(df) {
   )
 }
 
-#' Add radii of gyration uncertainties
+#' Roll up radii of gyration uncertainties
 #'
 #' @description
-#' `add_radii_of_gyration_unc()` adds calculated radii of gyration uncertainties to a data frame
+#' `rollup_radii_of_gyration_unc()` adds calculated radii of gyration uncertainties to a data frame
 #' of rolled-up mass properties and uncertainties.
 #'
 #' Radii of gyration uncertainties are calculated directly from moments of inertia and mass
-#' and their uncertainties;
-#' they are not recursively-defined, and do not require a rollup method.
+#' and their uncertainties; they are not recursively-defined. The algorithm proceeds in two steps:
+#'
+#'   1. Radii of gyration uncertainties are calculated for all elements. The calculation assumes uncertainties
+#'      in element mass and moments of inertia are uncorrelated, which we assume to be true.
+#'   1. A correction term is applied to aggregate elements based on the calculated covariance of
+#'      the aggregate mass and moments of inertia. The correction term depends on the mass, center of mass,
+#'      and mass uncertainty of each contributing element.
 #'
 #' @inheritParams get_mass_props_and_unc
 #'
@@ -49,9 +54,10 @@ add_radii_of_gyration <- function(df) {
 #'
 #' @examples
 #' sawe_table_rollup <- rollup_mass_props(sawe_tree, sawe_table)
-#' add_radii_of_gyration_unc(add_radii_of_gyration(sawe_table_rollup))
+#' rollup_radii_of_gyration_unc(add_radii_of_gyration(sawe_table_rollup))
 #'
-add_radii_of_gyration_unc <- function(df) {
+rollup_radii_of_gyration_unc <- function(df) {
+  # Step 1
   Reduce(
     f = function(d, i) {
       rgu <- get_mass_props_and_unc(d, i)
@@ -65,6 +71,7 @@ add_radii_of_gyration_unc <- function(df) {
     x = df_get_ids(df),
     init = df
   )
+  # Step 2
 }
 
 #' Get mass properties and uncertainties and radii of gyration
@@ -133,7 +140,7 @@ get_mass_props_and_unc_and_radii <- function(df, id) {
 #'
 #' @examples
 #' mp_table_rollup <- rollup_mass_props_and_unc(mp_tree, mp_table)
-#' radii_and_unc_table <- add_radii_of_gyration_unc(add_radii_of_gyration(mp_table_rollup))
+#' radii_and_unc_table <- rolllup_radii_of_gyration_unc(add_radii_of_gyration(mp_table_rollup))
 #' get_mass_props_and_unc_and_radii_and_unc(radii_and_unc_table, "C.1")
 #'
 get_mass_props_and_unc_and_radii_and_unc <- function(df, id) {

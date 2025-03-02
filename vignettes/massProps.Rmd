@@ -754,10 +754,52 @@ $$
 \begin{align}
 {\sigma_\boldsymbol{k}}^2 & \approx \left( \frac{\partial \boldsymbol{k}}{\partial \boldsymbol{I}} \right)^2 {\sigma_\boldsymbol{I}}^2 + \left( \frac{\partial \boldsymbol{k}}{\partial w} \right)^2 {\sigma_w}^2 + 2  \frac{\partial \boldsymbol{k}}{\partial \boldsymbol{I}} \frac{\partial \boldsymbol{k}}{\partial w} \sigma_{\boldsymbol{I}w} \\
   & \approx \left( \frac{1}{2 \sqrt{w \boldsymbol{I}}} \right)^2 {\sigma_\boldsymbol{I}}^2 + \left(\frac{- \sqrt{\boldsymbol{I}}}{2 w^{3/2}}\right)^2 {\sigma_w}^2 + 2 \left( \frac{1}{2 \sqrt{w \boldsymbol{I}}} \right) \left(\frac{- \sqrt{\boldsymbol{I}}}{2 w^{3/2}}\right) \sigma_{\boldsymbol{I}w} \\
-  & \approx \frac{1}{4 w \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 w^3} {\sigma_w}^2 - \frac{1}{2 w^2} \sigma_\boldsymbol{I} \sigma_w \rho_{\boldsymbol{I}w} \\
+  & \approx \frac{1}{4 w \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 w^3} {\sigma_w}^2 - \frac{1}{2 w^2} \sigma_{\boldsymbol{I}w} \\
 \end{align}
 $$
-where $\sigma_{\boldsymbol{I}w}$ is the covariance between $\boldsymbol{I}$ and $w$ and $\rho_{\boldsymbol{I}w}$ is their correlation coefficient. We can choose to assume that $\boldsymbol{I}$ and $w$ are independent, and therefore $\rho_{\boldsymbol{I}w} = 0$, but we can also note that, all else being equal, as the mass of a composite increases, its moments of inertia do not decrease. Therefore $\rho_{\boldsymbol{I}w} \ge 0$. Subject to that constraint and the fact that $\sigma_\boldsymbol{I} \sigma_w w^{-2} \gt 0$, it is clear that the most conservative (i.e., the largest) estimate of ${\sigma_\boldsymbol{k}}^2$ is achieved for $\rho_{\boldsymbol{I}w} = 0$, in which case we have
+where $\sigma_{\boldsymbol{I}w}$ is the covariance between $\boldsymbol{I}$ and $w$.
+
+Let $W$ and $X$ be random variables such that
+
+$$
+\begin{align}
+X & = \sum_{i=1}^{n} (w_i + {\epsilon_w}_i) \\
+Y & = \sum_{i=1}^{n} \left\{ {\Ixx}_i + {\epsilon_\Ixx}_i
+  + (w_i + {\epsilon_w}_i) \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right]
+  \right\}
+ \\
+\end{align}
+$$
+where $E[{\epsilon_w}_i {\epsilon_w}_j] = 0$ and $E[{\epsilon_\Ixx}_i {\epsilon_\Ixx}_j] = 0$ for all $i \neq j$ and $E[{\epsilon_w}_i {\epsilon_\Ixx}_j] = 0$ for all $i$ and $j$. It is clear from the linearity of $X$ and $Y$ in $w_i$ and $\Ixx_i$ that
+
+$$
+E[X] = E \left[\sum_{i=1}^{n} (w_i + {\epsilon_w}_i) \right] = w + \sum_{i=1}^{n} {\epsilon_w}_i = w
+$$
+and
+$$
+\begin{align}
+E[Y] & = E \left[ \sum_{i=1}^{n} \left\{ {\Ixx}_i + {\epsilon_{\Ixx}}_i
+  + (w_i + {\epsilon_w}_i) \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right] \right\} \right] \\
+& = \Ixx +  E \left[ \sum_{i=1}^{n} \left\{ {\epsilon_{\Ixx}}_i
+  + {\epsilon_w}_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right] \right\} \right] \\
+& = \Ixx
+\end{align}
+$$
+Therefore,
+
+$$
+\begin{align}
+\sigma_{\Ixx w} & = E \left[ \left( X - E[X] \right) \left( Y - E[Y] \right)\right] \\
+                & = E \left[ \left( \sum_{i=1}^{n} {\epsilon_w}_i \right)
+                    \left( \sum_{i=1}^{n} \left\{ {\epsilon_{\Ixx}}_i
+                    + {\epsilon_w}_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right] \right\} \right) \right] \\
+                & = E \left[ \sum_{i=1}^{n} {\epsilon_w}^2_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right] \right] \\
+                & = \sum_{i=1}^{n} E \left[ {\epsilon_w}^2_i \right] \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2  \right] \\
+                & = \sum_{i=1}^{n} {\sigma_w}^2_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2  \right] \\
+\end{align}
+$$
+
+We can choose to assume that $\boldsymbol{I}$ and $w$ are independent, and therefore $\rho_{\boldsymbol{I}w} = 0$, but we can also note that, all else being equal, as the mass of a composite increases, its moments of inertia do not decrease. Therefore $\rho_{\boldsymbol{I}w} \ge 0$. Subject to that constraint and the fact that $\sigma_\boldsymbol{I} \sigma_w w^{-2} \gt 0$, it is clear that the most conservative (i.e., the largest) estimate of ${\sigma_\boldsymbol{k}}^2$ is achieved for $\rho_{\boldsymbol{I}w} = 0$, in which case we have
 
 $$
 \begin{align}
@@ -798,7 +840,7 @@ sawe_input
 Our computed result is
 
 ```{r}
-sawe_result <- add_radii_of_gyration_unc(
+sawe_result <- rollup_radii_of_gyration_unc(
   add_radii_of_gyration(
     rollup_mass_props_and_unc(sawe_tree, sawe_table)[3, ]
   )
@@ -992,7 +1034,7 @@ This `r agree(isTRUE(all.equal(sigma_POI, c(sigma_Ixy = sawe_result$sigma_Ixy, s
 
 ```{r}
 sigma_rog <- function(m, I, sigma_m, sigma_I, rho_Im) {
-  sqrt(sigma_I^2 / (4 * m * I) + (I * sigma_m^2) / (4 * m^3) + (rho_Im * sigma_m * sigma_I) / (2 * m^2))
+  sqrt(sigma_I^2 / (4 * m * I) + (I * sigma_m^2) / (4 * m^3) - (rho_Im * sigma_m * sigma_I) / (2 * m^2))
 }
 rho_Im <- 0
 sigma_ROG <- c(
@@ -1009,6 +1051,27 @@ sigma_ROG
 ```
 
 This `r agree(isTRUE(all.equal(sigma_ROG, c(sigma_kx = sawe_result$sigma_kx, sigma_ky = sawe_result$sigma_ky, sigma_kz = sawe_result$sigma_kz))))` with the computed result.
+
+```{r}
+result <- rollup_radii_of_gyration_unc(add_radii_of_gyration(rollup_mass_props_and_unc(sawe_tree, sawe_table)))
+parts <- result[1:2, ]
+aggr <- result[3, ]
+sigma_rog_sawe_a <- function(k, kt, v1, c1, v2, c2, sigma_m, m, sigma_v1, sigma_v2, sigma_k) {
+  ((k^2 - kt^2 + (v1 - c1)^2 + (v2 - c2)^2) * sigma_m)^2 +
+    (2 * m * (v1 - c1) * sigma_v1)^2 +
+    (2 * m * (v2 - c2) * sigma_v2)^2 +
+    (2 * m * k * sigma_k)^2
+}
+sigma_rog_sawe_b <- function(k, m) 1 / (2 * k * m)
+sigma_ROG_sawe <- c(
+  sigma_kx = sigma_rog_sawe_b(aggr$kx, aggr$mass) * sqrt(sum(sigma_rog_sawe_a(parts$kx, aggr$kx, parts$Cy, aggr$Cy, parts$Cz, aggr$Cz,
+                                                         parts$sigma_mass, parts$mass, parts$sigma_Cy, parts$sigma_Cz, parts$sigma_kx))),
+  sigma_ky = sigma_rog_sawe_b(aggr$ky, aggr$mass) * sqrt(sum(sigma_rog_sawe_a(parts$ky, aggr$ky, parts$Cx, aggr$Cx, parts$Cz, aggr$Cz,
+                                                         parts$sigma_mass, parts$mass, parts$sigma_Cx, parts$sigma_Cz, parts$sigma_ky))),
+  sigma_kz = sigma_rog_sawe_b(aggr$kz, aggr$mass) * sqrt(sum(sigma_rog_sawe_a(parts$kz, aggr$kz, parts$Cx, aggr$Cx, parts$Cy, aggr$Cy,
+                                                         parts$sigma_mass, parts$mass, parts$sigma_Cx, parts$sigma_Cy, parts$sigma_kz)))
+)
+```
 
 ## Comparison With Published Results
 
