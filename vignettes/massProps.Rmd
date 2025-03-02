@@ -833,8 +833,7 @@ The corresponding R code is
 In this section we will calculate the results for the SAWE example step by step and compare them with the package results. The inputs are:
 
 ```{r echo = FALSE}
-sawe_input <- sawe_table[which(sawe_table$id != "Combined"), ]
-sawe_input
+sawe_table[which(sawe_table$id != "Combined"), ]
 ```
 
 Our computed result is
@@ -842,9 +841,9 @@ Our computed result is
 ```{r}
 sawe_result <- rollup_radii_of_gyration_unc(sawe_tree,
   add_radii_of_gyration(
-    rollup_mass_props_and_unc(sawe_tree, sawe_table)[3, ]
+    rollup_mass_props_and_unc(sawe_tree, sawe_table)
   )
-)
+)[3, ]
 sawe_result
 ```
 

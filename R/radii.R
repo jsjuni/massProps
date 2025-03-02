@@ -58,7 +58,7 @@ add_radii_of_gyration <- function(df) {
 #'
 rollup_radii_of_gyration_unc <- function(tree, df) {
   # Step 1
-  Reduce(
+  d1 <- Reduce(
     f = function(d, i) {
       rgu <- get_mass_props_and_unc(d, i)
       w <- rgu$mass
@@ -72,6 +72,11 @@ rollup_radii_of_gyration_unc <- function(tree, df) {
     init = df
   )
   # Step 2
+  rollup(tree,
+         d1,
+         update = function(ds, target, sources) ds,
+         validate_ds = validate_mass_props_and_unc_table
+  )
 }
 
 #' Get mass properties and uncertainties and radii of gyration
@@ -140,7 +145,7 @@ get_mass_props_and_unc_and_radii <- function(df, id) {
 #'
 #' @examples
 #' mp_table_rollup <- rollup_mass_props_and_unc(mp_tree, mp_table)
-#' radii_and_unc_table <- rollup_radii_of_gyration_unc(mt_tree, add_radii_of_gyration(mp_table_rollup))
+#' radii_and_unc_table <- rollup_radii_of_gyration_unc(mp_tree, add_radii_of_gyration(mp_table_rollup))
 #' get_mass_props_and_unc_and_radii_and_unc(radii_and_unc_table, "C.1")
 #'
 get_mass_props_and_unc_and_radii_and_unc <- function(df, id) {

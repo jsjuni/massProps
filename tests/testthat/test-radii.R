@@ -31,10 +31,10 @@ test_that("get_mass_props_and_unc_and_radii() works", {
 })
 
 test_that("get_mass_props_and_unc_and_radii_and_unc() works", {
-  in_df <- add_radii_of_gyration(mp_table[which(!is.na(mp_table$mass))[1:20], ])
-  out_df <- rollup_radii_of_gyration_unc(mp_tree, in_df)
-  expected <- out_df[which(out_df$id == "C.1.1.1.1.1.1.1"), ]
-  actual <- get_mass_props_and_unc_and_radii_and_unc(out_df, "C.1.1.1.1.1.1.1")
+  in_df <- add_radii_of_gyration(sawe_table)
+  out_df <- rollup_radii_of_gyration_unc(sawe_tree, in_df)
+  expected <- out_df[which(out_df$id == "Combined"), ]
+  actual <- get_mass_props_and_unc_and_radii_and_unc(out_df, "Combined")
 
   expect_equal(unname(actual$mass), unname(expected$mass))
   expect_equal(unname(actual$radii_gyration["x"]), unname(expected$kx))
