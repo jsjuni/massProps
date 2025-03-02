@@ -571,7 +571,7 @@ $$
 Let $\boldsymbol{s}_i^2$ be the matrix of inertia tensor uncertainty summands in the standard formulas for a given subcomponent $i$ above. That is,
 
 $$
-\boldsymbol{\sigma_I}^2 = \sum_{i=1}^{} \boldsymbol{s}_i^2
+\boldsymbol{\sigma_I}^2 = \sum_{i=1}^{n} \boldsymbol{s}_i^2
 $$
 
 Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $P_i$. Let $\boldsymbol{1}_3$ be the 3 ⨉ 3 identity matrix. If we interpret squaring a matrix as the Hadamard (element-wise) product with itself, then $$
