@@ -793,9 +793,9 @@ $$
                 & = E \left[ \left( \sum_{i=1}^{n} {\epsilon_w}_i \right)
                     \left( \sum_{i=1}^{n} \left\{ {\epsilon_{\Ixx}}_i
                     + {\epsilon_w}_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right] \right\} \right) \right] \\
-                & = E \left[ \sum_{i=1}^{n} {\epsilon_w}^2_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right] \right] \\
-                & = \sum_{i=1}^{n} E \left[ {\epsilon_w}^2_i \right] \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2  \right] \\
-                & = \sum_{i=1}^{n} {\sigma_w}^2_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2  \right] \\
+                & = E \left[ \sum_{i=1}^{n} {\epsilon_w}^2_i \left( \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right) \right] \\
+                & = \sum_{i=1}^{n} E \left[ {\epsilon_w}^2_i \right] \left( \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2  \right) \\
+                & = \sum_{i=1}^{n} {\sigma_w}^2_i \left( \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2  \right) \\
 \end{align}
 $$
 
