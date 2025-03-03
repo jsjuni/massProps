@@ -844,7 +844,8 @@ The corresponding R code is
             smp$sigma_mass^2 * (sum(d2) - d2)
           },
           sources
-        )
+        ),
+        init <- c(0, 0, 0)
       ) * 2 / tmp$mass^2
       tmp$sigma_radii_gyration <- sqrt(t1 - t2) / 2
       set_radii_of_gyration_unc(ds, target, tmp)
