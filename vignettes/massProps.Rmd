@@ -770,7 +770,7 @@ X & = \sum_{i=1}^{n} \left\{ {\Ixx}_i + {\epsilon_\Ixx}_i
  \\
 \end{align}
 $$
-where $E[{\epsilon_w}_i {\epsilon_w}_j] = 0$ and $E[{\epsilon_\Ixx}_i {\epsilon_\Ixx}_j] = 0$ for all $i \neq j$ and $E[{\epsilon_w}_i {\epsilon_\Ixx}_j] = 0$ for all $i$ and $j$. It is clear from the linearity of $X$ and $Y$ in $w_i$ and $\Ixx_i$ that
+where $E[{\epsilon_w}_i {\epsilon_w}_j] = 0$ and $E[{\epsilon_\Ixx}_i {\epsilon_\Ixx}_j] = 0$ for all $i \neq j$ and $E[{\epsilon_w}_i {\epsilon_\Ixx}_j] = 0$ for all $i$ and $j$. It is clear from the linearity of $W$ and $X$ in $w_i$ and $\Ixx_i$ that
 
 $$
 E[W] = E \left[\sum_{i=1}^{n} (w_i + {\epsilon_w}_i) \right] = w + \sum_{i=1}^{n} {\epsilon_w}_i = w
@@ -835,7 +835,7 @@ The corresponding R code is
       I <- diag(tmp$inertia)
       sigma_I <- diag(tmp$sigma_inertia)
       t1 <- sigma_I^2 / (tmp$mass * I) + (I * tmp$sigma_mass^2) / tmp$mass^3
-      t2 <- Reduce(
+      t2 <- 2 / tmp$mass^2 * Reduce(
         `+`,
         Map(
           f = function(s) {
@@ -846,7 +846,7 @@ The corresponding R code is
           sources
         ),
         init <- c(0, 0, 0)
-      ) * 2 / tmp$mass^2
+      )
       tmp$sigma_radii_gyration <- sqrt(t1 - t2) / 2
       set_radii_of_gyration_unc(ds, target, tmp)
     }

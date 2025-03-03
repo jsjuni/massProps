@@ -60,7 +60,7 @@ rollup_radii_of_gyration_unc <- function(tree, df) {
       I <- diag(tmp$inertia)
       sigma_I <- diag(tmp$sigma_inertia)
       t1 <- sigma_I^2 / (tmp$mass * I) + (I * tmp$sigma_mass^2) / tmp$mass^3
-      t2 <- Reduce(
+      t2 <- 2 / tmp$mass^2 * Reduce(
         `+`,
         Map(
           f = function(s) {
@@ -71,7 +71,7 @@ rollup_radii_of_gyration_unc <- function(tree, df) {
           sources
         ),
         init <- c(0, 0, 0)
-      ) * 2 / tmp$mass^2
+      )
       tmp$sigma_radii_gyration <- sqrt(t1 - t2) / 2
       set_radii_of_gyration_unc(ds, target, tmp)
     },
