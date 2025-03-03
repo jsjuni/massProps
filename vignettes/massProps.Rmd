@@ -813,7 +813,7 @@ $$
 $$
 \begin{align}
 {\sigma_\boldsymbol{k}}^2 & \approx \frac{1}{4 w \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 w^3} {\sigma_w}^2 -
-  \frac{1}{2 w^2} \sum_{i=1}^{n} {\sigma_w}^2_i (\boldsymbol{s}_i - d^2 ) \\
+  \frac{1}{2 w^2} \sum_{i=1}^{n} {\sigma_w}^2_i (\boldsymbol{s}_i - \boldsymbol{d}_i^2 ) \\
 \end{align}
 $$
 Therefore, we define
