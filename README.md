@@ -11,7 +11,7 @@ The `massProps` package extends `rollupTree` with functions to
 recursively calculate mass properties (and optionally, their
 uncertainties) for arbitrary composition trees. Formulas implemented are
 described in a technical paper published by the Society of Allied Weight
-Engineers.(Zimmerman and Nakai 2005)
+Engineers (Zimmerman and Nakai 2005).
 
 ## Installation
 
