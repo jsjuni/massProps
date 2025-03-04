@@ -169,7 +169,7 @@ set_mass_props <- function(df, id, mp) {
 
 #' Set mass properties uncertainties for a row in a data frame
 #'
-#' `set_mass_props_unc()` sets mass properties and uncertainties for a
+#' `set_mass_props_unc()` sets mass properties uncertainties for a
 #' selected row in a data frame with an `id` column.
 #'
 #' @inheritParams set_mass_props

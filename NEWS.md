@@ -4,6 +4,10 @@
 
 * Q expressions restored in inertia computations (#27, #31). The code now aligns
   better with the documentation.
+  
+* Calculations for radii of gyration and their uncertainties added (#9).
+
+* Numerous code and documentation improvements.
 
 # massProps 0.2.0
 

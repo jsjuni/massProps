@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The `massProps` package extends `rollupTree` with functions to recursively calculate mass properties (and optionally, their uncertainties) for arbitrary composition trees. Formulas implemented are described in a technical paper published by the Society of Allied Weight Engineers.[@zimmerman:05:sawe]
+The `massProps` package extends `rollupTree` with functions to recursively calculate mass properties (and optionally, their uncertainties) for arbitrary composition trees. Formulas implemented are described in a technical paper published by the Society of Allied Weight Engineers [@zimmerman:05:sawe].
 
 ## Installation
 
@@ -61,6 +61,18 @@ We can roll up mass properties to non-leaf elements as follows:
 
 ```{r}
 rollup_mass_props(test_tree, test_table)
+```
+
+The input data may include mass properties uncertainties as well:
+
+```{r}
+test_unc_table
+```
+
+Mass properties and their uncertainties can be rolled up as follows:
+
+```{r}
+rollup_mass_props_and_unc(test_tree, test_unc_table)
 ```
 
 ## References
