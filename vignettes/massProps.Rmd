@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 # Overview
 
-The `massProps` package extends `rollupTree` with functions to recursively calculate mass properties (and optionally, their uncertainties) for arbitrary decomposition trees. Formulas implemented are described in a technical paper published by the Society of Allied Weight Engineers.[@zimmerman:05:sawe]
+The `massProps` package extends `rollupTree` with functions to recursively calculate mass properties (and optionally, their uncertainties) for arbitrary decomposition trees. Formulas implemented are described in a technical paper published by the Society of Allied Weight Engineers [@zimmerman:05:sawe].
 
 # Synopsis
 
@@ -192,6 +192,10 @@ The author has intentionally made no effort to micro-optimize for performance. I
 \newcommand{\Ixz}{I_{XZ}}
 \newcommand{\Iyz}{I_{YZ}}
 
+\newcommand{\kx}{k_X}
+\newcommand{\ky}{k_Y}
+\newcommand{\kz}{k_Z}
+
 \newcommand{\moia}[3]{
   \sum_{i=1}^{n} \left[ {I_{#1}}_i
     + w_i \left( {#2}_i^2 + {#3}_i^2 \right)
@@ -242,7 +246,11 @@ The corresponding `R` code is
   amp$mass <- Reduce(`+`, Map(f = function(mp) mp$mass, mpl))
 ```
 
+<<<<<<< HEAD
 In this and the following code snippets, the variable `mpl` is a list of input mass property sets for parts, the variable `mp` is a formal parameter of an anonymous function applied to each member of `mpl`, and `amp` is the resulting aggregate mass property set. The line above is an `R` functional programming idiom for "set the mass value of the aggregate to the sum of the mass values of the parts".
+=======
+In this and the following code snippets, the variable `mpl` is a list of input mass property sets, the variable `mp` is a formal parameter of an anonymous function applied to each member of `mpl`, and `amp` is the resulting aggregate mass property set. The line above is an `R` functional programming idiom for "set the mass value of the result to the sum of the mass values of the inputs".
+>>>>>>> main
 
 ### Center of Mass
 
@@ -382,8 +390,7 @@ $$
 -
 w_i \boldsymbol{M}_i \right)
 }
-$$
-where
+$$ where
 
 $$
 \boxed{
@@ -526,7 +533,7 @@ $$
 Let $\boldsymbol{s}_i^2$ be the matrix of inertia tensor uncertainty summands in the standard formulas for a given subcomponent $i$ above. That is,
 
 $$
-\boldsymbol{\sigma_I}^2 = \sum_{i=1}^{} \boldsymbol{s}_i^2
+\boldsymbol{\sigma_I}^2 = \sum_{i=1}^{n} \boldsymbol{s}_i^2
 $$
 
 Let ${p_X}_i$, ${p_Y}_i$, and ${p_Z}_i$ be the respective diagonal elements of $P_i$. Let $\boldsymbol{1}_3$ be the 3 ⨉ 3 identity matrix. If we interpret squaring a matrix as the Hadamard (element-wise) product with itself, then $$
@@ -657,6 +664,158 @@ The corresponding `R` code is
   )))
 ```
 
+## Radii of Gyration and Their Uncertainties
+
+By definition:
+
+$$
+\begin{align}
+\kx & = \sqrt{\Ixx / w} \\
+\ky & = \sqrt{\Iyy / w} \\
+\kz & = \sqrt{\Izz / w} \\
+\end{align}
+$$ Let
+
+$$
+\boxed{
+\begin{align}
+\boldsymbol{k} & = (\kx \quad \ky \quad \kz)^T \\
+\boldsymbol{I} & = (\Ixx \quad \Iyy \quad \Izz)^T
+\end{align}
+}
+$$ Then
+
+$$
+\boxed{
+\boldsymbol{k} = \sqrt{ \boldsymbol{I} / w }
+}
+$$
+
+The corresponding R code is
+
+``` r
+      rg <- get_mass_props(d, i)
+      rg$radii_gyration <- sqrt(diag(rg$inertia) / rg$mass)
+```
+
+The SAWE reference gives equations for uncertainties of radii of gyration in recursive form, but as these radii are simply functions of moments of inertia and mass, we should be able to express their uncertainties in terms of uncertainties of moments of inertia and mass by applying standard uncertainty propagation theory [@wikipedia:uncprop].
+
+Let
+
+$$
+\boxed{
+\begin{align}
+\sigma_\boldsymbol{k} & = (\sigma_{\kx} \quad \sigma_{\ky} \quad \sigma_{\kz})^T \\
+\sigma_\boldsymbol{I} & = (\sigma_{\Ixx} \quad \sigma_{\Iyy} \quad \sigma_{\Izz})^T
+\end{align}
+}
+$$
+Then
+
+$$
+\begin{align}
+{\sigma_\boldsymbol{k}}^2 & \approx \left( \frac{\partial \boldsymbol{k}}{\partial \boldsymbol{I}} \right)^2 {\sigma_\boldsymbol{I}}^2 + \left( \frac{\partial \boldsymbol{k}}{\partial w} \right)^2 {\sigma_w}^2 + 2  \frac{\partial \boldsymbol{k}}{\partial \boldsymbol{I}} \frac{\partial \boldsymbol{k}}{\partial w} \sigma_{\boldsymbol{I}w} \\
+  & \approx \left( \frac{1}{2 \sqrt{w \boldsymbol{I}}} \right)^2 {\sigma_\boldsymbol{I}}^2 + \left(\frac{- \sqrt{\boldsymbol{I}}}{2 w^{3/2}}\right)^2 {\sigma_w}^2 + 2 \left( \frac{1}{2 \sqrt{w \boldsymbol{I}}} \right) \left(\frac{- \sqrt{\boldsymbol{I}}}{2 w^{3/2}}\right) \sigma_{\boldsymbol{I}w} \\
+  & \approx \frac{1}{4 w \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 w^3} {\sigma_w}^2 - \frac{1}{2 w^2} \sigma_{\boldsymbol{I}w} \\
+\end{align}
+$$
+where $\sigma_{\boldsymbol{I}w}$ is the covariance between $\boldsymbol{I}$ and $w$.
+
+Let $W$ and $X$ be random variables such that
+
+$$
+\begin{align}
+W & = \sum_{i=1}^{n} (w_i + {\epsilon_w}_i) \\
+X & = \sum_{i=1}^{n} \left\{ {\Ixx}_i + {\epsilon_\Ixx}_i
+  + (w_i + {\epsilon_w}_i) \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right]
+  \right\}
+ \\
+\end{align}
+$$
+where $E[{\epsilon_w}_i] = 0$ and $E[{\epsilon_\Ixx}_i] = 0$ for all $i$,
+$E[{\epsilon_w}_i {\epsilon_w}_j] = 0$ and $E[{\epsilon_\Ixx}_i {\epsilon_\Ixx}_j] = 0$ for all $i \neq j$, and
+$E[{\epsilon_w}_i {\epsilon_\Ixx}_j] = 0$ for all $i$ and $j$. It is clear from the linearity of $W$ and $X$ in $w_i$ and $\Ixx_i$ that
+
+$$
+E[W] = E \left[\sum_{i=1}^{n} (w_i + {\epsilon_w}_i) \right] = w + \sum_{i=1}^{n} {\epsilon_w}_i = w
+$$
+and
+$$
+\begin{align}
+E[X] & = E \left[ \sum_{i=1}^{n} \left\{ {\Ixx}_i + {\epsilon_{\Ixx}}_i
+  + (w_i + {\epsilon_w}_i) \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right] \right\} \right] \\
+& = \Ixx +  E \left[ \sum_{i=1}^{n} \left\{ {\epsilon_{\Ixx}}_i
+  + {\epsilon_w}_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right] \right\} \right] \\
+& = \Ixx
+\end{align}
+$$
+Therefore,
+
+$$
+\begin{align}
+\sigma_{\Ixx w} & = E \left[ \left( W - E[W] \right) \left( X - E[X] \right)\right] \\
+                & = E \left[ \left( \sum_{i=1}^{n} {\epsilon_w}_i \right)
+                    \left( \sum_{i=1}^{n} \left\{ {\epsilon_{\Ixx}}_i
+                    + {\epsilon_w}_i \left[ \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right] \right\} \right) \right] \\
+                & = E \left[ \sum_{i=1}^{n} {\epsilon_w}^2_i \left( \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2 \right) \right] \\
+                & = \sum_{i=1}^{n} E \left[ {\epsilon_w}^2_i \right] \left( \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2  \right) \\
+                & = \sum_{i=1}^{n} {\sigma_w}^2_i \left( \left( {y}_i - \bar{y} \right)^2 + \left( {z}_i - \bar{z} \right)^2  \right) \\
+\end{align}
+$$
+
+Exploiting symmetry, let
+
+$$
+\boxed{
+\begin{align}
+\boldsymbol{d}_i & = (({x}_i - \bar{x}) \quad ({y}_i - \bar{y}) \quad ({z}_i - \bar{z}))^T \\
+\boldsymbol{s}_i & = (\boldsymbol{d}_i^T\boldsymbol{d}_i \quad \boldsymbol{d}_i^T\boldsymbol{d}_i \quad \boldsymbol{d}_i^T\boldsymbol{d}_i)^T \\
+\end{align}
+}
+$$
+
+$$
+\begin{align}
+{\sigma_\boldsymbol{k}}^2 & \approx \frac{1}{4 w \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{4 w^3} {\sigma_w}^2 -
+  \frac{1}{2 w^2} \sum_{i=1}^{n} {\sigma_w}^2_i (\boldsymbol{s}_i - \boldsymbol{d}_i^2 ) \\
+\end{align}
+$$
+Therefore, we define
+
+$$
+\boxed{
+\begin{align}
+{\sigma_\boldsymbol{k}} & = \frac{1}{2} \sqrt{ \frac{1}{w \boldsymbol{I}} {\sigma_\boldsymbol{I}}^2 + \frac{\boldsymbol{I}}{w^3} {\sigma_w}^2
+-  \frac{2}{w^2} \sum_{i=1}^{n} {\sigma_w}^2_i (\boldsymbol{s}_i - \boldsymbol{d}_i^2 )
+}
+\end{align}
+}
+$$
+
+The corresponding R code is 
+
+``` r
+      tmp <- get_mass_props_and_unc(ds, target)
+      I <- diag(tmp$inertia)
+      sigma_I <- diag(tmp$sigma_inertia)
+      t1 <- sigma_I^2 / (tmp$mass * I) + (I * tmp$sigma_mass^2) / tmp$mass^3
+      t2 <- 2 / tmp$mass^2 * Reduce(
+        `+`,
+        Map(
+          f = function(s) {
+            smp <- get_mass_props_and_unc(ds, s)
+            d2 <- (smp$center_mass - tmp$center_mass)^2
+            smp$sigma_mass^2 * (sum(d2) - d2)
+          },
+          sources
+        ),
+        init <- c(0, 0, 0)
+      )
+      tmp$sigma_radii_gyration <- sqrt(t1 - t2) / 2
+      set_radii_of_gyration_unc(ds, target, tmp)
+    }
+```
+
 # Testing and Validation
 
 ## Comparison With Independently-Calculated Results
@@ -671,14 +830,19 @@ sawe_input
 Our computed result is
 
 ```{r}
-sawe_result <- rollup_mass_props_and_unc(sawe_tree, sawe_table)[3, ]
+t <- rollup_radii_of_gyration_unc(sawe_tree,
+  add_radii_of_gyration(
+    rollup_mass_props_and_unc(sawe_tree, sawe_table)
+  )
+)
+sawe_result <- t[t$id == "Combined", ]
 sawe_result
 ```
 
 ### Mass
 
 ```{r echo = FALSE}
-agree <- function(l) if (l) "agrees" else "does not agree"
+agree <- function(l) if (l) "agrees" else stop("disagreement")
 ```
 
 ```{r}
@@ -711,12 +875,12 @@ This `r agree(isTRUE(all.equal(unname(C), c(sawe_result$Cx, sawe_result$Cy, sawe
 
 ```{r}
 moi <- function(I, v1, v2, m, c1, c2) {
-  I + m * ((v1^2 + v2^2) - (c1^2 + c2^2))
+  sum(I + m * ((v1^2 + v2^2) - (c1^2 + c2^2)))
 }
 MOI <- c(
-  Ixx = sum(moi(sawe_input$Ixx, sawe_input$Cy, sawe_input$Cz, sawe_input$mass, C["Cy"], C["Cz"])),
-  Iyy = sum(moi(sawe_input$Iyy, sawe_input$Cx, sawe_input$Cz, sawe_input$mass, C["Cx"], C["Cz"])),
-  Izz = sum(moi(sawe_input$Izz, sawe_input$Cx, sawe_input$Cy, sawe_input$mass, C["Cx"], C["Cy"]))
+  Ixx = moi(sawe_input$Ixx, sawe_input$Cy, sawe_input$Cz, sawe_input$mass, C["Cy"], C["Cz"]),
+  Iyy = moi(sawe_input$Iyy, sawe_input$Cx, sawe_input$Cz, sawe_input$mass, C["Cx"], C["Cz"]),
+  Izz = moi(sawe_input$Izz, sawe_input$Cx, sawe_input$Cy, sawe_input$mass, C["Cx"], C["Cy"])
 )
 ```
 
@@ -732,12 +896,12 @@ This `r agree(isTRUE(all.equal(MOI, c(Ixx = sawe_result$Ixx, Iyy = sawe_result$I
 
 ```{r}
 poi <- function(I, v1, v2, m, c1, c2) {
-  I + m * (v1 * v2 - c1 * c2)
+  sum(I + m * (v1 * v2 - c1 * c2))
 }
 POI <- c(
-  Ixy = sum(poi(sawe_input$Ixy, sawe_input$Cx, sawe_input$Cy, sawe_input$mass, C["Cx"], C["Cy"])),
-  Ixz = sum(poi(sawe_input$Ixz, sawe_input$Cx, sawe_input$Cz, sawe_input$mass, C["Cx"], C["Cz"])),
-  Iyz = sum(poi(sawe_input$Iyz, sawe_input$Cy, sawe_input$Cz, sawe_input$mass, C["Cy"], C["Cz"]))
+  Ixy = poi(sawe_input$Ixy, sawe_input$Cx, sawe_input$Cy, sawe_input$mass, C["Cx"], C["Cy"]),
+  Ixz = poi(sawe_input$Ixz, sawe_input$Cx, sawe_input$Cz, sawe_input$mass, C["Cx"], C["Cz"]),
+  Iyz = poi(sawe_input$Iyz, sawe_input$Cy, sawe_input$Cz, sawe_input$mass, C["Cy"], C["Cz"])
 )
 ```
 
@@ -748,6 +912,25 @@ POI
 ```
 
 This `r agree(isTRUE(all.equal(POI, c(Ixy = sawe_result$Ixy, Ixz = sawe_result$Ixz, Iyz = sawe_result$Iyz))))` with the computed result.
+
+### Radii of Gyration
+
+```{r}
+rog <- function(I, m) sqrt(I / m)
+ROG <- c(
+  kx = rog(sawe_result$Ixx, sawe_result$mass),
+  ky = rog(sawe_result$Iyy, sawe_result$mass),
+  kz = rog(sawe_result$Izz, sawe_result$mass)
+)
+```
+
+The independently-calculated radii of gyration are
+
+```{r echo = FALSE}
+ROG
+```
+
+This `r agree(isTRUE(all.equal(ROG, c(kx = sawe_result$kx, ky = sawe_result$ky, kz = sawe_result$kz))))` with the computed result.
 
 ### Mass Uncertainty
 
@@ -766,13 +949,13 @@ This `r agree(isTRUE(all.equal(sigma_mass, sawe_result$sigma_mass)))` with the c
 ### Center of Mass Uncertainty
 
 ```{r}
-sigma_cm <- function(m, sigma_v, sigma_m, v, c) {
-  (m * sigma_v)^2 + (sigma_m * (v - c))^2
+sigma_cm <- function(m, sigma_v, sigma_m, v, c, mass) {
+  sqrt(sum((m * sigma_v)^2 + (sigma_m * (v - c))^2)) / mass
 }
 sigma_C <- c(
-  sigma_Cx = sqrt(sum(sigma_cm(sawe_input$mass, sawe_input$sigma_Cx, sawe_input$sigma_mass, sawe_input$Cx, C["Cx"]))) / mass,
-  sigma_Cy = sqrt(sum(sigma_cm(sawe_input$mass, sawe_input$sigma_Cy, sawe_input$sigma_mass, sawe_input$Cy, C["Cy"]))) / mass,
-  sigma_Cz = sqrt(sum(sigma_cm(sawe_input$mass, sawe_input$sigma_Cz, sawe_input$sigma_mass, sawe_input$Cz, C["Cz"]))) / mass
+  sigma_Cx = sigma_cm(sawe_input$mass, sawe_input$sigma_Cx, sawe_input$sigma_mass, sawe_input$Cx, C["Cx"], mass),
+  sigma_Cy = sigma_cm(sawe_input$mass, sawe_input$sigma_Cy, sawe_input$sigma_mass, sawe_input$Cy, C["Cy"], mass),
+  sigma_Cz = sigma_cm(sawe_input$mass, sawe_input$sigma_Cz, sawe_input$sigma_mass, sawe_input$Cz, C["Cz"], mass)
 )
 ```
 
@@ -788,18 +971,20 @@ This `r agree(isTRUE(all.equal(sigma_C, c(sigma_Cx = sawe_result$sigma_Cx, sigma
 
 ```{r}
 sigma_moi <- function(sigma_I, mass, sigma_mass, v1, v2, c1, c2, sigma_v1, sigma_v2) {
-  sigma_I^2 +
+  sqrt(sum(
+    sigma_I^2 +
     (2 * mass * (v1 - c1) * sigma_v1)^2 +
     (2 * mass * (v2 - c2) * sigma_v2)^2 +
     (((v1 - c1)^2 + (v2 - c2)^2) * sigma_mass)^2
+  ))
 }
 sigma_MOI <- c(
-  sigma_Ixx = sqrt(sum(sigma_moi(sawe_input$sigma_Ixx, sawe_input$mass, sawe_input$sigma_mass, sawe_input$Cy,
-                                  sawe_input$Cz, C["Cy"], C["Cz"], sawe_input$sigma_Cy, sawe_input$sigma_Cz))),
-  sigma_Iyy = sqrt(sum(sigma_moi(sawe_input$sigma_Iyy, sawe_input$mass, sawe_input$sigma_mass, sawe_input$Cx,
-                                  sawe_input$Cz, C["Cx"], C["Cz"], sawe_input$sigma_Cx, sawe_input$sigma_Cz))),
-  sigma_Izz = sqrt(sum(sigma_moi(sawe_input$sigma_Izz, sawe_input$mass, sawe_input$sigma_mass, sawe_input$Cx,
-                                  sawe_input$Cy, C["Cx"], C["Cy"], sawe_input$sigma_Cx, sawe_input$sigma_Cy)))
+  sigma_Ixx = sigma_moi(sawe_input$sigma_Ixx, sawe_input$mass, sawe_input$sigma_mass, sawe_input$Cy,
+                                  sawe_input$Cz, C["Cy"], C["Cz"], sawe_input$sigma_Cy, sawe_input$sigma_Cz),
+  sigma_Iyy = sigma_moi(sawe_input$sigma_Iyy, sawe_input$mass, sawe_input$sigma_mass, sawe_input$Cx,
+                                  sawe_input$Cz, C["Cx"], C["Cz"], sawe_input$sigma_Cx, sawe_input$sigma_Cz),
+  sigma_Izz = sigma_moi(sawe_input$sigma_Izz, sawe_input$mass, sawe_input$sigma_mass, sawe_input$Cx,
+                                  sawe_input$Cy, C["Cx"], C["Cy"], sawe_input$sigma_Cx, sawe_input$sigma_Cy)
 )
 ```
 
@@ -815,18 +1000,20 @@ This `r agree(isTRUE(all.equal(sigma_MOI, c(sigma_Ixx = sawe_result$sigma_Ixx, s
 
 ```{r}
 sigma_poi <- function(sigma_I, mass, sigma_mass, v1, v2, c1, c2, sigma_v1, sigma_v2) {
-  sigma_I^2 +
+  sqrt(sum(
+    sigma_I^2 +
     ((v1 - c1) * mass * sigma_v2)^2 +
     ((v1 - c1) * (v2 - c2) * sigma_mass)^2 +
     ((v2 - c2) * mass * sigma_v1)^2
+  ))
 }
 sigma_POI <- c(
-  sigma_Ixy = sqrt(sum(sigma_poi(sawe_input$sigma_Ixy, sawe_input$mass, sawe_input$sigma_mass, sawe_input$Cx,
-                                  sawe_input$Cy, C["Cx"], C["Cy"], sawe_input$sigma_Cx, sawe_input$sigma_Cy))),
-  sigma_Ixz = sqrt(sum(sigma_poi(sawe_input$sigma_Ixz, sawe_input$mass, sawe_input$sigma_mass, sawe_input$Cx,
-                                  sawe_input$Cz, C["Cx"], C["Cz"], sawe_input$sigma_Cx, sawe_input$sigma_Cz))),
-  sigma_Iyz = sqrt(sum(sigma_poi(sawe_input$sigma_Iyz, sawe_input$mass, sawe_input$sigma_mass, sawe_input$Cy,
-                                  sawe_input$Cz, C["Cy"], C["Cz"], sawe_input$sigma_Cy, sawe_input$sigma_Cz)))
+  sigma_Ixy = sigma_poi(sawe_input$sigma_Ixy, sawe_input$mass, sawe_input$sigma_mass, sawe_input$Cx,
+                                  sawe_input$Cy, C["Cx"], C["Cy"], sawe_input$sigma_Cx, sawe_input$sigma_Cy),
+  sigma_Ixz = sigma_poi(sawe_input$sigma_Ixz, sawe_input$mass, sawe_input$sigma_mass, sawe_input$Cx,
+                                  sawe_input$Cz, C["Cx"], C["Cz"], sawe_input$sigma_Cx, sawe_input$sigma_Cz),
+  sigma_Iyz = sigma_poi(sawe_input$sigma_Iyz, sawe_input$mass, sawe_input$sigma_mass, sawe_input$Cy,
+                                  sawe_input$Cz, C["Cy"], C["Cz"], sawe_input$sigma_Cy, sawe_input$sigma_Cz)
 )
 ```
 
@@ -838,9 +1025,55 @@ sigma_POI
 
 This `r agree(isTRUE(all.equal(sigma_POI, c(sigma_Ixy = sawe_result$sigma_Ixy, sigma_Ixz = sawe_result$sigma_Ixz, sigma_Iyz = sawe_result$sigma_Iyz))))` with the computed result.
 
+### Radii of Gyration Uncertainties
+
+```{r}
+sigma_rog <- function(mt, It, sigma_mt, sigma_It, v1, c1, v2, c2, sigma_m) {
+  sqrt(sigma_It^2 / (4 * mt * It) + (It * sigma_mt^2) / (4 * mt^3) - sum(sigma_m^2 * ((v1 - c1)^2 + (v2 - c2)^2)) / (2 * mt^2))
+}
+sigma_ROG <- c(
+  sigma_kx = sigma_rog(sawe_result$mass, sawe_result$Ixx, sawe_result$sigma_mass, sawe_result$sigma_Ixx,
+                       sawe_input$Cy, sawe_result$Cy, sawe_input$Cz, sawe_result$Cz, sawe_input$sigma_mass),
+  sigma_ky = sigma_rog(sawe_result$mass, sawe_result$Iyy, sawe_result$sigma_mass, sawe_result$sigma_Iyy,
+                       sawe_input$Cx, sawe_result$Cx, sawe_input$Cz, sawe_result$Cz, sawe_input$sigma_mass),
+  sigma_kz = sigma_rog(sawe_result$mass, sawe_result$Izz, sawe_result$sigma_mass, sawe_result$sigma_Izz,
+                       sawe_input$Cx, sawe_result$Cx, sawe_input$Cy, sawe_result$Cy, sawe_input$sigma_mass)
+)
+```
+
+The independently-calculated radii of gyration uncertainties are
+
+```{r echo = FALSE}
+sigma_ROG
+```
+
+This `r agree(isTRUE(all.equal(sigma_ROG, c(sigma_kx = sawe_result$sigma_kx, sigma_ky = sawe_result$sigma_ky, sigma_kz = sawe_result$sigma_kz))))` with the computed result.
+
+```{r echo = FALSE}
+result <- rollup_radii_of_gyration_unc(sawe_tree, add_radii_of_gyration(rollup_mass_props_and_unc(sawe_tree, sawe_table)))
+parts <- result[1:2, ]
+aggr <- result[3, ]
+sigma_rog_sawe<- function(k, kt, v1, c1, v2, c2, sigma_m, m, mt, sigma_v1, sigma_v2, sigma_k) {
+  sqrt(sum(
+    ((k^2 - kt^2 + (v1 - c1)^2 + (v2 - c2)^2) * sigma_m)^2 +
+      (2 * m * (v1 - c1) * sigma_v1)^2 +
+      (2 * m * (v2 - c2) * sigma_v2)^2 +
+      (2 * m * k * sigma_k)^2
+  )) /  (2 * kt * mt)
+}
+sigma_ROG_sawe <- c(
+  sigma_kx = sigma_rog_sawe(parts$kx, aggr$kx, parts$Cy, aggr$Cy, parts$Cz, aggr$Cz,
+                            parts$sigma_mass, parts$mass, aggr$mass, parts$sigma_Cy, parts$sigma_Cz, parts$sigma_kx),
+  sigma_ky = sigma_rog_sawe(parts$ky, aggr$ky, parts$Cx, aggr$Cx, parts$Cz, aggr$Cz,
+                            parts$sigma_mass, parts$mass, aggr$mass, parts$sigma_Cx, parts$sigma_Cz, parts$sigma_ky),
+  sigma_kz = sigma_rog_sawe(parts$kz, aggr$kz, parts$Cx, aggr$Cx, parts$Cy, aggr$Cy,
+                            parts$sigma_mass, parts$mass, aggr$mass, parts$sigma_Cx, parts$sigma_Cy, parts$sigma_kz)
+)
+```
+
 ## Comparison With Published Results
 
-The SAWE reference provides computed results for their example. These results match those within a tolerance of 0.2%. The small differences are likely because their actual input values were not identical to the truncated values published in the article.
+The SAWE reference provides computed results for their example (excluding radii of gyration and their uncertainties). These results match those within a tolerance of 0.2%. The small differences are likely because their actual input values were not identical to the truncated values published in the article.
 
 # Performance Evaluation
 
