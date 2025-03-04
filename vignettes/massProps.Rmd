@@ -246,11 +246,7 @@ The corresponding `R` code is
   amp$mass <- Reduce(`+`, Map(f = function(mp) mp$mass, mpl))
 ```
 
-<<<<<<< HEAD
 In this and the following code snippets, the variable `mpl` is a list of input mass property sets for parts, the variable `mp` is a formal parameter of an anonymous function applied to each member of `mpl`, and `amp` is the resulting aggregate mass property set. The line above is an `R` functional programming idiom for "set the mass value of the aggregate to the sum of the mass values of the parts".
-=======
-In this and the following code snippets, the variable `mpl` is a list of input mass property sets, the variable `mp` is a formal parameter of an anonymous function applied to each member of `mpl`, and `amp` is the resulting aggregate mass property set. The line above is an `R` functional programming idiom for "set the mass value of the result to the sum of the mass values of the inputs".
->>>>>>> main
 
 ### Center of Mass
 
