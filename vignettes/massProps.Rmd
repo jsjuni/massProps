@@ -1090,12 +1090,12 @@ result <- rollup_radii_of_gyration_unc(sawe_tree, add_radii_of_gyration(rollup_m
 parts <- result[1:2, ]
 aggr <- result[3, ]
 sigma_rog_sawe<- function(k, kt, v1, c1, v2, c2, sigma_m, m, mt, sigma_v1, sigma_v2, sigma_k) {
-  1 / (2 * kt * mt) * (
-    sqrt(sum(((k^2 - kt^2/mt + (v1 - c1)^2 + (v2 - c2)^2) * sigma_m)^2 +
+  sqrt(sum(
+    ((k^2 - kt^2 + (v1 - c1)^2 + (v2 - c2)^2) * sigma_m)^2 +
       (2 * m * (v1 - c1) * sigma_v1)^2 +
       (2 * m * (v2 - c2) * sigma_v2)^2 +
       (2 * m * k * sigma_k)^2
-  )))
+  )) /  (2 * kt * mt)
 }
 sigma_ROG_sawe <- c(
   sigma_kx = sigma_rog_sawe(parts$kx, aggr$kx, parts$Cy, aggr$Cy, parts$Cz, aggr$Cz,
