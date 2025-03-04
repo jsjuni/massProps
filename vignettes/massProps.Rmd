@@ -878,7 +878,7 @@ sawe_result
 ### Mass
 
 ```{r echo = FALSE}
-agree <- function(l) if (l) "agrees" else "does not agree"
+agree <- function(l) if (l) "agrees" else stop("disagreement")
 ```
 
 ```{r}
