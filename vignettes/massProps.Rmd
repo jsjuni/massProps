@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 # Overview
 
-The `massProps` package extends `rollupTree` with functions to recursively calculate mass properties (and optionally, their uncertainties) for arbitrary decomposition trees. Formulas implemented are described in a technical paper published by the Society of Allied Weight Engineers.[@zimmerman:05:sawe]
+The `massProps` package extends `rollupTree` with functions to recursively calculate mass properties (and optionally, their uncertainties) for arbitrary decomposition trees. Formulas implemented are described in a technical paper published by the Society of Allied Weight Engineers [@zimmerman:05:sawe].
 
 # Synopsis
 
@@ -736,7 +736,7 @@ The corresponding R code is
       rg$radii_gyration <- sqrt(diag(rg$inertia) / rg$mass)
 ```
 
-The SAWE reference gives equations for uncertainties of radii of gyration in recursive form, but as these radii are simply functions of moments of inertia and mass, we should be able to express their uncertainties in terms of uncertainties of moments of inertia and mass by applying standard uncertainty propagation theory.
+The SAWE reference gives equations for uncertainties of radii of gyration in recursive form, but as these radii are simply functions of moments of inertia and mass, we should be able to express their uncertainties in terms of uncertainties of moments of inertia and mass by applying standard uncertainty propagation theory [@wikipedia:uncprop].
 
 Let
 
@@ -1066,8 +1066,8 @@ This `r agree(isTRUE(all.equal(sigma_POI, c(sigma_Ixy = sawe_result$sigma_Ixy, s
 ### Radii of Gyration Uncertainties
 
 ```{r}
-sigma_rog <- function(m, I, sigma_m, sigma_I, v1, c1, v2, c2, sigma_mi) {
-  sqrt(sigma_I^2 / (4 * m * I) + (I * sigma_m^2) / (4 * m^3) - sum(sigma_mi^2 * ((v1 - c1)^2 + (v2 - c2)^2)) / (2 * m^2))
+sigma_rog <- function(mt, It, sigma_mt, sigma_It, v1, c1, v2, c2, sigma_m) {
+  sqrt(sigma_It^2 / (4 * mt * It) + (It * sigma_mt^2) / (4 * mt^3) - sum(sigma_m^2 * ((v1 - c1)^2 + (v2 - c2)^2)) / (2 * mt^2))
 }
 sigma_ROG <- c(
   sigma_kx = sigma_rog(sawe_result$mass, sawe_result$Ixx, sawe_result$sigma_mass, sawe_result$sigma_Ixx,
