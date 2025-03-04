@@ -770,7 +770,9 @@ X & = \sum_{i=1}^{n} \left\{ {\Ixx}_i + {\epsilon_\Ixx}_i
  \\
 \end{align}
 $$
-where $E[{\epsilon_w}_i {\epsilon_w}_j] = 0$ and $E[{\epsilon_\Ixx}_i {\epsilon_\Ixx}_j] = 0$ for all $i \neq j$ and $E[{\epsilon_w}_i {\epsilon_\Ixx}_j] = 0$ for all $i$ and $j$. It is clear from the linearity of $W$ and $X$ in $w_i$ and $\Ixx_i$ that
+where $E[{\epsilon_w}_i] = 0$ and $E[{\epsilon_\Ixx}_i] = 0$ for all $i$,
+$E[{\epsilon_w}_i {\epsilon_w}_j] = 0$ and $E[{\epsilon_\Ixx}_i {\epsilon_\Ixx}_j] = 0$ for all $i \neq j$, and
+$E[{\epsilon_w}_i {\epsilon_\Ixx}_j] = 0$ for all $i$ and $j$. It is clear from the linearity of $W$ and $X$ in $w_i$ and $\Ixx_i$ that
 
 $$
 E[W] = E \left[\sum_{i=1}^{n} (w_i + {\epsilon_w}_i) \right] = w + \sum_{i=1}^{n} {\epsilon_w}_i = w
