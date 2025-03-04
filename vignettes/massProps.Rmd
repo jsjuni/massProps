@@ -15,6 +15,49 @@ knitr::opts_chunk$set(
 )
 ```
 
+\newcommand{\sumwi}{\sum_{i=1}^{n}w_i}
+
+\newcommand{\sumwivi}[1]{\sum_{i=1}^{n}{w_i}{{#1}_i}}
+
+\newcommand{\Ixx}{I_{XX}}
+\newcommand{\Iyy}{I_{YY}}
+\newcommand{\Izz}{I_{ZZ}}
+\newcommand{\Ixy}{I_{XY}}
+\newcommand{\Ixz}{I_{XZ}}
+\newcommand{\Iyz}{I_{YZ}}
+
+\newcommand{\kx}{k_X}
+\newcommand{\ky}{k_Y}
+\newcommand{\kz}{k_Z}
+
+\newcommand{\moia}[3]{
+  \sum_{i=1}^{n} \left[ {I_{#1}}_i
+    + w_i \left( {#2}_i^2 + {#3}_i^2 \right)
+  - w_i \left( \bar{#2}^2 + \bar{#3}^2 \right)
+  \right]
+}
+
+\newcommand{\moib}[3]{
+\sum_{i=1}^{n} \left\{ {I_{#1}}_i
+  + w_i \left[ \left( {#2}_i - \bar{#2} \right)^2 + \left( {#3}_i - \bar{#3} \right)^2 \right]
+  \right\}
+}
+
+\newcommand{\di}[1]{({#1}_i - \bar{#1})}
+
+\newcommand{\poia}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i {{#2}_i}{{#3}_i} -w_i (\bar{#2}\bar{#3})\right]}
+\newcommand{\poib}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i \di{#2}\di{#3}\right]}
+\newcommand{\sigmacm}[1]{
+  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_\bar{#1}}}_i)^2 + [{\sigma_w}_i \di{#1}]^2 \right\} }
+  \bigg/ \sum_{i=1}^{n}w_i \\
+}
+\newcommand{\sigmamoi}[3]{\sqrt{ \sum_{i=1}^n \left\{
+  \sigma_{{I_{#1}}_i}^2 + \left[ 2 w_i \di{#2} \sigma_{{#2}_i} \right]^2 + \left[ 2 w_i \di{#3} \sigma_{{#3}_i} \right]^2 + \left[ \left(\di{#2}^2 + \di{#3}^2 \right)\sigma_{w_i}\right]^2 \right\} }
+}
+\newcommand{\sigmapoi}[3]{\sqrt{ \sum_{i=1}^n \left\{
+  \sigma_{{I_{#1}}_i}^2 + \left[ \di{#2} w_i \sigma_{{#3}_i}\right]^2 + \left[ \di{#2}\di{#3}\sigma_{w_i} \right]^2 + \left[ \di{#3}  w_i \sigma_{{#2}_i} \right]^2 \right\} }
+}
+
 # Overview
 
 The `massProps` package extends `rollupTree` with functions to recursively calculate mass properties (and optionally, their uncertainties) for arbitrary decomposition trees. Formulas implemented are described in a technical paper published by the Society of Allied Weight Engineers [@zimmerman:05:sawe].
@@ -53,13 +96,9 @@ The Mass Property Table must contain the following columns. Other columns may ex
 
 -   `Iyz` product of inertia relative to the $y$ and $z$ axes (numeric)
 
--   `POIconv` either '+' or '-', indicating the sign convention for products of inertia[^1]
+  -   `POIconv` either '+' or '-', indicating the sign convention for products of inertia. In the negative convention, for example, $I_{XY} \equiv -\int{xy \rho \, dV}$. In the positive convention, $I_{XY} \equiv \int{xy \rho \, dV}$.
 
--   `Ipoint` logical indicator that this item is considered a point mass (i.e., its inertia contribution is negligible)[^2]
-
-[^1]: In the negative convention, for example, $\Ixy \equiv -\int xy \rho \thinspace dV$. In the positive convention, $\Ixy \equiv \int xy \rho \thinspace dV$.
-
-[^2]: The same algebraic result can be achieved by setting all moments and products of inertia to zero, but `rollup_mass_props()` by default ensures that all leaf items in the tree have mass properties that correspond to physically-realizable objects. A zero inertia tensor will fail this check. Rather than relax the check (which is essential for trustworthy results), a `TRUE` value for `Ipoint` indicates that the inertia tensor should be excluded from computations.
+-   `Ipoint` logical indicator that this item is considered a point mass. The same algebraic result can be achieved by setting all moments and products of inertia to zero, but `rollup_mass_props()` by default ensures that all leaf items in the tree have mass properties that correspond to physically-realizable objects. A zero inertia tensor will fail this check. Rather than relax the check (which is essential for trustworthy results), a `TRUE` value for `Ipoint` indicates that the inertia tensor should be excluded from computations.
 
 #### Required Columns for Mass Properties Uncertainties
 
@@ -129,6 +168,8 @@ Then we can compute mass properties for non-leaf elements by calling `rollup_mas
 rollup_mass_props(test_tree, test_table)
 ```
 
+Note that, although the table shows the parent of each element for clarity of exposition, the child-parent relations are coneveyed *only* by the tree passed as the first argument.
+
 The input may also contain uncertainties data. This example is from the Society of Allied Weight Engineers:
 
 ```{r echo = FALSE}
@@ -180,49 +221,6 @@ Strategies for achieving the objective include
 The author has intentionally made no effort to micro-optimize for performance. In particular, the author is aware that representing the inertia and its uncertainty as 3 ⨉ 3 matrices is "inefficient" to the degree that it independently calculates values that are redundant by symmetry. "Inefficient", however, does not mean "slow". See [Performance Evaluation] below.
 
 # Theory
-
-\newcommand{\sumwi}{\sum_{i=1}^{n}w_i}
-
-\newcommand{\sumwivi}[1]{\sum_{i=1}^{n}{w_i}{{#1}_i}}
-
-\newcommand{\Ixx}{I_{XX}}
-\newcommand{\Iyy}{I_{YY}}
-\newcommand{\Izz}{I_{ZZ}}
-\newcommand{\Ixy}{I_{XY}}
-\newcommand{\Ixz}{I_{XZ}}
-\newcommand{\Iyz}{I_{YZ}}
-
-\newcommand{\kx}{k_X}
-\newcommand{\ky}{k_Y}
-\newcommand{\kz}{k_Z}
-
-\newcommand{\moia}[3]{
-  \sum_{i=1}^{n} \left[ {I_{#1}}_i
-    + w_i \left( {#2}_i^2 + {#3}_i^2 \right)
-  - w_i \left( \bar{#2}^2 + \bar{#3}^2 \right)
-  \right]
-}
-
-\newcommand{\moib}[3]{
-\sum_{i=1}^{n} \left\{ {I_{#1}}_i
-  + w_i \left[ \left( {#2}_i - \bar{#2} \right)^2 + \left( {#3}_i - \bar{#3} \right)^2 \right]
-  \right\}
-}
-
-\newcommand{\di}[1]{({#1}_i - \bar{#1})}
-
-\newcommand{\poia}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i {{#2}_i}{{#3}_i} -w_i (\bar{#2}\bar{#3})\right]}
-\newcommand{\poib}[3]{\sum_{i=1}^{n} \left[ {I_{#1}}_i + w_i \di{#2}\di{#3}\right]}
-\newcommand{\sigmacm}[1]{
-  \sqrt{ \sum_{i=1}^n \left\{ (w_i {{\sigma_\bar{#1}}}_i)^2 + [{\sigma_w}_i \di{#1}]^2 \right\} }
-  \bigg/ \sum_{i=1}^{n}w_i \\
-}
-\newcommand{\sigmamoi}[3]{\sqrt{ \sum_{i=1}^n \left\{
-  \sigma_{{I_{#1}}_i}^2 + \left[ 2 w_i \di{#2} \sigma_{{#2}_i} \right]^2 + \left[ 2 w_i \di{#3} \sigma_{{#3}_i} \right]^2 + \left[ \left(\di{#2}^2 + \di{#3}^2 \right)\sigma_{w_i}\right]^2 \right\} }
-}
-\newcommand{\sigmapoi}[3]{\sqrt{ \sum_{i=1}^n \left\{
-  \sigma_{{I_{#1}}_i}^2 + \left[ \di{#2} w_i \sigma_{{#3}_i}\right]^2 + \left[ \di{#2}\di{#3}\sigma_{w_i} \right]^2 + \left[ \di{#3}  w_i \sigma_{{#2}_i} \right]^2 \right\} }
-}
 
 In this section, we state the reference equations [@zimmerman:05:sawe] and show, where applicable, how those equations can be rewritten in more concise form. The form of the equations actually implemented is displayed within a box, e.g. $\boxed{F = ma}$.
 
