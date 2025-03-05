@@ -1,4 +1,4 @@
-# massProps (development version)
+# massProps 0.3.0
 
 * Numeric subscripts replaced with symbolic (e.g., [1] -> ["x"]) (#25).
 
