@@ -1,3 +1,5 @@
+# massProps (development version)
+
 # massProps 0.3.1
 
 * Examples made smaller to avoid CRAN runtime violations
