@@ -27,5 +27,5 @@ of the tree contain the same identifiers, and that the mass properties of every 
 of the table are valid.
 }
 \examples{
-validate_mass_props_table(mp_tree, mp_table)
+validate_mass_props_table(mp_tree_small, mp_table_small)
 }
