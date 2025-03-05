@@ -56,24 +56,25 @@ rollup_radii_of_gyration_unc <- function(tree, df) {
     tree,
     df,
     update = function(ds, target, sources) {
-      tmp <- get_mass_props_and_unc(ds, target)
-      I <- diag(tmp$inertia)
-      sigma_I <- diag(tmp$sigma_inertia)
-      t1 <- sigma_I^2 / (tmp$mass * I) + (I * tmp$sigma_mass^2) / tmp$mass^3
-      t2 <- 2 / tmp$mass^2 * Reduce(
-        `+`,
-        Map(
-          f = function(s) {
-            smp <- get_mass_props_and_unc(ds, s)
-            d2 <- (smp$center_mass - tmp$center_mass)^2
-            smp$sigma_mass^2 * (sum(d2) - d2)
-          },
-          sources
-        ),
-        init <- c(0, 0, 0)
-      )
-      tmp$sigma_radii_gyration <- sqrt(t1 - t2) / 2
-      set_radii_of_gyration_unc(ds, target, tmp)
+      amp <- get_mass_props_and_unc(ds, target)
+      I <- diag(amp$inertia)
+      sigma_I <- diag(amp$sigma_inertia)
+      amp$sigma_radii_gyration <- sqrt(
+        sigma_I^2 / (amp$mass * I) + (I * amp$sigma_mass^2) / amp$mass^3 -
+          2 / amp$mass^2 * Reduce(
+            `+`,
+            Map(
+              f = function(s) {
+                mp <- get_mass_props_and_unc(ds, s)
+                d2 <- (mp$center_mass - amp$center_mass)^2
+                mp$sigma_mass^2 * (sum(d2) - d2)
+              },
+              sources
+            ),
+            init <- c(0, 0, 0)
+          )
+      ) / 2
+      set_radii_of_gyration_unc(ds, target, amp)
     },
     validate_ds = validate_mass_props_and_unc_table
   )

@@ -49,7 +49,20 @@ test_table
 #> 12 P.8    A.3    2 -1 -1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE
 ```
 
-and this graph with edges representing child-parent relations:
+`POIconv` indicates the products of inertia sign convention. In the
+negative convention, for example, $I_{XY} \equiv -\int{xy \rho \, dV}$.
+In the positive convention, $I_{XY} \equiv \int{xy \rho \, dV}$.
+
+`Ipoint` indicates whether this object is to be considered a point mass.
+The same algebraic result can be achieved by setting all moments and
+products of inertia to zero, but `rollup_mass_props()` by default
+ensures that all leaf items in the tree have mass properties that
+correspond to physically-realizable objects. A zero inertia tensor will
+fail this check. Rather than relax the check (which is essential for
+trustworthy results), a `TRUE` value for `Ipoint` indicates that the
+inertia tensor should be excluded from computations.
+
+We construct a graph with edges representing child-parent relations:
 
 ``` r
 library(igraph)
@@ -79,6 +92,10 @@ rollup_mass_props(test_tree, test_table)
 #> 11 P.7    A.3    2 -1 -1  1   4 -0.1  -0.1   4   0.1   4       -  FALSE
 #> 12 P.8    A.3    2 -1 -1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE
 ```
+
+Note that, although the table shows the parent of each element for
+clarity of exposition, the child-parent relations are coneveyed *only*
+by the tree passed as the first argument.
 
 The input data may include mass properties uncertainties as well:
 
