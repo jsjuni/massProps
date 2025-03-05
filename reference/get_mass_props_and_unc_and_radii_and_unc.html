@@ -9,7 +9,7 @@ and radii of gyration and uncertainties list from a selected row in a data frame
 
     <a class="navbar-brand me-2" href="../index.html">massProps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,7 +32,7 @@ and radii of gyration and uncertainties list from a selected row in a data frame
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Get mass properties and uncertainties and radii of gyration and uncertainties</h1>
-      <small class="dont-index">Source: <a href="https://github.com/jsjuni/massProps/blob/main/R/radii.R" class="external-link"><code>R/radii.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jsjuni/massProps/blob/v0.3.1/R/radii.R" class="external-link"><code>R/radii.R</code></a></small>
       <div class="d-none name"><code>get_mass_props_and_unc_and_radii_and_unc.Rd</code></div>
     </div>
 
@@ -78,8 +78,9 @@ tensor is <code>Ixy</code> if <code>POIconv</code> is "-"; it is -<code>Ixy</cod
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mp_table_rollup</span> <span class="op">&lt;-</span> <span class="fu"><a href="rollup_mass_props_and_unc.html">rollup_mass_props_and_unc</a></span><span class="op">(</span><span class="va">mp_tree</span>, <span class="va">mp_table</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">radii_and_unc_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="rollup_radii_of_gyration_unc.html">rollup_radii_of_gyration_unc</a></span><span class="op">(</span><span class="va">mp_tree</span>, <span class="fu"><a href="add_radii_of_gyration.html">add_radii_of_gyration</a></span><span class="op">(</span><span class="va">mp_table_rollup</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mp_table_small_rollup</span> <span class="op">&lt;-</span> <span class="fu"><a href="rollup_mass_props_and_unc.html">rollup_mass_props_and_unc</a></span><span class="op">(</span><span class="va">mp_tree_small</span>, <span class="va">mp_table_small</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">radii_and_unc_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="rollup_radii_of_gyration_unc.html">rollup_radii_of_gyration_unc</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>                          <span class="va">mp_tree_small</span>, <span class="fu"><a href="add_radii_of_gyration.html">add_radii_of_gyration</a></span><span class="op">(</span><span class="va">mp_table_small_rollup</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">get_mass_props_and_unc_and_radii_and_unc</span><span class="op">(</span><span class="va">radii_and_unc_table</span>, <span class="st">"C.1"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 635.6602</span>
