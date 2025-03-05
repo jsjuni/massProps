@@ -83,7 +83,9 @@
 <span><span class="co">#&gt; 10 P.6    A.3    2 -1  1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
 <span><span class="co">#&gt; 11 P.7    A.3    2 -1 -1  1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
 <span><span class="co">#&gt; 12 P.8    A.3    2 -1 -1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span></code></pre></div>
-<p>and this graph with edges representing child-parent relations:</p>
+<p><code>POIconv</code> indicates the products of inertia sign convention. In the negative convention, for example, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mrow><mi>X</mi><mi>Y</mi></mrow></msub><mo>≡</mo><mo>−</mo><mo>∫</mo><mrow><mi>x</mi><mi>y</mi><mi>ρ</mi><mspace width="0.167em"></mspace><mi>d</mi><mi>V</mi></mrow></mrow><annotation encoding="application/x-tex">I_{XY} \equiv -\int{xy \rho \, dV}</annotation></semantics></math>. In the positive convention, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mrow><mi>X</mi><mi>Y</mi></mrow></msub><mo>≡</mo><mo>∫</mo><mrow><mi>x</mi><mi>y</mi><mi>ρ</mi><mspace width="0.167em"></mspace><mi>d</mi><mi>V</mi></mrow></mrow><annotation encoding="application/x-tex">I_{XY} \equiv \int{xy \rho \, dV}</annotation></semantics></math>.</p>
+<p><code>Ipoint</code> indicates whether this object is to be considered a point mass. The same algebraic result can be achieved by setting all moments and products of inertia to zero, but <code><a href="reference/rollup_mass_props.html">rollup_mass_props()</a></code> by default ensures that all leaf items in the tree have mass properties that correspond to physically-realizable objects. A zero inertia tensor will fail this check. Rather than relax the check (which is essential for trustworthy results), a <code>TRUE</code> value for <code>Ipoint</code> indicates that the inertia tensor should be excluded from computations.</p>
+<p>We construct a graph with edges representing child-parent relations:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/" class="external-link">igraph</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://r.igraph.org/reference/E.html" class="external-link">E</a></span><span class="op">(</span><span class="va">test_tree</span><span class="op">)</span></span>
@@ -107,6 +109,7 @@
 <span><span class="co">#&gt; 10 P.6    A.3    2 -1  1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
 <span><span class="co">#&gt; 11 P.7    A.3    2 -1 -1  1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span>
 <span><span class="co">#&gt; 12 P.8    A.3    2 -1 -1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span></code></pre></div>
+<p>Note that, although the table shows the parent of each element for clarity of exposition, the child-parent relations are coneveyed <em>only</em> by the tree passed as the first argument.</p>
 <p>The input data may include mass properties uncertainties as well:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test_unc_table</span></span>
