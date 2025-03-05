@@ -1,5 +1,7 @@
 # massProps 0.3.1
 
+* Examples made smaller to avoid CRAN runtime violations
+
 # massProps 0.3.0
 
 * Numeric subscripts replaced with symbolic (e.g., [1] -> ["x"]) (#25).
