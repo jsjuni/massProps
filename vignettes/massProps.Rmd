@@ -1046,6 +1046,7 @@ This `r agree(isTRUE(all.equal(sigma_ROG, c(sigma_kx = sawe_result$sigma_kx, sig
 result <- rollup_radii_of_gyration_unc(sawe_tree, add_radii_of_gyration(rollup_mass_props_and_unc(sawe_tree, sawe_table)))
 parts <- result[1:2, ]
 aggr <- result[3, ]
+# does not agree
 sigma_rog_sawe<- function(k, kt, v1, c1, v2, c2, sigma_m, m, mt, sigma_v1, sigma_v2, sigma_k) {
   sqrt(sum(
     ((k^2 - kt^2 + (v1 - c1)^2 + (v2 - c2)^2) * sigma_m)^2 +
@@ -1060,6 +1061,32 @@ sigma_ROG_sawe <- c(
   sigma_ky = sigma_rog_sawe(parts$ky, aggr$ky, parts$Cx, aggr$Cx, parts$Cz, aggr$Cz,
                             parts$sigma_mass, parts$mass, aggr$mass, parts$sigma_Cx, parts$sigma_Cz, parts$sigma_ky),
   sigma_kz = sigma_rog_sawe(parts$kz, aggr$kz, parts$Cx, aggr$Cx, parts$Cy, aggr$Cy,
+                            parts$sigma_mass, parts$mass, aggr$mass, parts$sigma_Cx, parts$sigma_Cy, parts$sigma_kz)
+)
+# agrees
+alt_moi_sawe <- function(m, mt, k, v1, c1, v2, c2) {
+  sum(m * (k^2 + v1^2 + v2^2)) - mt * (c1^2 + c2^2)
+}
+alt_MOI_sawe <- c(
+  Ixx = alt_moi_sawe(parts$mass, aggr$mass, parts$kx, parts$Cy, aggr$Cy, parts$Cz, aggr$Cz),
+  Iyy = alt_moi_sawe(parts$mass, aggr$mass, parts$ky, parts$Cx, aggr$Cx, parts$Cz, aggr$Cz),
+  Izz = alt_moi_sawe(parts$mass, aggr$mass, parts$kz, parts$Cx, aggr$Cx, parts$Cy, aggr$Cy)
+)
+# does not agree
+alt_sigma_moi_sawe <- function(k, v1, c1, v2, c2, sigma_m, m, mt, sigma_v1, sigma_v2, sigma_k) {
+  sqrt(sum(
+    ((k^2 + (v1 - c1)^2 + (v2 - c2)^2) * sigma_m)^2 +
+      (2 * m * (v1 - c1) * sigma_v1)^2 +
+      (2 * m * (v2 - c2) * sigma_v2)^2 +
+      (2 * m * k * sigma_k)^2
+  ))
+}
+alt_sigma_MOI_sawe <- c(
+  sigma_Ixx = alt_sigma_moi_sawe(parts$kx, parts$Cy, aggr$Cy, parts$Cz, aggr$Cz,
+                            parts$sigma_mass, parts$mass, aggr$mass, parts$sigma_Cy, parts$sigma_Cz, parts$sigma_kx),
+  sigma_Iyy = alt_sigma_moi_sawe(parts$ky, parts$Cx, aggr$Cx, parts$Cz, aggr$Cz,
+                            parts$sigma_mass, parts$mass, aggr$mass, parts$sigma_Cx, parts$sigma_Cz, parts$sigma_ky),
+  sigma_Izz = alt_sigma_moi_sawe(parts$kz, parts$Cx, aggr$Cx, parts$Cy, aggr$Cy,
                             parts$sigma_mass, parts$mass, aggr$mass, parts$sigma_Cx, parts$sigma_Cy, parts$sigma_kz)
 )
 ```
