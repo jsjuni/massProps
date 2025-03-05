@@ -7,7 +7,7 @@
   
 * Calculations for radii of gyration and their uncertainties added (#9).
 
-* Numerous code and documentation improvements.
+* Numerous code and documentation improvements (#37).
 
 # massProps 0.2.0
 
