@@ -1,4 +1,8 @@
-# massProps (development version)
+# massProps 0.3.1
+
+* Examples made smaller to avoid CRAN runtime violations
+
+# massProps 0.3.0
 
 * Numeric subscripts replaced with symbolic (e.g., [1] -> ["x"]) (#25).
 
@@ -7,7 +11,7 @@
   
 * Calculations for radii of gyration and their uncertainties added (#9).
 
-* Numerous code and documentation improvements.
+* Numerous code and documentation improvements (#37).
 
 # massProps 0.2.0
 

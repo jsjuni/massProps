@@ -25,5 +25,5 @@ TRUE if valid, stops with an error otherwise
 to a leaf vertex of the tree.
 }
 \examples{
-validate_mass_props_and_unc_table(mp_tree, mp_table)
+validate_mass_props_and_unc_table(mp_tree_small, mp_table_small)
 }

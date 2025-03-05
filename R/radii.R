@@ -107,9 +107,9 @@ rollup_radii_of_gyration_unc <- function(tree, df) {
 #' @export
 #'
 #' @examples
-#' mp_table_rollup <- rollup_mass_props_and_unc(mp_tree, mp_table)
-#' radii_table <- add_radii_of_gyration(mp_table_rollup)
-#' get_mass_props_and_unc_and_radii(radii_table, "C.1")
+#' mp_table_small_rollup <- rollup_mass_props_and_unc(mp_tree_small, mp_table_small)
+#' radii_table_small <- add_radii_of_gyration(mp_table_small_rollup)
+#' get_mass_props_and_unc_and_radii(radii_table_small, "C.1")
 #'
 get_mass_props_and_unc_and_radii <- function(df, id) {
   l <- get_mass_props_and_unc(df, id)
@@ -145,8 +145,9 @@ get_mass_props_and_unc_and_radii <- function(df, id) {
 #' @export
 #'
 #' @examples
-#' mp_table_rollup <- rollup_mass_props_and_unc(mp_tree, mp_table)
-#' radii_and_unc_table <- rollup_radii_of_gyration_unc(mp_tree, add_radii_of_gyration(mp_table_rollup))
+#' mp_table_small_rollup <- rollup_mass_props_and_unc(mp_tree_small, mp_table_small)
+#' radii_and_unc_table <- rollup_radii_of_gyration_unc(
+#'                           mp_tree_small, add_radii_of_gyration(mp_table_small_rollup))
 #' get_mass_props_and_unc_and_radii_and_unc(radii_and_unc_table, "C.1")
 #'
 get_mass_props_and_unc_and_radii_and_unc <- function(df, id) {

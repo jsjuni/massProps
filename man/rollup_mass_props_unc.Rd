@@ -34,6 +34,6 @@ expects the mass properties in its input to have been rolled up, whereas \code{r
 the mass properties rollup itself.
 }
 \examples{
-mp_ru <- rollup_mass_props(mp_tree, mp_table)
-rollup_mass_props_unc(mp_tree, mp_ru)[1:100, ]
+mp_ru <- rollup_mass_props(mp_tree_small, mp_table_small)
+rollup_mass_props_unc(mp_tree_small, mp_ru)
 }
