@@ -141,9 +141,7 @@ The tree is an `igraph::graph` with vertices named by identifiers in the mass pr
 ## Invocation
 
 ```{r setup}
-library(rollupTree)
 library(massProps)
-suppressPackageStartupMessages({library(igraph)})
 ```
 
 Suppose we have the following mass properties table:
@@ -159,7 +157,7 @@ test_tree
 ```
 
 ```{r echo = FALSE}
-plot(test_tree,layout=layout_as_tree(test_tree, 2, mode="in"), vertex.shape = 'none', edge.arrow.mode = 0)
+igraph::plot.igraph(test_tree,layout=igraph::layout_as_tree(test_tree, 2, mode="in"), vertex.shape = 'none', edge.arrow.mode = 0)
 ```
 
 Then we can compute mass properties for non-leaf elements by calling `rollup_mass_props()`:
@@ -189,7 +187,7 @@ na_mass_props_and_unc <- function(d, t, v) {
 na_mass_props_and_unc_update <- function(d, t, s) {
   update_mass_props_and_unc(d, t, s, override = na_mass_props_and_unc)
 }
-sawe_input <- rollup(sawe_tree, sawe_table, update = na_mass_props_and_unc_update, validate_ds = validate_mass_props_and_unc_table)
+sawe_input <- rollupTree::rollup(sawe_tree, sawe_table, update = na_mass_props_and_unc_update, validate_ds = validate_mass_props_and_unc_table)
 ```
 
 ```{r}
@@ -1098,7 +1096,7 @@ The SAWE reference provides computed results for their example (excluding radii 
 # Performance Evaluation
 
 ```{r echo = FALSE}
-mp_tree_depth <- max(dfs(mp_tree, 2, mode = "in", order=FALSE, dist=TRUE)$dist) + 1
+mp_tree_depth <- max(igraph::dfs(mp_tree, 2, mode = "in", order=FALSE, dist=TRUE)$dist) + 1
 nv <- length(igraph::V(mp_tree))
 ne <- length(igraph::E(mp_tree))
 nl <- length(which(igraph::degree(mp_tree, mode="in") == 0))

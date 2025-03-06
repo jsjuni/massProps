@@ -1,5 +1,7 @@
 # massProps (development version)
 
+* Invocation instructions in vignette cleaned up (#41)
+
 # massProps 0.3.1
 
 * Examples made smaller to avoid CRAN runtime violations
