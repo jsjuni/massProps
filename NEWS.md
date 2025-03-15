@@ -2,6 +2,8 @@
 
 * Invocation instructions in vignette cleaned up (#41)
 
+* Covariance exposition for RoG uncertainty clarified (#43)
+
 # massProps 0.3.1
 
 * Examples made smaller to avoid CRAN runtime violations
