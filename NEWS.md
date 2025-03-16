@@ -1,8 +1,10 @@
 # massProps (development version)
 
-* Invocation instructions in vignette cleaned up (#41)
+* Invocation instructions in vignette cleaned up (#41).
 
-* Covariance exposition for RoG uncertainty clarified (#43)
+* Covariance exposition for RoG uncertainty clarified (#43).
+
+* Initialization in rollup_radii_of_gyration_unc() cleaned up (#44).
 
 # massProps 0.3.1
 

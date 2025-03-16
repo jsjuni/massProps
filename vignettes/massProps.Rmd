@@ -804,7 +804,7 @@ The corresponding R code is
               },
               sources
             ),
-            init <- c(0, 0, 0)
+            init = c(0, 0, 0)
           )
       ) / 2
  ```
