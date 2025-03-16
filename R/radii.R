@@ -71,7 +71,7 @@ rollup_radii_of_gyration_unc <- function(tree, df) {
               },
               sources
             ),
-            init <- c(0, 0, 0)
+            init = c(0, 0, 0)
           )
       ) / 2
       set_radii_of_gyration_unc(ds, target, amp)
