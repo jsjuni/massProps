@@ -6,6 +6,8 @@
 
 * Initialization in rollup_radii_of_gyration_unc() cleaned up (#44).
 
+* igraph loading fix for vignette (#48).
+
 # massProps 0.3.1
 
 * Examples made smaller to avoid CRAN runtime violations
