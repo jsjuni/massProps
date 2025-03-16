@@ -152,7 +152,11 @@ test_table
 
 Suppose we also have this tree:
 
+```{r echo = FALSE}
+suppressPackageStartupMessages({library(igraph)})
+```
 ```{r}
+library(igraph)
 test_tree
 ```
 
