@@ -211,9 +211,7 @@ zero)</p></li>
 <h3 id="invocation">Invocation<a class="anchor" aria-label="anchor" href="#invocation"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jsjuni.github.io/rollupTree/" class="external-link">rollupTree</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jsjuni.github.io/massProps/">massProps</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/" class="external-link">igraph</a></span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jsjuni.github.io/massProps/">massProps</a></span><span class="op">)</span></span></code></pre></div>
 <p>Suppose we have the following mass properties table:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test_table</span></span>
@@ -232,13 +230,14 @@ zero)</p></li>
 <span><span class="co">#&gt; 12 P.8    A.3    2 -1 -1 -1   4 -0.1  -0.1   4   0.1   4       -  FALSE</span></span></code></pre></div>
 <p>Suppose we also have this tree:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">test_tree</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/" class="external-link">igraph</a></span><span class="op">)</span></span>
+<span><span class="va">test_tree</span></span>
 <span><span class="co">#&gt; IGRAPH 7d8200c DN-- 12 11 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c)</span></span>
 <span><span class="co">#&gt; + edges from 7d8200c (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] A.2-&gt;A.1 A.3-&gt;A.1 C.1-&gt;A.1 P.1-&gt;A.2 P.2-&gt;A.2 P.3-&gt;A.2 P.4-&gt;A.2 P.5-&gt;A.3</span></span>
 <span><span class="co">#&gt;  [9] P.6-&gt;A.3 P.7-&gt;A.3 P.8-&gt;A.3</span></span></code></pre></div>
-<p><img src="massProps_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p><img src="massProps_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>Then we can compute mass properties for non-leaf elements by calling
 <code><a href="../reference/rollup_mass_props.html">rollup_mass_props()</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -1003,7 +1002,7 @@ E[X] &amp; = E \left[ \sum_{i=1}^{n} \left\{ {I_{XX}}_i + {\epsilon_{I_{XX}}}_i
 <span>              <span class="op">}</span>,</span>
 <span>              <span class="va">sources</span></span>
 <span>            <span class="op">)</span>,</span>
-<span>            <span class="va">init</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span>            init <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span>          <span class="op">)</span></span>
 <span>      <span class="op">)</span> <span class="op">/</span> <span class="fl">2</span></span></code></pre></div>
 </div>
