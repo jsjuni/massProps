@@ -12,3 +12,4 @@
 ^README\.Rmd$
 ^CRAN-SUBMISSION$
 ^revdep$
+^codecov\.yml$
