@@ -5,6 +5,11 @@
 
 <!-- badges: start -->
 
+[![CRAN
+status](https://www.r-pkg.org/badges/version/massProps)](https://CRAN.R-project.org/package=massProps)
+[![R-CMD-check](https://github.com/jsjuni/massProps/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jsjuni/massProps/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/jsjuni/massProps/graph/badge.svg)](https://app.codecov.io/gh/jsjuni/massProps)
 <!-- badges: end -->
 
 The `massProps` package extends `rollupTree` with functions to

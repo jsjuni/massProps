@@ -17,6 +17,9 @@ knitr::opts_chunk$set(
 # massProps
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/massProps)](https://CRAN.R-project.org/package=massProps)
+[![R-CMD-check](https://github.com/jsjuni/massProps/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jsjuni/massProps/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/jsjuni/massProps/graph/badge.svg)](https://app.codecov.io/gh/jsjuni/massProps)
 <!-- badges: end -->
 
 The `massProps` package extends `rollupTree` with functions to recursively calculate mass properties (and optionally, their uncertainties) for arbitrary composition trees. Formulas implemented are described in a technical paper published by the Society of Allied Weight Engineers [@zimmerman:05:sawe].
