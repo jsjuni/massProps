@@ -339,14 +339,14 @@ combine_mass_props_unc <- function(mpl, amp) {
 
   # mass uncertainty
 
-  amp$sigma_mass = sqrt(Reduce(`+`, Map(f = function(v) v$sigma_mass^2, mpl)))
+  amp$sigma_mass = sqrt(Reduce(`+`, Map(f = function(mp) mp$sigma_mass^2, mpl)))
 
   # center of mass uncertainty
 
   amp$sigma_center_mass = sqrt(Reduce(`+`, Map(
-    f = function(v) {
-      (v$mass * v$sigma_center_mass)^2 +
-        (v$sigma_mass * (v$center_mass - amp$center_mass))^2
+    f = function(mp) {
+      (mp$mass * mp$sigma_center_mass)^2 +
+        (mp$sigma_mass * (mp$center_mass - amp$center_mass))^2
     },
     mpl
   ))) / amp$mass
@@ -354,11 +354,11 @@ combine_mass_props_unc <- function(mpl, amp) {
   # inertia tensor uncertainty
 
   amp$sigma_inertia = sqrt(Reduce(`+`, Map(
-    f = function(v) {
+    f = function(mp) {
 
-      d <- v$center_mass - amp$center_mass
+      d <- mp$center_mass - amp$center_mass
 
-      P <- outer(d, v$sigma_center_mass)
+      P <- outer(d, mp$sigma_center_mass)
       p <- diag(P)
 
       Q <- outer(d, d)
@@ -366,9 +366,9 @@ combine_mass_props_unc <- function(mpl, amp) {
       M1 <-   P  - diag(p - 2 * p[c("y", "x", "x")])
       M2 <- t(P) - diag(p - 2 * p[c("z", "z", "y")])
       M3 <-   Q  - sum(diag(Q)) * diag(3)
-      M4 <- v$mass^2 * (M1^2 + M2^2) + (v$sigma_mass * M3)^2
+      M4 <- mp$mass^2 * (M1^2 + M2^2) + (mp$sigma_mass * M3)^2
 
-      if (v$point) M4 else v$sigma_inertia^2 + M4
+      if (mp$point) M4 else mp$sigma_inertia^2 + M4
     },
     mpl
   )))

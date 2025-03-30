@@ -8,6 +8,8 @@
 
 * igraph loading fix for vignette (#48).
 
+* Formal parameters made consistent in combine functions (#51).
+
 # massProps 0.3.1
 
 * Examples made smaller to avoid CRAN runtime violations
