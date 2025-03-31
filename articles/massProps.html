@@ -1260,15 +1260,15 @@ were taken with and without input validation:</p>
 <span>          <span class="st">'mp + unc    validation'</span> <span class="op">=</span> <span class="fu"><a href="../reference/rollup_mass_props_and_unc.html">rollup_mass_props_and_unc</a></span><span class="op">(</span><span class="va">mp_tree</span>, <span class="va">mp_table</span><span class="op">)</span>,</span>
 <span>          <span class="st">'mp       no validation'</span> <span class="op">=</span> <span class="fu"><a href="../reference/rollup_mass_props_fast.html">rollup_mass_props_fast</a></span><span class="op">(</span><span class="va">mp_tree</span>, <span class="va">mp_table</span><span class="op">)</span>,</span>
 <span>          <span class="st">'mp          validation'</span> <span class="op">=</span> <span class="fu"><a href="../reference/rollup_mass_props.html">rollup_mass_props</a></span><span class="op">(</span><span class="va">mp_tree</span>, <span class="va">mp_table</span><span class="op">)</span>,</span>
-<span>          replications <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>          replications <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>          columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"test"</span>, <span class="st">"replications"</span>, <span class="st">"elapsed"</span>, <span class="st">"user.self"</span>, <span class="st">"sys.self"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">mutate</span><span class="op">(</span>elapsed <span class="op">=</span> <span class="va">elapsed</span> <span class="op">/</span> <span class="fl">10</span>, user.self <span class="op">=</span> <span class="va">user.self</span> <span class="op">/</span> <span class="fl">10</span>, sys.self <span class="op">=</span> <span class="va">sys.self</span> <span class="op">/</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <p>Times reported are in seconds.</p>
 <pre><code>                    test replications elapsed user.self sys.self
-4 mp          validation            1   0.840     0.824    0.016
-3 mp       no validation            1   0.604     0.594    0.011
-2 mp + unc    validation            1   1.479     1.454    0.026
-1 mp + unc no validation            1   0.993     0.974    0.019</code></pre>
+4 mp          validation           10  1.0340    1.0182   0.0161
+3 mp       no validation           10  0.6926    0.6821   0.0106
+2 mp + unc    validation           10  1.6079    1.5814   0.0268
+1 mp + unc no validation           10  1.0657    1.0465   0.0194</code></pre>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
