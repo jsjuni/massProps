@@ -1,3 +1,5 @@
+# massProps (development version)
+
 # massProps 0.3.2
 
 * Invocation instructions in vignette cleaned up (#41).
