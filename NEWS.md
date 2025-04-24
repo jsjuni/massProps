@@ -1,5 +1,7 @@
 # massProps (development version)
 
+* Benchmark results cleaned up (#54).
+
 # massProps 0.3.2
 
 * Invocation instructions in vignette cleaned up (#41).

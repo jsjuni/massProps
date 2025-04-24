@@ -1144,23 +1144,25 @@ Flags: acpi, aes, apic, clfsh, cmov, cx16, cx8, de, ds, dscpl, dtse64, est, fpu,
 Benchmark results for rollup of mass properties and uncertainties were taken with and without input validation:
 
 ```{r eval=FALSE}
-benchmark('mp + unc no validation' = rollup_mass_props_and_unc_fast(mp_tree, mp_table),
-          'mp + unc    validation' = rollup_mass_props_and_unc(mp_tree, mp_table),
-          'mp       no validation' = rollup_mass_props_fast(mp_tree, mp_table),
-          'mp          validation' = rollup_mass_props(mp_tree, mp_table),
-          replications = 10,
+reps <- 10
+benchmark('mp + unc             ' = rollup_mass_props_and_unc_fast(mp_tree, mp_table),
+          'mp + unc + validation' = rollup_mass_props_and_unc(mp_tree, mp_table),
+          'mp                   ' = rollup_mass_props_fast(mp_tree, mp_table),
+          'mp       + validation' = rollup_mass_props(mp_tree, mp_table),
+          replications = reps,
           columns = c("test", "replications", "elapsed", "user.self", "sys.self")
-) |> mutate(elapsed = elapsed / 10, user.self = user.self / 10, sys.self = sys.self / 10)
+) |> mutate(across(c("elapsed", "user.self", "sys.self"), ~ .x / reps)) |>
+  select(-replications)
 ```
 
 Times reported are in seconds.
 
 ```
-                    test replications elapsed user.self sys.self
-4 mp          validation           10  1.0340    1.0182   0.0161
-3 mp       no validation           10  0.6926    0.6821   0.0106
-2 mp + unc    validation           10  1.6079    1.5814   0.0268
-1 mp + unc no validation           10  1.0657    1.0465   0.0194
+                   test elapsed user.self sys.self
+3 mp                     0.6754    0.6632   0.0123
+4 mp       + validation  0.9793    0.9651   0.0143
+1 mp + unc               1.0322    1.0139   0.0184
+2 mp + unc + validation  1.5216    1.4957   0.0261
 ```
 
 # References
