@@ -1,9 +1,9 @@
 pandoc: 3.1.11
-pkgdown: 2.1.1
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   massProps: massProps.html
-last_built: 2025-04-19T20:07Z
+last_built: 2025-06-19T22:36Z
 urls:
   reference: https://jsjuni.github.io/massProps/reference
   article: https://jsjuni.github.io/massProps/articles

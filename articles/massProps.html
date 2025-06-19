@@ -1256,19 +1256,21 @@ Flags: acpi, aes, apic, clfsh, cmov, cx16, cx8, de, ds, dscpl, dtse64, est, fpu,
 <p>Benchmark results for rollup of mass properties and uncertainties
 were taken with and without input validation:</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">benchmark</span><span class="op">(</span><span class="st">'mp + unc no validation'</span> <span class="op">=</span> <span class="fu"><a href="../reference/rollup_mass_props_and_unc_fast.html">rollup_mass_props_and_unc_fast</a></span><span class="op">(</span><span class="va">mp_tree</span>, <span class="va">mp_table</span><span class="op">)</span>,</span>
-<span>          <span class="st">'mp + unc    validation'</span> <span class="op">=</span> <span class="fu"><a href="../reference/rollup_mass_props_and_unc.html">rollup_mass_props_and_unc</a></span><span class="op">(</span><span class="va">mp_tree</span>, <span class="va">mp_table</span><span class="op">)</span>,</span>
-<span>          <span class="st">'mp       no validation'</span> <span class="op">=</span> <span class="fu"><a href="../reference/rollup_mass_props_fast.html">rollup_mass_props_fast</a></span><span class="op">(</span><span class="va">mp_tree</span>, <span class="va">mp_table</span><span class="op">)</span>,</span>
-<span>          <span class="st">'mp          validation'</span> <span class="op">=</span> <span class="fu"><a href="../reference/rollup_mass_props.html">rollup_mass_props</a></span><span class="op">(</span><span class="va">mp_tree</span>, <span class="va">mp_table</span><span class="op">)</span>,</span>
-<span>          replications <span class="op">=</span> <span class="fl">10</span>,</span>
+<code class="sourceCode R"><span><span class="va">reps</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="fu">benchmark</span><span class="op">(</span><span class="st">'mp + unc             '</span> <span class="op">=</span> <span class="fu"><a href="../reference/rollup_mass_props_and_unc_fast.html">rollup_mass_props_and_unc_fast</a></span><span class="op">(</span><span class="va">mp_tree</span>, <span class="va">mp_table</span><span class="op">)</span>,</span>
+<span>          <span class="st">'mp + unc + validation'</span> <span class="op">=</span> <span class="fu"><a href="../reference/rollup_mass_props_and_unc.html">rollup_mass_props_and_unc</a></span><span class="op">(</span><span class="va">mp_tree</span>, <span class="va">mp_table</span><span class="op">)</span>,</span>
+<span>          <span class="st">'mp                   '</span> <span class="op">=</span> <span class="fu"><a href="../reference/rollup_mass_props_fast.html">rollup_mass_props_fast</a></span><span class="op">(</span><span class="va">mp_tree</span>, <span class="va">mp_table</span><span class="op">)</span>,</span>
+<span>          <span class="st">'mp       + validation'</span> <span class="op">=</span> <span class="fu"><a href="../reference/rollup_mass_props.html">rollup_mass_props</a></span><span class="op">(</span><span class="va">mp_tree</span>, <span class="va">mp_table</span><span class="op">)</span>,</span>
+<span>          replications <span class="op">=</span> <span class="va">reps</span>,</span>
 <span>          columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"test"</span>, <span class="st">"replications"</span>, <span class="st">"elapsed"</span>, <span class="st">"user.self"</span>, <span class="st">"sys.self"</span><span class="op">)</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">mutate</span><span class="op">(</span>elapsed <span class="op">=</span> <span class="va">elapsed</span> <span class="op">/</span> <span class="fl">10</span>, user.self <span class="op">=</span> <span class="va">user.self</span> <span class="op">/</span> <span class="fl">10</span>, sys.self <span class="op">=</span> <span class="va">sys.self</span> <span class="op">/</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"elapsed"</span>, <span class="st">"user.self"</span>, <span class="st">"sys.self"</span><span class="op">)</span>, <span class="op">~</span> <span class="va">.x</span> <span class="op">/</span> <span class="va">reps</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">replications</span><span class="op">)</span></span></code></pre></div>
 <p>Times reported are in seconds.</p>
-<pre><code>                    test replications elapsed user.self sys.self
-4 mp          validation           10  1.0340    1.0182   0.0161
-3 mp       no validation           10  0.6926    0.6821   0.0106
-2 mp + unc    validation           10  1.6079    1.5814   0.0268
-1 mp + unc no validation           10  1.0657    1.0465   0.0194</code></pre>
+<pre><code>                   test elapsed user.self sys.self
+3 mp                     0.6754    0.6632   0.0123
+4 mp       + validation  0.9793    0.9651   0.0143
+1 mp + unc               1.0322    1.0139   0.0184
+2 mp + unc + validation  1.5216    1.4957   0.0261</code></pre>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -1297,7 +1299,7 @@ Society of Allied Weight Engineers.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
