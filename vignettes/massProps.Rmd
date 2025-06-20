@@ -385,16 +385,12 @@ $$
                                                 ({x}_i - \bar{x})({y}_i - \bar{y})         & -({x}_i - \bar{x})^2 - ({z}_i - \bar{z})^2 &  ({y}_i - \bar{y})({z}_i - \bar{z})        \\
                                                 ({x}_i - \bar{x})({z}_i - \bar{z})         & ({y}_i - \bar{y})({z}_i - \bar{z})         & -({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 \\
                                               \end{bmatrix} \\
-                 & = \boldsymbol{I}_i - w_i \begin{bmatrix}
+                 & = \boldsymbol{I}_i - w_i \left( \begin{bmatrix}
                                                 ({x}_i - \bar{x})^2     & ({x}_i - \bar{x})({y}_i - \bar{y}) & ({x}_i - \bar{x})({z}_i - \bar{z}) \\
                                                 ({x}_i - \bar{x})({y}_i - \bar{y}) & ({y}_i - \bar{y})^2     & ({y}_i - \bar{y})({z}_i - \bar{z}) \\
                                                 ({x}_i - \bar{x})({z}_i - \bar{z}) & ({y}_i - \bar{y})({z}_i - \bar{z}) & ({z}_i - \bar{z})^2     \\
-                                              \end{bmatrix} \\
-                 & \mathrel{\phantomeq} \phantomii - w_i \begin{bmatrix}
-                                                          -({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 & 0                               & 0                              \\
-                                                          0                               & -({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 & 0                              \\
-                                                          0                               & 0                               &-({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 \\
-                                                       \end{bmatrix} \\
+                                              \end{bmatrix}
+                - \left(({x}_i - \bar{x})^2 + ({y}_i - \bar{y})^2 + ({z}_i - \bar{z})^2 \right) \boldsymbol{1}_3 \right) \\
                  & = \boldsymbol{I}_i - w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{1}_3 \right)
 \end{aligned}
 $$
@@ -585,13 +581,13 @@ $$
   w_i({x}_i - \bar{x}) \sigma_{y_i} & 2 w_i({x}_i - \bar{x}) \sigma_{x_i} &   w_i ({y}_i - \bar{y}) \sigma_{z_i} \\
   w_i({x}_i - \bar{x}) \sigma_{z_i} &   w_i ({y}_i - \bar{y}) \sigma_{z_i} & 2 w_i({x}_i - \bar{x}) \sigma_{x_i}
 \end{bmatrix}^2 \\
-& \mathrel{\phantomeq} \phantomsigii +
+& \mathrel{\phantom{=}} \phantom{{\boldsymbol{\sigma_I}}_i^2}+
 \begin{bmatrix}
 2 w_i ({z}_i - \bar{z}) \sigma_{z_i} &   w_i ({y}_i - \bar{y}) \sigma_{x_i} &   w_i ({z}_i - \bar{z}) \sigma_{x_i} \\
   w_i ({y}_i - \bar{y}) \sigma_{x_i} & 2 w_i ({z}_i - \bar{z}) \sigma_{z_i} &   w_i ({z}_i - \bar{z}) \sigma_{y_i} \\
   w_i ({z}_i - \bar{z}) \sigma_{x_i} &   w_i ({z}_i - \bar{z}) \sigma_{y_i} & 2 w_i ({y}_i - \bar{y}) \sigma_{y_i}
 \end{bmatrix}^2 \\
-& \mathrel{\phantomeq} \phantomsigii +
+& \mathrel{\phantom{=}} \phantom{{\boldsymbol{\sigma_I}}_i^2}+
 \begin{bmatrix}
 (({y}_i - \bar{y})^2 + ({z}_i - \bar{z})^2)\sigma_{w_i} &({x}_i - \bar{x})({y}_i - \bar{y})\sigma_{w_i} &({x}_i - \bar{x})({z}_i - \bar{z})\sigma_{w_i} \\
 ({y}_i - \bar{y})({x}_i - \bar{x})\sigma_{w_i} & (({x}_i - \bar{x})^2 + ({z}_i - \bar{z})^2)\sigma_{w_i} & ({y}_i - \bar{y})({z}_i - \bar{z})\sigma_{w_i} \\
@@ -606,7 +602,7 @@ $$
 0 & 0 & ({z}_i - \bar{z})\sigma_{y_i} - 2({x}_i - \bar{x})\sigma_{x_i} \\
 \end{bmatrix}
 \right) ^2 \\
-& \mathrel{\phantomeq} \phantomsigii + w_i^2 \left(
+& \mathrel{\phantom{=}} \phantom{{\boldsymbol{\sigma_I}}_i^2}+ w_i^2 \left(
 \boldsymbol{P}_i^T -
 \begin{bmatrix}
 ({x}_i - \bar{x})\sigma_{x_i} - 2 ({z}_i - \bar{z})\sigma_{y_i} & 0 & 0 \\
@@ -614,7 +610,7 @@ $$
 0 & 0 & ({z}_i - \bar{z})\sigma_{y_i} - 2 ({y}_i - \bar{y})\sigma_{y_i} \\
 \end{bmatrix}
 \right) ^2 \\
-& \mathrel{\phantomeq} \phantomsigii + \sigma_{w_i}^2 \left(
+& \mathrel{\phantom{=}} \phantom{{\boldsymbol{\sigma_I}}_i^2}+ \sigma_{w_i}^2 \left(
 \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3
 \right)^2 \\ \\
 & = {\boldsymbol{\sigma_I}}_i^2
@@ -626,7 +622,7 @@ $$
 0 & 0 & {p_Z}_i - 2  {p_X}_i \\
 \end{bmatrix}
 \right) ^2 \\
-& \mathrel{\phantomeq} \phantomsigii + w_i^2 \left(
+& \mathrel{\phantom{=}} \phantom{{\boldsymbol{\sigma_I}}_i^2}+ w_i^2 \left(
 \boldsymbol{P}_i^T -
 \begin{bmatrix}
  {p_X}_i - 2{p_Z}_i & 0 & 0 \\
@@ -634,7 +630,7 @@ $$
 0 & 0 & {p_Z}_i - 2 {p_Y}_i \\
 \end{bmatrix}
 \right) ^2 \\
-& \mathrel{\phantomeq} \phantomsigii + \sigma_{w_i}^2 \left(
+& \mathrel{\phantom{=}} \phantom{{\boldsymbol{\sigma_I}}_i^2}+ \sigma_{w_i}^2 \left(
 \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3
 \right)^2
 \end{align}
