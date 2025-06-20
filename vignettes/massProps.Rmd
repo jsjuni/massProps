@@ -349,33 +349,24 @@ $$
 $$
 
 where $$
-\begin{align}
-\boldsymbol{s}_i & = \boldsymbol{I}_i \\
-& -
-w_i \begin{bmatrix}
--\di{y}^2 - \di{z}^2 & \di{x}\di{y}         & \di{x}\di{z}         \\
-\di{x}\di{y}         & -\di{x}^2 - \di{z}^2 &  \di{y}\di{z}        \\
-\di{x}\di{z}         & \di{y}\di{z}         & -\di{x}^2 - \di{y}^2 \\
-\end{bmatrix} \\
-& =
-\boldsymbol{I}_i \\
-& -
-w_i \begin{bmatrix}
-\di{x}^2     & \di{x}\di{y} & \di{x}\di{z} \\
-\di{x}\di{y} & \di{y}^2     & \di{y}\di{z} \\
-\di{x}\di{z} & \di{y}\di{z} & \di{z}^2     \\
-\end{bmatrix} \\
-& -
-w_i \begin{bmatrix}
--\di{x}^2 - \di{y}^2 - \di{z}^2 & 0                               & 0                              \\
-0                               & -\di{x}^2 - \di{y}^2 - \di{z}^2 & 0                              \\
-0                               & 0                               &-\di{x}^2 - \di{y}^2 - \di{z}^2 \\
-\end{bmatrix} \\
-& =
-\boldsymbol{I}_i
--
-w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{1}_3 \right)
-\end{align}
+\begin{aligned}
+\boldsymbol{s}_i & = \boldsymbol{I}_i - w_i \begin{bmatrix}
+                                                -\di{y}^2 - \di{z}^2 & \di{x}\di{y}         & \di{x}\di{z}         \\
+                                                \di{x}\di{y}         & -\di{x}^2 - \di{z}^2 &  \di{y}\di{z}        \\
+                                                \di{x}\di{z}         & \di{y}\di{z}         & -\di{x}^2 - \di{y}^2 \\
+                                              \end{bmatrix} \\
+                 & = \boldsymbol{I}_i - w_i \begin{bmatrix}
+                                                \di{x}^2     & \di{x}\di{y} & \di{x}\di{z} \\
+                                                \di{x}\di{y} & \di{y}^2     & \di{y}\di{z} \\
+                                                \di{x}\di{z} & \di{y}\di{z} & \di{z}^2     \\
+                                              \end{bmatrix} \\
+                 & \hphantom{= \boldsymbol{I}_i} - w_i \begin{bmatrix}
+                                                          -\di{x}^2 - \di{y}^2 - \di{z}^2 & 0                               & 0                              \\
+                                                          0                               & -\di{x}^2 - \di{y}^2 - \di{z}^2 & 0                              \\
+                                                          0                               & 0                               &-\di{x}^2 - \di{y}^2 - \di{z}^2 \\
+                                                       \end{bmatrix} \\
+                 & =  \boldsymbol{I}_i - w_i \left( \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i) \boldsymbol{1}_3 \right)
+\end{aligned}
 $$
 
 where $\mathrm{tr}(\boldsymbol{Q}_i)$ is the *trace* of $\boldsymbol{Q}_i$, i.e., the sum of its diagonal elements, and $\boldsymbol{1}_3$ is the 3⨉3 identity matrix. Therefore
