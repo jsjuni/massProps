@@ -54,6 +54,9 @@ knitr::opts_chunk$set(
 \newcommand{\sigmapoi}[3]{\sqrt{ \sum_{i=1}^n \left\{
   \sigma_{{I_{#1}}_i}^2 + \left[ \di{#2} w_i \sigma_{{#3}_i}\right]^2 + \left[ \di{#2}\di{#3}\sigma_{w_i} \right]^2 + \left[ \di{#3}  w_i \sigma_{{#2}_i} \right]^2 \right\} }
 }
+\newcommand{\phantomeq}{\phantom{=}}
+\newcommand{\phantomii}{\phantom{\boldsymbol{I}_i}}
+\newcommand{\phantomsigii}{\phantom{{\boldsymbol{\sigma_I}}_i^2}}
 
 # Overview
 
@@ -387,7 +390,7 @@ $$
                                                 ({x}_i - \bar{x})({y}_i - \bar{y}) & ({y}_i - \bar{y})^2     & ({y}_i - \bar{y})({z}_i - \bar{z}) \\
                                                 ({x}_i - \bar{x})({z}_i - \bar{z}) & ({y}_i - \bar{y})({z}_i - \bar{z}) & ({z}_i - \bar{z})^2     \\
                                               \end{bmatrix} \\
-                 & \mathrel{\hphantom{=}} \hphantom{\boldsymbol{I}_i} - w_i \begin{bmatrix}
+                 & \mathrel{\phantomeq} \phantomii - w_i \begin{bmatrix}
                                                           -({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 & 0                               & 0                              \\
                                                           0                               & -({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 & 0                              \\
                                                           0                               & 0                               &-({x}_i - \bar{x})^2 - ({y}_i - \bar{y})^2 - ({z}_i - \bar{z})^2 \\
@@ -582,13 +585,13 @@ $$
   w_i({x}_i - \bar{x}) \sigma_{y_i} & 2 w_i({x}_i - \bar{x}) \sigma_{x_i} &   w_i ({y}_i - \bar{y}) \sigma_{z_i} \\
   w_i({x}_i - \bar{x}) \sigma_{z_i} &   w_i ({y}_i - \bar{y}) \sigma_{z_i} & 2 w_i({x}_i - \bar{x}) \sigma_{x_i}
 \end{bmatrix}^2 \\
-& \mathrel{\hphantom{=}} \hphantom{{\boldsymbol{\sigma_I}}_i^2} +
+& \mathrel{\phantomeq} \phantomsigii +
 \begin{bmatrix}
 2 w_i ({z}_i - \bar{z}) \sigma_{z_i} &   w_i ({y}_i - \bar{y}) \sigma_{x_i} &   w_i ({z}_i - \bar{z}) \sigma_{x_i} \\
   w_i ({y}_i - \bar{y}) \sigma_{x_i} & 2 w_i ({z}_i - \bar{z}) \sigma_{z_i} &   w_i ({z}_i - \bar{z}) \sigma_{y_i} \\
   w_i ({z}_i - \bar{z}) \sigma_{x_i} &   w_i ({z}_i - \bar{z}) \sigma_{y_i} & 2 w_i ({y}_i - \bar{y}) \sigma_{y_i}
 \end{bmatrix}^2 \\
-& \mathrel{\hphantom{=}} \hphantom{{\boldsymbol{\sigma_I}}_i^2} +
+& \mathrel{\phantomeq} \phantomsigii +
 \begin{bmatrix}
 (({y}_i - \bar{y})^2 + ({z}_i - \bar{z})^2)\sigma_{w_i} &({x}_i - \bar{x})({y}_i - \bar{y})\sigma_{w_i} &({x}_i - \bar{x})({z}_i - \bar{z})\sigma_{w_i} \\
 ({y}_i - \bar{y})({x}_i - \bar{x})\sigma_{w_i} & (({x}_i - \bar{x})^2 + ({z}_i - \bar{z})^2)\sigma_{w_i} & ({y}_i - \bar{y})({z}_i - \bar{z})\sigma_{w_i} \\
@@ -603,7 +606,7 @@ $$
 0 & 0 & ({z}_i - \bar{z})\sigma_{y_i} - 2({x}_i - \bar{x})\sigma_{x_i} \\
 \end{bmatrix}
 \right) ^2 \\
-& \mathrel{\hphantom{=}} \hphantom{{\boldsymbol{\sigma_I}}_i^2} + w_i^2 \left(
+& \mathrel{\phantomeq} \phantomsigii + w_i^2 \left(
 \boldsymbol{P}_i^T -
 \begin{bmatrix}
 ({x}_i - \bar{x})\sigma_{x_i} - 2 ({z}_i - \bar{z})\sigma_{y_i} & 0 & 0 \\
@@ -611,7 +614,7 @@ $$
 0 & 0 & ({z}_i - \bar{z})\sigma_{y_i} - 2 ({y}_i - \bar{y})\sigma_{y_i} \\
 \end{bmatrix}
 \right) ^2 \\
-& \mathrel{\hphantom{=}} \hphantom{{\boldsymbol{\sigma_I}}_i^2} + \sigma_{w_i}^2 \left(
+& \mathrel{\phantomeq} \phantomsigii + \sigma_{w_i}^2 \left(
 \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3
 \right)^2 \\ \\
 & = {\boldsymbol{\sigma_I}}_i^2
@@ -623,7 +626,7 @@ $$
 0 & 0 & {p_Z}_i - 2  {p_X}_i \\
 \end{bmatrix}
 \right) ^2 \\
-& \mathrel{\hphantom{=}} \hphantom{{\boldsymbol{\sigma_I}}_i^2} + w_i^2 \left(
+& \mathrel{\phantomeq} \phantomsigii + w_i^2 \left(
 \boldsymbol{P}_i^T -
 \begin{bmatrix}
  {p_X}_i - 2{p_Z}_i & 0 & 0 \\
@@ -631,7 +634,7 @@ $$
 0 & 0 & {p_Z}_i - 2 {p_Y}_i \\
 \end{bmatrix}
 \right) ^2 \\
-& \mathrel{\hphantom{=}} \hphantom{{\boldsymbol{\sigma_I}}_i^2} + \sigma_{w_i}^2 \left(
+& \mathrel{\phantomeq} \phantomsigii + \sigma_{w_i}^2 \left(
 \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3
 \right)^2
 \end{align}
