@@ -2,6 +2,8 @@
 
 * Benchmark results cleaned up (#54).
 
+* Inertia tensor and uncertainty equations layout improved (#57).
+
 # massProps 0.3.2
 
 * Invocation instructions in vignette cleaned up (#41).
