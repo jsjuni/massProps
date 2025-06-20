@@ -1,4 +1,4 @@
-# massProps (development version)
+# massProps 0.3.3
 
 * Benchmark results cleaned up (#54).
 
