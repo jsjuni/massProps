@@ -113,10 +113,10 @@ get_mass_props_and_unc <- function(ds, id, get_by_id = df_get_by_id) {
 
 #' Set mass properties for a row in a data frame
 #'
-#' `set_mass_props()` sets mass properties for a specified row in a data frame.
+#' `set_mass_props()` sets mass properties for a specified item in a data set
 #'
 #' @inheritParams get_mass_props
-#' @param df A data frame with an `id` column.
+#' @param ds A data set with an `id` property.
 #' @param mp
 #' A list with the following named elements:
 #' - `mass` Numeric mass.
@@ -126,8 +126,10 @@ get_mass_props_and_unc <- function(ds, id, get_by_id = df_get_by_id) {
 #' - `inertia` Numeric 3x3 matrix inertia tensor. The signs of the products of inertia
 #' are determined by `POIconv`. For example, `Ixy` is the \eqn{xy} element of the inertia
 #' tensor if `POIconv` is "-"; it is the additive inverse of that value if `POIconv` is "+".
+#' @param A function to set the value of a property for the selected item,
+#'   called as set_by_id(ds, id, property, value); default df_set_by_id()
 #'
-#' @returns The updated data frame with columns `id`, `mass`, `Cx`,
+#' @returns The updated data set with properties `id`, `mass`, `Cx`,
 #'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
 #'
 #' @export
@@ -138,7 +140,7 @@ get_mass_props_and_unc <- function(ds, id, get_by_id = df_get_by_id) {
 #' mp$poi_conv = "+"
 #' set_mass_props(df, "C.1.2.2.3.2.1.1", mp)
 #'
-set_mass_props <- function(df, id, mp) {
+set_mass_props <- function(ds, id, mp, set_by_id = df_set_by_id) {
   m <- mp$inertia
   tryCatch(
     poi_factor <- if (mp$poi_conv == "-") 1 else if (mp$poi_conv == "+") -1 else stop(),
@@ -163,16 +165,16 @@ set_mass_props <- function(df, id, mp) {
     Ipoint = mp$point
   )
   Reduce(
-    f = function(d, n) df_set_by_id(d, id, n, values[[n]]),
+    f = function(d, n) set_by_id(d, id, n, values[[n]]),
     x = names(values),
-    init = df
+    init = ds
   )
 }
 
 #' Set mass properties uncertainties for a row in a data frame
 #'
 #' `set_mass_props_unc()` sets mass properties uncertainties for a
-#' selected row in a data frame with an `id` column.
+#' selected item in a data set
 #'
 #' @inheritParams set_mass_props
 #' @param mpu
@@ -188,7 +190,7 @@ set_mass_props <- function(df, id, mp) {
 #' @examples
 #' set_mass_props_unc(sawe_table, "Combined", get_mass_props_unc(sawe_table, "Widget"))
 #'
-set_mass_props_unc <- function(df, id, mpu) {
+set_mass_props_unc <- function(ds, id, mpu, set_by_id = df_set_by_id) {
   values <- list(
     sigma_mass = mpu$sigma_mass,
 
@@ -205,9 +207,9 @@ set_mass_props_unc <- function(df, id, mpu) {
     sigma_Iyz = (mpu$sigma_inertia["y", "z"] + mpu$sigma_inertia["z", "y"]) / 2.0
   )
   Reduce(
-    f = function(d, n) df_set_by_id(d, id, n, values[[n]]),
+    f = function(d, n) set_by_id(d, id, n, values[[n]]),
     x = names(values),
-    init = df
+    init = ds
   )
 }
 
@@ -238,8 +240,8 @@ set_mass_props_unc <- function(df, id, mpu) {
 #' mpu <- c(get_mass_props_and_unc(sawe_table, "Widget"), poi_conv = "+")
 #' set_mass_props_and_unc(sawe_table, "Combined", mpu)
 #'
-set_mass_props_and_unc <- function(df, id, mpu) {
-  set_mass_props_unc(set_mass_props(df, id, mpu), id, mpu)
+set_mass_props_and_unc <- function(ds, id, mpu, set_by_id = df_set_by_id) {
+  set_mass_props_unc(set_mass_props(ds, id, mpu, set_by_id), id, mpu, set_by_id)
 }
 
 #' Set POI sign convention for mass properties list to "+"
