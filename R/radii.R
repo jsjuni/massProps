@@ -18,15 +18,15 @@
 #' test_table_rollup <- rollup_mass_props(test_tree, test_table)
 #' add_radii_of_gyration(test_table_rollup)
 #'
-add_radii_of_gyration <- function(df) {
+add_radii_of_gyration <- function(ds, get = get_mass_props, get_ids = df_get_ids, set_radii = set_radii_of_gyration) {
   Reduce(
     f = function(d, i) {
-      rg <- get_mass_props(d, i)
+      rg <- get(d, i)
       rg$radii_gyration <- sqrt(diag(rg$inertia) / rg$mass)
-      set_radii_of_gyration(d, i, rg)
+      set_radii(d, i, rg)
     },
-    x = df_get_ids(df),
-    init = df
+    x = get_ids(ds),
+    init = ds
   )
 }
 
@@ -51,12 +51,16 @@ add_radii_of_gyration <- function(df) {
 #' sawe_table_rollup <- rollup_mass_props(sawe_tree, sawe_table)
 #' rollup_radii_of_gyration_unc(sawe_tree, add_radii_of_gyration(sawe_table_rollup))
 #'
-rollup_radii_of_gyration_unc <- function(tree, df) {
+rollup_radii_of_gyration_unc <- function(tree, ds,
+                                         get_mpu = get_mass_props_and_unc,
+                                         set_radii_unc = set_radii_of_gyration_unc,
+                                         validate_ds = validate_mass_props_and_unc_table
+                                         ) {
   rollup(
     tree,
-    df,
+    ds,
     update = function(ds, target, sources) {
-      amp <- get_mass_props_and_unc(ds, target)
+      amp <- get_mpu(ds, target)
       I <- diag(amp$inertia)
       sigma_I <- diag(amp$sigma_inertia)
       amp$sigma_radii_gyration <- sqrt(
@@ -65,7 +69,7 @@ rollup_radii_of_gyration_unc <- function(tree, df) {
             `+`,
             Map(
               f = function(s) {
-                mp <- get_mass_props_and_unc(ds, s)
+                mp <- get_mpu(ds, s)
                 d2 <- (mp$center_mass - amp$center_mass)^2
                 mp$sigma_mass^2 * (sum(d2) - d2)
               },
@@ -74,9 +78,9 @@ rollup_radii_of_gyration_unc <- function(tree, df) {
             init = c(0, 0, 0)
           )
       ) / 2
-      set_radii_of_gyration_unc(ds, target, amp)
+      set_radii_unc(ds, target, amp)
     },
-    validate_ds = validate_mass_props_and_unc_table
+    validate_ds
   )
 }
 
@@ -111,9 +115,9 @@ rollup_radii_of_gyration_unc <- function(tree, df) {
 #' radii_table_small <- add_radii_of_gyration(mp_table_small_rollup)
 #' get_mass_props_and_unc_and_radii(radii_table_small, "C.1")
 #'
-get_mass_props_and_unc_and_radii <- function(df, id) {
-  l <- get_mass_props_and_unc(df, id)
-  l$radii_gyration = sapply(c(x = "kx", y = "ky", z = "kz"), FUN=function(p) df_get_by_id(df, id, p))
+get_mass_props_and_unc_and_radii <- function(ds, id, get_mpu = get_mass_props_and_unc, get_by_id = df_get_by_id) {
+  l <- get_mpu(ds, id)
+  l$radii_gyration = sapply(c(x = "kx", y = "ky", z = "kz"), FUN=function(p) get_by_id(ds, id, p))
   l
 }
 
@@ -150,9 +154,9 @@ get_mass_props_and_unc_and_radii <- function(df, id) {
 #'                           mp_tree_small, add_radii_of_gyration(mp_table_small_rollup))
 #' get_mass_props_and_unc_and_radii_and_unc(radii_and_unc_table, "C.1")
 #'
-get_mass_props_and_unc_and_radii_and_unc <- function(df, id) {
-  l <- get_mass_props_and_unc_and_radii(df, id)
-  l$sigma_radii_gyration = sapply(c(x = "sigma_kx", y = "sigma_ky", z = "sigma_kz"), FUN=function(p) df_get_by_id(df, id, p))
+get_mass_props_and_unc_and_radii_and_unc <- function(ds, id, get_mpur = get_mass_props_and_unc_and_radii, get_by_id = df_get_by_id) {
+  l <- get_mpur(ds, id)
+  l$sigma_radii_gyration = sapply(c(x = "sigma_kx", y = "sigma_ky", z = "sigma_kz"), FUN=function(p) get_by_id(ds, id, p))
   l
 }
 
@@ -173,16 +177,16 @@ get_mass_props_and_unc_and_radii_and_unc <- function(df, id) {
 #' @examples
 #' rgl <- list(radii_gyration = c(x = 1, y = 2, z = 3))
 #' set_radii_of_gyration(mp_table, "C.1", rgl)[1:5, ]
-set_radii_of_gyration <- function(df, id, rg) {
+set_radii_of_gyration <- function(ds, id, rg, set_by_id = df_set_by_id) {
   values <- list(
     kx = rg$radii_gyration["x"],
     ky = rg$radii_gyration["y"],
     kz = rg$radii_gyration["z"]
   )
   Reduce(
-    f = function(d, n) df_set_by_id(d, id, n, values[[n]]),
+    f = function(d, n) set_by_id(d, id, n, values[[n]]),
     x = names(values),
-    init = df
+    init = ds
   )
 }
 
@@ -204,15 +208,15 @@ set_radii_of_gyration <- function(df, id, rg) {
 #' rgul <- list(sigma_radii_gyration = c(x = 1, y = 2, z = 3))
 #' set_radii_of_gyration_unc(mp_table, "C.1", rgul)[1:5, ]
 #'
-set_radii_of_gyration_unc <- function(df, id, rgu) {
+set_radii_of_gyration_unc <- function(ds, id, rgu, set_by_id = df_set_by_id) {
   values <- list(
     sigma_kx = rgu$sigma_radii_gyration["x"],
     sigma_ky = rgu$sigma_radii_gyration["y"],
     sigma_kz = rgu$sigma_radii_gyration["z"]
   )
   Reduce(
-    f = function(d, n) df_set_by_id(d, id, n, values[[n]]),
+    f = function(d, n) set_by_id(d, id, n, values[[n]]),
     x = names(values),
-    init = df
+    init = ds
   )
 }
