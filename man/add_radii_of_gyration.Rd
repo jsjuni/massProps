@@ -4,18 +4,30 @@
 \alias{add_radii_of_gyration}
 \title{Add radii of gyration}
 \usage{
-add_radii_of_gyration(df)
+add_radii_of_gyration(
+  ds,
+  get = get_mass_props,
+  get_ids = df_get_ids,
+  set_radii = set_radii_of_gyration
+)
 }
 \arguments{
-\item{df}{A data frame with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\item{ds}{A data set with (at least) these properties: \code{id}, \code{mass}, \code{Cx},
 \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
+
+\item{get}{A function to get a mass property list for a specified item in a data set, called as get(ds, id). Default: get_mass_props().}
+
+\item{get_ids}{A function to get ids from a data set, called as get_ids(ds). Default: df_get_ids().}
+
+\item{set_radii}{A function to set the radii of gyration value for a specified item in data set,
+called as set_radii(ds, id, value).}
 }
 \value{
-A data frame with the same columns as \code{df}, plus
-radii of gyration in columns \code{kx}, \code{ky}, and \code{kz}.`
+A data set with the same columns as \code{ds}, plus
+radii of gyration in properties \code{kx}, \code{ky}, and \code{kz}.`
 }
 \description{
-\code{add_radii_of_gyration()} adds calculated radii of gyration to a data frame
+\code{add_radii_of_gyration()} adds calculated radii of gyration to a data set
 of rolled-up mass properties.
 
 Radii of gyration are calculated directly from moments of inertia and mass;

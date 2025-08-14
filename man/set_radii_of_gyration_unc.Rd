@@ -2,26 +2,29 @@
 % Please edit documentation in R/radii.R
 \name{set_radii_of_gyration_unc}
 \alias{set_radii_of_gyration_unc}
-\title{Set radii of gyration uncertainties for a row in a data frame}
+\title{Set radii of gyration uncertainties for an item in a data set}
 \usage{
-set_radii_of_gyration_unc(df, id, rgu)
+set_radii_of_gyration_unc(ds, id, rgu, set_by_id = df_set_by_id)
 }
 \arguments{
-\item{df}{A data frame with an \code{id} column.}
+\item{ds}{A data set with an \code{id} property.}
 
-\item{id}{The \code{id} value of the desired row.}
+\item{id}{The \code{id} value of the desired item}
 
 \item{rgu}{A list with the following named elements:
 \itemize{
 \item \code{sigma_radii_gyration} Numeric 3x3 matrix radii of gyration uncertainties.
 }}
+
+\item{set_by_id}{A function to set the value of a property for the selected item,
+called as set_by_id(ds, id, property, value); default df_set_by_id()}
 }
 \value{
-The updated data frame.
+The updated data set
 }
 \description{
 \code{set_radii_of_gyration_unc()} sets radii of gyration uncertainties for a
-selected row in a data frame with an \code{id} column.
+selected item in a data set with an \code{id} property.
 }
 \examples{
 rgul <- list(sigma_radii_gyration = c(x = 1, y = 2, z = 3))

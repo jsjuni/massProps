@@ -6,27 +6,27 @@
 \usage{
 rollup_mass_props_and_unc(
   tree,
-  df,
-  validate_df = validate_mass_props_and_unc_table,
+  ds,
+  validate_ds = validate_mass_props_and_unc_table,
   ...
 )
 }
 \arguments{
 \item{tree}{An 'igraph' tree whose vertices are named as the values of the \code{id}
-column of \code{df} and whose directed edges point from child id to parent id.}
+column of \code{ds} and whose directed edges point from child id to parent id.}
 
-\item{df}{A data frame  with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\item{ds}{A data set  with (at least) these properties: \code{id}, \code{mass}, \code{Cx},
 \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
 
-\item{validate_df}{A validator for the tree and table, default \code{validate_mass_props_and_unc_table()}}
+\item{validate_ds}{A validator for the tree and table, default \code{validate_mass_props_and_unc_table()}}
 
 \item{...}{Other parameters passed to \code{rollupTree::rollup()}}
 }
 \value{
-The updated data frame
+The updated data set.
 }
 \description{
-'rollup_mass_props_and_unc()' rolls up mass properties in a data frame
+'rollup_mass_props_and_unc()' rolls up mass properties in a data set
 with (at least) these columns: \code{id}, \code{mass}, \code{Cx}, \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy},
 \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}, \code{sigma_mass}, \code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz},
 \code{sigma_Ixx}, \code{sigma_Iyy}, \code{sigma_Izz}, \code{sigma_Ixy}, \code{sigma_Ixz}, \code{sigma_Iyz}.

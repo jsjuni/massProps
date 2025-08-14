@@ -2,14 +2,14 @@
 % Please edit documentation in R/massprops.R
 \name{set_mass_props}
 \alias{set_mass_props}
-\title{Set mass properties for a row in a data frame}
+\title{Set mass properties for an item in a data set}
 \usage{
-set_mass_props(df, id, mp)
+set_mass_props(ds, id, mp, set_by_id = df_set_by_id)
 }
 \arguments{
-\item{df}{A data frame with an \code{id} column.}
+\item{ds}{A data set with an \code{id} property.}
 
-\item{id}{The \code{id} value of the desired row.}
+\item{id}{The \code{id} value of the desired item}
 
 \item{mp}{A list with the following named elements:
 \itemize{
@@ -21,13 +21,16 @@ set_mass_props(df, id, mp)
 are determined by \code{POIconv}. For example, \code{Ixy} is the \eqn{xy} element of the inertia
 tensor if \code{POIconv} is "-"; it is the additive inverse of that value if \code{POIconv} is "+".
 }}
+
+\item{set_by_id}{A function to set the value of a property for the selected item,
+called as set_by_id(ds, id, property, value); default df_set_by_id()}
 }
 \value{
-The updated data frame with columns \code{id}, \code{mass}, \code{Cx},
+The updated data set with properties \code{id}, \code{mass}, \code{Cx},
 \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.
 }
 \description{
-\code{set_mass_props()} sets mass properties for a specified row in a data frame.
+\code{set_mass_props()} sets mass properties for a specified item in a data set
 }
 \examples{
 df <- data.frame(id = c("C.1.2.2.3.1.2.3", "C.1.2.2.3.2.1.1"))

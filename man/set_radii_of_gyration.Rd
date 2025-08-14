@@ -4,24 +4,27 @@
 \alias{set_radii_of_gyration}
 \title{Set radii of gyration for a row in a data frame}
 \usage{
-set_radii_of_gyration(df, id, rg)
+set_radii_of_gyration(ds, id, rg, set_by_id = df_set_by_id)
 }
 \arguments{
-\item{df}{A data frame with an \code{id} column.}
+\item{ds}{A data set with an \code{id} property.}
 
-\item{id}{The \code{id} value of the desired row.}
+\item{id}{The \code{id} value of the desired item}
 
 \item{rg}{A list with the following named elements:
 \itemize{
 \item \code{radii_gyration} Numeric 3x3 matrix radii of gyration.
 }}
+
+\item{set_by_id}{A function to set the value of a property for the selected item,
+called as set_by_id(ds, id, property, value); default df_set_by_id()}
 }
 \value{
-The updated data frame.
+The updated data set
 }
 \description{
 \code{set_radii_of_gyration()} sets radii of gyration for a
-selected row in a data frame with an \code{id} column.
+selected item in a data set with an \code{id} property
 }
 \examples{
 rgl <- list(radii_gyration = c(x = 1, y = 2, z = 3))

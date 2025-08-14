@@ -2,15 +2,18 @@
 % Please edit documentation in R/massprops.R
 \name{get_mass_props}
 \alias{get_mass_props}
-\title{Get mass properties for a row in a data frame}
+\title{Get mass properties for an item in a data set}
 \usage{
-get_mass_props(df, id)
+get_mass_props(ds, id, get_by_id = df_get_by_id)
 }
 \arguments{
-\item{df}{A data frame with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\item{ds}{A data set with (at least) these properties: \code{id}, \code{mass}, \code{Cx},
 \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
 
-\item{id}{The \code{id} value of the desired row.}
+\item{id}{The \code{id} value of the desired item}
+
+\item{get_by_id}{A function to get the value of a property from the selected item,
+called as get_by_id(ds, id, property); default df_get_by_id()}
 }
 \value{
 A list with the following named elements:
@@ -24,7 +27,7 @@ tensor is \code{Ixy} if \code{POIconv} is "-"; it is -\code{Ixy} if \code{POIcon
 }
 }
 \description{
-\code{get_mass_props()} creates a mass properties list from a selected row in a data frame.
+\code{get_mass_props()} creates a mass properties list from a selected item in a data set
 }
 \examples{
 get_mass_props(mp_table, "C.1.2.2.3.1.2.3")

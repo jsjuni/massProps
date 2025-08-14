@@ -4,16 +4,14 @@
 \alias{validate_mass_props_and_unc_table}
 \title{Validate a mass properties and uncertainties table}
 \usage{
-validate_mass_props_and_unc_table(tree, df)
+validate_mass_props_and_unc_table(tree, ds)
 }
 \arguments{
 \item{tree}{An 'igraph' tree whose vertices are named as the values of the \code{id}
-column of \code{df} and whose directed edges point from child id to parent id.}
+column of \code{ds} and whose directed edges point from child id to parent id.}
 
-\item{df}{A data frame  with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
-\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint},
-\code{sigma_mass}, \code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz}, \code{sigma_Ixx}, \code{sigma_Iyy},
-\code{sigma_Izz}, \code{sigma_Ixy}, \code{sigma_Ixz}, \code{sigma_Iyz}.}
+\item{ds}{A data set  with (at least) these properties: \code{id}, \code{mass}, \code{Cx},
+\code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
 }
 \value{
 TRUE if valid, stops with an error otherwise
@@ -21,7 +19,7 @@ TRUE if valid, stops with an error otherwise
 \description{
 \code{validate_mass_props_and_unc()} calls
 \code{validate_mass_props_table()} and further applies the checks of
-\code{validate_mass_props_and_unc()} to every row of the data frame corresponding
+\code{validate_mass_props_and_unc()} to every item of the data set corresponding
 to a leaf vertex of the tree.
 }
 \examples{

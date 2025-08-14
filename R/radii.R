@@ -1,16 +1,20 @@
 #' Add radii of gyration
 #'
 #' @description
-#' `add_radii_of_gyration()` adds calculated radii of gyration to a data frame
+#' `add_radii_of_gyration()` adds calculated radii of gyration to a data set
 #' of rolled-up mass properties.
 #'
 #' Radii of gyration are calculated directly from moments of inertia and mass;
 #' they are not recursively-defined, and do not require a rollup method.
 #'
 #' @inheritParams get_mass_props
+#' @param get A function to get a mass property list for a specified item in a data set, called as get(ds, id). Default: get_mass_props().
+#' @param get_ids A function to get ids from a data set, called as get_ids(ds). Default: df_get_ids().
+#' @param set_radii A function to set the radii of gyration value for a specified item in data set,
+#'  called as set_radii(ds, id, value).
 #'
-#' @returns A data frame with the same columns as `df`, plus
-#' radii of gyration in columns `kx`, `ky`, and `kz`.`
+#' @returns A data set with the same columns as `ds`, plus
+#' radii of gyration in properties `kx`, `ky`, and `kz`.`
 #'
 #' @export
 #'
@@ -33,7 +37,7 @@ add_radii_of_gyration <- function(ds, get = get_mass_props, get_ids = df_get_ids
 #' Roll up radii of gyration uncertainties
 #'
 #' @description
-#' `rollup_radii_of_gyration_unc()` adds calculated radii of gyration uncertainties to a data frame
+#' `rollup_radii_of_gyration_unc()` adds calculated radii of gyration uncertainties to a data set
 #' of rolled-up mass properties and uncertainties.
 #'
 #' Radii of gyration uncertainties are calculated directly from moments of inertia and mass
@@ -41,9 +45,13 @@ add_radii_of_gyration <- function(ds, get = get_mass_props, get_ids = df_get_ids
 #' for composite elements depend on uncertainties of their component elements.
 #'
 #' @inheritParams rollup_mass_props_and_unc
+#' @param get_mpu A function to get mass properties and uncertainties for an item in a data set, called as
+#'   get_mpu(ds, id). Default: get_mass_props_and_unc().
+#' @param set_radii_unc A function to set radii of gyration uncertainties for an item in a data set, called
+#'   as set_radii_unc(ds, target, mp). Default: set_radii_of_gyration_unc().
 #'
-#' @returns A data frame with the same columns as `df`, plus
-#' radii of gyration in columns `sigma_kx`, `sigma_ky`, and `sigma_kz`.`
+#' @returns A data set with the same properties as `ds`, plus
+#' radii of gyration properties `sigma_kx`, `sigma_ky`, and `sigma_kz`.`
 #'
 #' @export
 #'
@@ -88,13 +96,15 @@ rollup_radii_of_gyration_unc <- function(tree, ds,
 #'
 #' @description
 #' `get_mass_props_and_unc_and_radii()` creates a mass properties and uncertainties
-#' and radii of gyration list from a selected row in a data frame.
+#' and radii of gyration list from a selected item in a data set
 #'
 #' @inheritParams get_mass_props
-#' @param df A data frame with (at least) these columns: `id`, `mass`, `Cx`,
+#' @param ds A data set with (at least) these properties: `id`, `mass`, `Cx`,
 #'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`,
 #'   `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,`sigma_Ixy`, `sigma_Ixz`,
 #'   `sigma_Iyz`, `kx`, `ky`, `kz`.
+#' @param get_mpu A function to get mass properties and uncertainties for a specified item in a data set, called as
+#' get_mpu(ds, id). Default: get_mass_props_and_unc().
 #'
 #' @returns A list with the following named elements:
 #' - `mass` Numeric mass.
@@ -125,13 +135,17 @@ get_mass_props_and_unc_and_radii <- function(ds, id, get_mpu = get_mass_props_an
 #'
 #' @description
 #' `get_mass_props_and_unc_and_radii_and_unc()` creates a mass properties and uncertainties
-#' and radii of gyration and uncertainties list from a selected row in a data frame.
+#' and radii of gyration and uncertainties list from a selected row in a data set
 #'
 #' @inheritParams get_mass_props
-#' @param df A data frame with (at least) these columns: `id`, `mass`, `Cx`,
+#' @inheritParams get_mass_props_and_unc_and_radii
+#' @param ds A data set with (at least) these properties: `id`, `mass`, `Cx`,
 #'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`,
 #'   `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,`sigma_Ixy`, `sigma_Ixz`,
 #'   `sigma_Iyz`, `kx`, `ky`, `kz`, `sigma_kx`, `sigma_ky`, `sigma_kz`.
+#' @param get_mpur A function to get mass properties and uncertainties and radii of gyration and uncertainties
+#'   for an item in a data set, called as
+#'   get_mpur(ds, id). Default: get_mass_props_and_unc_and_radii().
 #'
 #' @returns A list with the following named elements:
 #' - `mass` Numeric mass.
@@ -163,14 +177,14 @@ get_mass_props_and_unc_and_radii_and_unc <- function(ds, id, get_mpur = get_mass
 #' Set radii of gyration for a row in a data frame
 #'
 #' `set_radii_of_gyration()` sets radii of gyration for a
-#' selected row in a data frame with an `id` column.
+#' selected item in a data set with an `id` property
 #'
 #' @inheritParams set_mass_props
 #' @param rg
 #' A list with the following named elements:
 #' - `radii_gyration` Numeric 3x3 matrix radii of gyration.
 #'
-#' @returns The updated data frame.
+#' @returns The updated data set
 #'
 #' @export
 #'
@@ -190,17 +204,17 @@ set_radii_of_gyration <- function(ds, id, rg, set_by_id = df_set_by_id) {
   )
 }
 
-#' Set radii of gyration uncertainties for a row in a data frame
+#' Set radii of gyration uncertainties for an item in a data set
 #'
 #' `set_radii_of_gyration_unc()` sets radii of gyration uncertainties for a
-#' selected row in a data frame with an `id` column.
+#' selected item in a data set with an `id` property.
 #'
-#' @inheritParams set_mass_props
+#' @inheritParams set_radii_of_gyration
 #' @param rgu
 #' A list with the following named elements:
 #' - `sigma_radii_gyration` Numeric 3x3 matrix radii of gyration uncertainties.
 #'
-#' @returns The updated data frame.
+#' @returns The updated data set
 #'
 #' @export
 #'

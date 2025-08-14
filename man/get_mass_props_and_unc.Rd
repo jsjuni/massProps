@@ -2,17 +2,20 @@
 % Please edit documentation in R/massprops.R
 \name{get_mass_props_and_unc}
 \alias{get_mass_props_and_unc}
-\title{Get mass properties and uncertainties for a row in a data frame}
+\title{Get mass properties and uncertainties for an item in a data set}
 \usage{
-get_mass_props_and_unc(df, id)
+get_mass_props_and_unc(ds, id, get_by_id = df_get_by_id)
 }
 \arguments{
-\item{df}{A data frame with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\item{ds}{A data set with (at least) these properties: \code{id}, \code{mass}, \code{Cx},
 \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint},
 \code{sigma_mass}, \code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz},\code{sigma_Ixy}, \code{sigma_Ixz},
 \code{sigma_Iyz}.}
 
-\item{id}{The \code{id} value of the desired row.}
+\item{id}{The \code{id} value of the desired item}
+
+\item{get_by_id}{A function to get the value of a property from the selected item,
+called as get_by_id(ds, id, property); default df_get_by_id()}
 }
 \value{
 A list with the following named elements:

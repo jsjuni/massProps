@@ -4,23 +4,26 @@
 \alias{set_poi_conv_from_target}
 \title{Set POI convention for mass properties list to match a target item}
 \usage{
-set_poi_conv_from_target(df, target, mp)
+set_poi_conv_from_target(ds, target, mp, get_by_id = df_get_by_id)
 }
 \arguments{
-\item{df}{A data frame with columns \code{id} and \code{POIconv}.}
+\item{ds}{A data set with properties \code{id} and \code{POIconv}.}
 
-\item{target}{The \code{id} value of the target row.}
+\item{target}{The \code{id} value of the target item}
 
 \item{mp}{A mass properties list.}
+
+\item{get_by_id}{A function to get the value of a property from the selected item,
+called as get_by_id(ds, id, property); default df_get_by_id()}
 }
 \value{
 The mass properties list with the named element \code{poi_conv} set to the
-\code{POIconv} column of the target row in the data frame.
+\code{POIconv} property of the target item in the data set
 }
 \description{
 \code{set_poi_conv_from_target()} sets the products of inertia sign convention for a
-mass properties list to that of a target item in a mass properties table. This convention
-determines how products of inertia are saved to the data frame.
+mass properties list to that of a target item in a mass properties data set. This convention
+determines how products of inertia are saved to the data set.
 
 The signature \verb{of set_poi_conv_from_target()} is such that it can be passed as an \code{override} argument
 to \code{update_mass_props()} and \code{update_mass_props_and_unc()}, thus ensuring

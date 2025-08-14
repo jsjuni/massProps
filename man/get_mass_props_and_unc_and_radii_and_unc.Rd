@@ -4,15 +4,27 @@
 \alias{get_mass_props_and_unc_and_radii_and_unc}
 \title{Get mass properties and uncertainties and radii of gyration and uncertainties}
 \usage{
-get_mass_props_and_unc_and_radii_and_unc(df, id)
+get_mass_props_and_unc_and_radii_and_unc(
+  ds,
+  id,
+  get_mpur = get_mass_props_and_unc_and_radii,
+  get_by_id = df_get_by_id
+)
 }
 \arguments{
-\item{df}{A data frame with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\item{ds}{A data set with (at least) these properties: \code{id}, \code{mass}, \code{Cx},
 \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint},
 \code{sigma_mass}, \code{sigma_Cx}, \code{sigma_Cy}, \code{sigma_Cz},\code{sigma_Ixy}, \code{sigma_Ixz},
 \code{sigma_Iyz}, \code{kx}, \code{ky}, \code{kz}, \code{sigma_kx}, \code{sigma_ky}, \code{sigma_kz}.}
 
-\item{id}{The \code{id} value of the desired row.}
+\item{id}{The \code{id} value of the desired item}
+
+\item{get_mpur}{A function to get mass properties and uncertainties and radii of gyration and uncertainties
+for an item in a data set, called as
+get_mpur(ds, id). Default: get_mass_props_and_unc_and_radii().}
+
+\item{get_by_id}{A function to get the value of a property from the selected item,
+called as get_by_id(ds, id, property); default df_get_by_id()}
 }
 \value{
 A list with the following named elements:
@@ -32,7 +44,7 @@ tensor is \code{Ixy} if \code{POIconv} is "-"; it is -\code{Ixy} if \code{POIcon
 }
 \description{
 \code{get_mass_props_and_unc_and_radii_and_unc()} creates a mass properties and uncertainties
-and radii of gyration and uncertainties list from a selected row in a data frame.
+and radii of gyration and uncertainties list from a selected row in a data set
 }
 \examples{
 mp_table_small_rollup <- rollup_mass_props_and_unc(mp_tree_small, mp_table_small)

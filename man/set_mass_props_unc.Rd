@@ -2,14 +2,14 @@
 % Please edit documentation in R/massprops.R
 \name{set_mass_props_unc}
 \alias{set_mass_props_unc}
-\title{Set mass properties uncertainties for a row in a data frame}
+\title{Set mass properties uncertainties for an item in a data set}
 \usage{
-set_mass_props_unc(df, id, mpu)
+set_mass_props_unc(ds, id, mpu, set_by_id = df_set_by_id)
 }
 \arguments{
-\item{df}{A data frame with an \code{id} column.}
+\item{ds}{A data set with an \code{id} property.}
 
-\item{id}{The \code{id} value of the desired row.}
+\item{id}{The \code{id} value of the desired item}
 
 \item{mpu}{A list with the following named elements:
 \itemize{
@@ -17,13 +17,16 @@ set_mass_props_unc(df, id, mpu)
 \item \code{sigma_center_mass} Numeric 3-vector center of mass uncertainties.
 \item \code{sigma_inertia} Numeric 3x3 matrix inertia tensor uncertainties.
 }}
+
+\item{set_by_id}{A function to set the value of a property for the selected item,
+called as set_by_id(ds, id, property, value); default df_set_by_id()}
 }
 \value{
-The updated data frame.
+The updated data set.
 }
 \description{
 \code{set_mass_props_unc()} sets mass properties uncertainties for a
-selected row in a data frame with an \code{id} column.
+selected item in a data set
 }
 \examples{
 set_mass_props_unc(sawe_table, "Combined", get_mass_props_unc(sawe_table, "Widget"))

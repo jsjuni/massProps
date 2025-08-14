@@ -4,25 +4,38 @@
 \alias{update_mass_props}
 \title{Update mass properties}
 \usage{
-update_mass_props(df, target, sources, override = set_poi_conv_from_target)
+update_mass_props(
+  ds,
+  target,
+  sources,
+  set = set_mass_props,
+  get = get_mass_props,
+  combine = combine_mass_props,
+  override = set_poi_conv_from_target
+)
 }
 \arguments{
-\item{df}{A data frame  with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\item{ds}{A data set  with (at least) these properties: \code{id}, \code{mass}, \code{Cx},
 \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
 
-\item{target}{The \code{id} value of the target row.}
+\item{target}{The \code{id} value of the target item.}
 
-\item{sources}{List of \code{id} values of the of the source rows.}
+\item{sources}{List of \code{id} values of the of the source items.}
 
-\item{override}{An override function, called as override(df, target, value). The default override sets the POI sign convention
-of a computed aggregate to the \code{POIconv} column of the target row in the data frame.}
+\item{set}{A function to set the mass properties of the target item, called as set(ds, target, mpl). Default set_mass_props().}
+
+\item{get}{A function to get the mass properties of a source item, called as get(ds, source). Default get_mass_props().}
+
+\item{combine}{A function to combine a list of mass property sets, called as combine(mpl). Default combine_mass_props().}
+
+\item{override}{An override function, called as override(ds, target, value). Default set_poi_conv_from_target().}
 }
 \value{
-The updated data frame.
+The updated data set.
 }
 \description{
-\code{update_mass_props()} updates mass properties for a specified target row from
-specified source rows in a data frame.
+\code{update_mass_props()} updates mass properties for a specified target item from
+specified source items in a data set.
 }
 \examples{
 leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))

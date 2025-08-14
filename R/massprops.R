@@ -1,4 +1,4 @@
-#' Get mass properties for a row in a data frame
+#' Get mass properties for an item in a data set
 #'
 #' `get_mass_props()` creates a mass properties list from a selected item in a data set
 #'
@@ -42,9 +42,9 @@ get_mass_props <- function(ds, id, get_by_id = df_get_by_id) {
   )
 }
 
-#' Get mass properties uncertainties for a row in a data frame
+#' Get mass properties uncertainties for an item in a data set
 #'
-#' `get_mass_props_unc()` creates a mass properties uncertainties list from a selected row in a data frame.
+#' `get_mass_props_unc()` creates a mass properties uncertainties list from a selected item in a data set.
 #'
 #' @inheritParams get_mass_props
 #' @param ds A data set  with (at least) these properties: `id`, `sigma_mass`,
@@ -79,14 +79,14 @@ get_mass_props_unc <- function(ds, id, get_by_id = df_get_by_id) {
   )
 }
 
-#' Get mass properties and uncertainties for a row in a data frame
+#' Get mass properties and uncertainties for an item in a data set
 #'
 #' @description
 #' `get_mass_props_and_unc()` is a convenience wrapper that combines the results of
 #' `get_mass_props()` and `get_mass_props_unc()`.
 #'
 #' @inheritParams get_mass_props
-#' @param df A data set with (at least) these properties: `id`, `mass`, `Cx`,
+#' @param ds A data set with (at least) these properties: `id`, `mass`, `Cx`,
 #'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`,
 #'   `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,`sigma_Ixy`, `sigma_Ixz`,
 #'   `sigma_Iyz`.
@@ -111,7 +111,7 @@ get_mass_props_and_unc <- function(ds, id, get_by_id = df_get_by_id) {
   c(get_mass_props(ds, id, get_by_id), get_mass_props_unc(ds, id, get_by_id))
 }
 
-#' Set mass properties for a row in a data frame
+#' Set mass properties for an item in a data set
 #'
 #' `set_mass_props()` sets mass properties for a specified item in a data set
 #'
@@ -126,7 +126,7 @@ get_mass_props_and_unc <- function(ds, id, get_by_id = df_get_by_id) {
 #' - `inertia` Numeric 3x3 matrix inertia tensor. The signs of the products of inertia
 #' are determined by `POIconv`. For example, `Ixy` is the \eqn{xy} element of the inertia
 #' tensor if `POIconv` is "-"; it is the additive inverse of that value if `POIconv` is "+".
-#' @param A function to set the value of a property for the selected item,
+#' @param set_by_id A function to set the value of a property for the selected item,
 #'   called as set_by_id(ds, id, property, value); default df_set_by_id()
 #'
 #' @returns The updated data set with properties `id`, `mass`, `Cx`,
@@ -171,7 +171,7 @@ set_mass_props <- function(ds, id, mp, set_by_id = df_set_by_id) {
   )
 }
 
-#' Set mass properties uncertainties for a row in a data frame
+#' Set mass properties uncertainties for an item in a data set
 #'
 #' `set_mass_props_unc()` sets mass properties uncertainties for a
 #' selected item in a data set
@@ -183,7 +183,7 @@ set_mass_props <- function(ds, id, mp, set_by_id = df_set_by_id) {
 #' - `sigma_center_mass` Numeric 3-vector center of mass uncertainties.
 #' - `sigma_inertia` Numeric 3x3 matrix inertia tensor uncertainties.
 #'
-#' @returns The updated data frame.
+#' @returns The updated data set.
 #'
 #' @export
 #'
@@ -213,7 +213,7 @@ set_mass_props_unc <- function(ds, id, mpu, set_by_id = df_set_by_id) {
   )
 }
 
-#' Set mass properties and uncertainties for a row in a data frame
+#' Set mass properties and uncertainties for an item in a data set
 #'
 #' @description
 #' `set_mass_props_and_unc()` is a convenience wrapper that combines the results of
@@ -232,7 +232,7 @@ set_mass_props_unc <- function(ds, id, mpu, set_by_id = df_set_by_id) {
 #' - `sigma_center_mass` Numeric 3-vector center of mass uncertainties.
 #' - `sigma_inertia` Numeric 3x3 matrix inertia tensor uncertainties.
 #'
-#' @returns The updated data frame.
+#' @returns The updated data set.
 #'
 #' @export
 #'
@@ -300,27 +300,28 @@ set_poi_conv_minus <- function(ds, target, mp) {
 #'
 #' @description
 #' `set_poi_conv_from_target()` sets the products of inertia sign convention for a
-#' mass properties list to that of a target item in a mass properties table. This convention
-#' determines how products of inertia are saved to the data frame.
+#' mass properties list to that of a target item in a mass properties data set. This convention
+#' determines how products of inertia are saved to the data set.
 #'
 #' The signature `of set_poi_conv_from_target()` is such that it can be passed as an `override` argument
 #' to `update_mass_props()` and `update_mass_props_and_unc()`, thus ensuring
 #' that all calculated POI values follow the negative integral convention of the target item to which they are written.
 #'
+#' @inheritParams get_mass_props
 #' @inheritParams set_poi_conv_plus
-#' @param df A data frame with columns `id` and `POIconv`.
-#' @param target The `id` value of the target row.
+#' @param ds A data set with properties `id` and `POIconv`.
+#' @param target The `id` value of the target item
 #'
 #' @return The mass properties list with the named element `poi_conv` set to the
-#'   `POIconv` column of the target row in the data frame.
+#'   `POIconv` property of the target item in the data set
 #'
 #' @export
 #'
 #' @examples
 #' set_poi_conv_from_target(mp_table, "C.1.2.2.3.2.1", get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
 #'
-set_poi_conv_from_target <- function(df, target, mp, get_by_id = df_get_by_id) {
-  mp$poi_conv <- get_by_id(df, target, "POIconv")
+set_poi_conv_from_target <- function(ds, target, mp, get_by_id = df_get_by_id) {
+  mp$poi_conv <- get_by_id(ds, target, "POIconv")
   mp
 }
 
@@ -493,17 +494,19 @@ combine_mass_props_and_unc <- function(mpl) {
 
 #' Update mass properties
 #'
-#' `update_mass_props()` updates mass properties for a specified target row from
-#' specified source rows in a data frame.
+#' `update_mass_props()` updates mass properties for a specified target item from
+#' specified source items in a data set.
 #'
-#' @param df A data frame  with (at least) these columns: `id`, `mass`, `Cx`,
+#' @param ds A data set  with (at least) these properties: `id`, `mass`, `Cx`,
 #'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
-#' @param target The `id` value of the target row.
-#' @param sources List of `id` values of the of the source rows.
-#' @param override An override function, called as override(df, target, value). The default override sets the POI sign convention
-#' of a computed aggregate to the `POIconv` column of the target row in the data frame.
+#' @param target The `id` value of the target item.
+#' @param sources List of `id` values of the of the source items.
+#' @param set A function to set the mass properties of the target item, called as set(ds, target, mpl). Default set_mass_props().
+#' @param get A function to get the mass properties of a source item, called as get(ds, source). Default get_mass_props().
+#' @param combine A function to combine a list of mass property sets, called as combine(mpl). Default combine_mass_props().
+#' @param override An override function, called as override(ds, target, value). Default set_poi_conv_from_target().
 #'
-#' @return The updated data frame.
+#' @return The updated data set.
 #'
 #' @export
 #'
@@ -511,13 +514,13 @@ combine_mass_props_and_unc <- function(mpl) {
 #' leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))
 #' update_mass_props(test_table, "A.3", leaves)
 #'
-update_mass_props <- function(df, target, sources,
+update_mass_props <- function(ds, target, sources,
                               set = set_mass_props,
                               get = get_mass_props,
                               combine = combine_mass_props,
                               override = set_poi_conv_from_target) {
   update_prop(
-    df,
+    ds,
     target = target,
     sources = sources,
     set,
@@ -532,17 +535,17 @@ update_mass_props <- function(df, target, sources,
 #' @description
 #' `update_mass_props_unc()` updates mass properties uncertainties
 #' for a specified target row from
-#' specified source rows in a data frame
+#' specified source items in a data set
 #' with (at least) these columns: `id`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
 #' `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
 #'
 #' @inheritParams update_mass_props
-#' @param df A data frame  with (at least) these columns: `id`, `mass`, `Cx`,
+#' @param df A data set  with (at least) these properties: `id`, `mass`, `Cx`,
 #'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`,
 #'   `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`, `sigma_Ixx`, `sigma_Iyy`,
 #'   `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
 #'
-#' @returns The updated data frame.
+#' @returns The updated data set.
 #'
 #' @export
 #'
@@ -570,12 +573,12 @@ update_mass_props_unc <- function(df, target, sources,
 #'
 #' @description
 #' `update_mass_props_and_unc()` updates mass properties and uncertainties
-#' for a specified target row from
-#' specified source rows in a data frame.
+#' for a specified target item from
+#' specified source items in a data set
 #'
 #' @inheritParams update_mass_props_unc
 #'
-#' @return The updated data frame.
+#' @return The updated data set.
 #'
 #' @export
 #'
@@ -759,9 +762,9 @@ validate_mass_props_and_unc <- function(mpu) {
 #' Validate a mass properties table
 #'
 #' @description `validate_mass_props_table()` checks that the names of vertices
-#'   in a tree and the `id` values of a data frame are identical. It further
-#'   applies the checks of `validate_mass_props()` to every row of the data
-#'   frame corresponding to a leaf vertex of the tree.
+#'   in a tree and the `id` values of a data set are identical. It further
+#'   applies the checks of `validate_mass_props()` to every item of the data
+#'   set corresponding to a leaf vertex of the tree.
 #'
 #' @inheritParams update_mass_props
 #' @inheritParams rollup_mass_props
@@ -777,8 +780,8 @@ validate_mass_props_and_unc <- function(mpu) {
 #'
 #' @examples
 #' validate_mass_props_table(mp_tree_small, mp_table_small)
-validate_mass_props_table <- function(tree, df) {
-  validate_ds(tree, df, df_get_ids, get_mass_props, validate_mass_props)
+validate_mass_props_table <- function(tree, ds) {
+  validate_ds(tree, ds, df_get_ids, get_mass_props, validate_mass_props)
 }
 
 #' Validate a mass properties and uncertainties table
@@ -788,7 +791,7 @@ validate_mass_props_table <- function(tree, df) {
 #'
 #' @description `validate_mass_props_and_unc()` calls
 #' `validate_mass_props_table()` and further applies the checks of
-#' `validate_mass_props_and_unc()` to every row of the data frame corresponding
+#' `validate_mass_props_and_unc()` to every item of the data set corresponding
 #' to a leaf vertex of the tree.
 #'
 #' @returns TRUE if valid, stops with an error otherwise
@@ -797,38 +800,38 @@ validate_mass_props_table <- function(tree, df) {
 #'
 #' @examples
 #' validate_mass_props_and_unc_table(mp_tree_small, mp_table_small)
-validate_mass_props_and_unc_table <- function(tree, df) {
-  validate_ds(tree, df, df_get_ids, get_mass_props_and_unc, validate_mass_props_and_unc)
+validate_mass_props_and_unc_table <- function(tree, ds) {
+  validate_ds(tree, ds, df_get_ids, get_mass_props_and_unc, validate_mass_props_and_unc)
 }
 
 #' Roll up mass properties
 #'
 #' @description
-#' 'rollup_mass_props()' rolls up mass properties in a data frame such that the mass properties of each
-#' non-leaf vertex element is the aggregation of those of its child elements.
+#' 'rollup_mass_props()' rolls up mass properties in a data set such that the mass properties of each
+#' non-leaf vertex item is the aggregation of those of its child items.
 #'
 #' @inheritParams update_mass_props
 #' @param tree An 'igraph' tree whose vertices are named as the values of the `id`
-#'   column of `df` and whose directed edges point from child id to parent id.
-#' @param validate_df A validator for the tree and table, default `validate_mass_props_table()`
+#'   column of `ds` and whose directed edges point from child id to parent id.
+#' @param validate_ds A validator for the tree and table, default `validate_mass_props_table()`
 #' @param ... Other parameters passed to `rollupTree::rollup()`
 #'
-#' @returns The updated data frame
+#' @returns The updated data set.
 #'
 #' @export
 #'
 #' @examples
 #' rollup_mass_props(mp_tree_small, mp_table_small)
 #'
-rollup_mass_props <- function(tree, df, validate_df = validate_mass_props_table, ...) {
-  rollup(tree, df, update_mass_props, validate_df, ...)
+rollup_mass_props <- function(tree, ds, validate_ds = validate_mass_props_table, ...) {
+  rollup(tree, ds, update_mass_props, validate_ds, ...)
 }
 
 #' Roll up mass properties uncertainties
 #'
 #' @description
-#' `rollup_mass_props_unc()` rolls up mass properties uncertainties in a data frame such that the uncertainties of each
-#' non-leaf vertex element is the aggregation of the mass properties and uncertainties of its child elements.
+#' `rollup_mass_props_unc()` rolls up mass properties uncertainties in a data set such that the uncertainties of each
+#' non-leaf vertex item is the aggregation of the mass properties and uncertainties of its child items.
 #'
 #' The difference between `rollup_mass_props_unc()` and `rollup_mass_props_and_unc()` is that `rollup_mass_props_unc()`
 #' expects the mass properties in its input to have been rolled up, whereas `rollup_mass_props_and_unc()` performs
@@ -836,9 +839,9 @@ rollup_mass_props <- function(tree, df, validate_df = validate_mass_props_table,
 #'
 #' @inheritParams rollup_mass_props
 #' @inheritParams update_mass_props_unc
-#' @param validate_df A validator for the tree and table, default `validate_mass_props_and_unc_table()`
+#' @param validate_ds A validator for the tree and table, default `validate_mass_props_and_unc_table()`
 #'
-#' @returns The updated data frame
+#' @returns The updated data set.
 #'
 #' @export
 #'
@@ -846,14 +849,14 @@ rollup_mass_props <- function(tree, df, validate_df = validate_mass_props_table,
 #' mp_ru <- rollup_mass_props(mp_tree_small, mp_table_small)
 #' rollup_mass_props_unc(mp_tree_small, mp_ru)
 
-rollup_mass_props_unc <- function(tree, df, validate_df = validate_mass_props_and_unc_table, ...) {
-  rollup(tree, df, update_mass_props_unc, validate_df, ...)
+rollup_mass_props_unc <- function(tree, df, validate_ds = validate_mass_props_and_unc_table, ...) {
+  rollup(tree, df, update_mass_props_unc, validate_ds, ...)
 }
 
 #' Roll up mass properties and uncertainties
 #'
 #' @description
-#' 'rollup_mass_props_and_unc()' rolls up mass properties in a data frame
+#' 'rollup_mass_props_and_unc()' rolls up mass properties in a data set
 #' with (at least) these columns: `id`, `mass`, `Cx`, `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`,
 #' `Ixz`, `Iyz`, `POIconv`, `Ipoint`, `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,
 #' `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`, `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
@@ -864,15 +867,15 @@ rollup_mass_props_unc <- function(tree, df, validate_df = validate_mass_props_an
 #'
 #' @inheritParams rollup_mass_props
 #' @inheritParams update_mass_props_unc
-#' @param validate_df A validator for the tree and table, default `validate_mass_props_and_unc_table()`
+#' @param validate_ds A validator for the tree and table, default `validate_mass_props_and_unc_table()`
 #'
-#' @returns The updated data frame
+#' @returns The updated data set.
 #' @export
 #'
 #' @examples
 #' rollup_mass_props_and_unc(mp_tree_small, mp_table_small)
-rollup_mass_props_and_unc <- function(tree, df, validate_df = validate_mass_props_and_unc_table, ...) {
-  rollup(tree, df, update_mass_props_and_unc, validate_df, ...)
+rollup_mass_props_and_unc <- function(tree, ds, validate_ds = validate_mass_props_and_unc_table, ...) {
+  rollup(tree, ds, update_mass_props_and_unc, validate_ds, ...)
 }
 
 #' Roll up mass properties without input validation
@@ -885,15 +888,15 @@ rollup_mass_props_and_unc <- function(tree, df, validate_df = validate_mass_prop
 #'
 #' @inheritParams rollup_mass_props
 #'
-#' @returns The updated data frame
+#' @returns The updated data set.
 #'
 #' @export
 #'
 #' @examples
 #' rollup_mass_props_fast(test_tree, test_table)
 #'
-rollup_mass_props_fast <- function(tree, df) {
-  rollup_mass_props(tree, df, validate_df = function(t, d) TRUE, validate_tree = function(t) NA)
+rollup_mass_props_fast <- function(tree, ds) {
+  rollup_mass_props(tree, ds, validate_ds = function(t, d) TRUE, validate_tree = function(t) NA)
 }
 
 
@@ -908,15 +911,15 @@ rollup_mass_props_fast <- function(tree, df) {
 #' @inheritParams rollup_mass_props
 #' @inheritParams update_mass_props_unc
 #'
-#' @returns The updated data frame
+#' @returns The updated data set.
 #'
 #' @export
 #'
 #' @examples
 #' rollup_mass_props_unc_fast(sawe_tree, sawe_table)
 #'
-rollup_mass_props_unc_fast <- function(tree, df) {
-  rollup_mass_props_unc(tree, df, validate_df = function(t, d) TRUE, validate_tree = function(t) NA)
+rollup_mass_props_unc_fast <- function(tree, ds) {
+  rollup_mass_props_unc(tree, ds, validate_ds = function(t, d) TRUE, validate_tree = function(t) NA)
 }
 
 #' Roll up mass properties and uncertainties without input validation
@@ -930,13 +933,13 @@ rollup_mass_props_unc_fast <- function(tree, df) {
 #' @inheritParams rollup_mass_props
 #' @inheritParams update_mass_props_unc
 #'
-#' @returns The updated data frame
+#' @returns The updated data set.
 #'
 #' @export
 #'
 #' @examples
 #' rollup_mass_props_and_unc_fast(sawe_tree, sawe_table)
 #'
-rollup_mass_props_and_unc_fast <- function(tree, df) {
-  rollup_mass_props_and_unc(tree, df, validate_df = function(t, d) TRUE, validate_tree = function(t) NA)
+rollup_mass_props_and_unc_fast <- function(tree, ds) {
+  rollup_mass_props_and_unc(tree, ds, validate_ds = function(t, d) TRUE, validate_tree = function(t) NA)
 }

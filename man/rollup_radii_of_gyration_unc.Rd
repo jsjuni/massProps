@@ -4,21 +4,35 @@
 \alias{rollup_radii_of_gyration_unc}
 \title{Roll up radii of gyration uncertainties}
 \usage{
-rollup_radii_of_gyration_unc(tree, df)
+rollup_radii_of_gyration_unc(
+  tree,
+  ds,
+  get_mpu = get_mass_props_and_unc,
+  set_radii_unc = set_radii_of_gyration_unc,
+  validate_ds = validate_mass_props_and_unc_table
+)
 }
 \arguments{
 \item{tree}{An 'igraph' tree whose vertices are named as the values of the \code{id}
-column of \code{df} and whose directed edges point from child id to parent id.}
+column of \code{ds} and whose directed edges point from child id to parent id.}
 
-\item{df}{A data frame  with (at least) these columns: \code{id}, \code{mass}, \code{Cx},
+\item{ds}{A data set  with (at least) these properties: \code{id}, \code{mass}, \code{Cx},
 \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
+
+\item{get_mpu}{A function to get mass properties and uncertainties for an item in a data set, called as
+get_mpu(ds, id). Default: get_mass_props_and_unc().}
+
+\item{set_radii_unc}{A function to set radii of gyration uncertainties for an item in a data set, called
+as set_radii_unc(ds, target, mp). Default: set_radii_of_gyration_unc().}
+
+\item{validate_ds}{A validator for the tree and table, default \code{validate_mass_props_and_unc_table()}}
 }
 \value{
-A data frame with the same columns as \code{df}, plus
-radii of gyration in columns \code{sigma_kx}, \code{sigma_ky}, and \code{sigma_kz}.`
+A data set with the same properties as \code{ds}, plus
+radii of gyration properties \code{sigma_kx}, \code{sigma_ky}, and \code{sigma_kz}.`
 }
 \description{
-\code{rollup_radii_of_gyration_unc()} adds calculated radii of gyration uncertainties to a data frame
+\code{rollup_radii_of_gyration_unc()} adds calculated radii of gyration uncertainties to a data set
 of rolled-up mass properties and uncertainties.
 
 Radii of gyration uncertainties are calculated directly from moments of inertia and mass
