@@ -1,10 +1,12 @@
 #' Get mass properties for a row in a data frame
 #'
-#' `get_mass_props()` creates a mass properties list from a selected row in a data frame.
+#' `get_mass_props()` creates a mass properties list from a selected item in a data set
 #'
-#' @param df A data frame with (at least) these columns: `id`, `mass`, `Cx`,
+#' @param ds A data set with (at least) these properties: `id`, `mass`, `Cx`,
 #'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`.
-#' @param id The `id` value of the desired row.
+#' @param id The `id` value of the desired item
+#' @param get_by_id A function to get the value of a property from the selected item,
+#'   called as get_by_id(ds, id, property); default df_get_by_id()
 #'
 #' @returns A list with the following named elements:
 #' - `mass` Numeric mass.
@@ -19,24 +21,24 @@
 #' @examples
 #' get_mass_props(mp_table, "C.1.2.2.3.1.2.3")
 #'
-get_mass_props <- function(df, id) {
-  poi_conv <- df_get_by_id(df, id, "POIconv")
+get_mass_props <- function(ds, id, get_by_id = df_get_by_id) {
+  poi_conv <- get_by_id(ds, id, "POIconv")
   list(
-    mass = df_get_by_id(df, id, "mass"),
-    center_mass = sapply(c(x = "Cx", y = "Cy", z = "Cz"), FUN=function(p) df_get_by_id(df, id, p)),
+    mass = get_by_id(ds, id, "mass"),
+    center_mass = sapply(c(x = "Cx", y = "Cy", z = "Cz"), FUN=function(p) get_by_id(ds, id, p)),
     inertia = {
       xyz <- list("x", "y", "z")
       it <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
-      it["x", "x"] <- df_get_by_id(df, id, "Ixx")
-      it["y", "y"] <- df_get_by_id(df, id, "Iyy")
-      it["z", "z"] <- df_get_by_id(df, id, "Izz")
+      it["x", "x"] <- get_by_id(ds, id, "Ixx")
+      it["y", "y"] <- get_by_id(ds, id, "Iyy")
+      it["z", "z"] <- get_by_id(ds, id, "Izz")
       poi_factor <- if (poi_conv == '-') 1 else -1
-      it["x", "y"] <- it["y", "x"] <- poi_factor * df_get_by_id(df, id, "Ixy")
-      it["x", "z"] <- it["z", "x"] <- poi_factor * df_get_by_id(df, id, "Ixz")
-      it["y", "z"] <- it["z", "y"] <- poi_factor * df_get_by_id(df, id, "Iyz")
+      it["x", "y"] <- it["y", "x"] <- poi_factor * get_by_id(ds, id, "Ixy")
+      it["x", "z"] <- it["z", "x"] <- poi_factor * get_by_id(ds, id, "Ixz")
+      it["y", "z"] <- it["z", "y"] <- poi_factor * get_by_id(ds, id, "Iyz")
       it
     },
-    point = df_get_by_id(df, id, "Ipoint")
+    point = get_by_id(ds, id, "Ipoint")
   )
 }
 
@@ -45,7 +47,7 @@ get_mass_props <- function(df, id) {
 #' `get_mass_props_unc()` creates a mass properties uncertainties list from a selected row in a data frame.
 #'
 #' @inheritParams get_mass_props
-#' @param df A data frame  with (at least) these columns: `id`, `sigma_mass`,
+#' @param ds A data set  with (at least) these properties: `id`, `sigma_mass`,
 #'   `sigma_Cx`, `sigma_Cy`, `sigma_Cz`, `sigma_Ixx`, `sigma_Iyy`, `sigma_Izz`,
 #'   `sigma_Ixy`, `sigma_Ixz`, `sigma_Iyz`.
 #'
@@ -59,19 +61,19 @@ get_mass_props <- function(df, id) {
 #' @examples
 #' get_mass_props_unc(mp_table, "C.1.2.2.3.1.2.3")
 #'
-get_mass_props_unc <- function(df, id) {
+get_mass_props_unc <- function(ds, id, get_by_id = df_get_by_id) {
   list(
-    sigma_mass = df_get_by_id(df, id, "sigma_mass"),
-    sigma_center_mass = sapply(c(x = "sigma_Cx", y = "sigma_Cy", z = "sigma_Cz"), FUN=function(p) df_get_by_id(df, id, p)),
+    sigma_mass = get_by_id(ds, id, "sigma_mass"),
+    sigma_center_mass = sapply(c(x = "sigma_Cx", y = "sigma_Cy", z = "sigma_Cz"), FUN=function(p) get_by_id(ds, id, p)),
     sigma_inertia = {
       xyz <- list("x", "y", "z")
       sit <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
-      sit["x", "x"] <- df_get_by_id(df, id, "sigma_Ixx")
-      sit["y", "y"] <- df_get_by_id(df, id, "sigma_Iyy")
-      sit["z", "z"] <- df_get_by_id(df, id, "sigma_Izz")
-      sit["x", "y"] <- sit["y", "x"] <- df_get_by_id(df, id, "sigma_Ixy")
-      sit["x", "z"] <- sit["z", "x"] <- df_get_by_id(df, id, "sigma_Ixz")
-      sit["y", "z"] <- sit["z", "y"] <- df_get_by_id(df, id, "sigma_Iyz")
+      sit["x", "x"] <- get_by_id(ds, id, "sigma_Ixx")
+      sit["y", "y"] <- get_by_id(ds, id, "sigma_Iyy")
+      sit["z", "z"] <- get_by_id(ds, id, "sigma_Izz")
+      sit["x", "y"] <- sit["y", "x"] <- get_by_id(ds, id, "sigma_Ixy")
+      sit["x", "z"] <- sit["z", "x"] <- get_by_id(ds, id, "sigma_Ixz")
+      sit["y", "z"] <- sit["z", "y"] <- get_by_id(ds, id, "sigma_Iyz")
       sit
     }
   )
@@ -84,7 +86,7 @@ get_mass_props_unc <- function(df, id) {
 #' `get_mass_props()` and `get_mass_props_unc()`.
 #'
 #' @inheritParams get_mass_props
-#' @param df A data frame with (at least) these columns: `id`, `mass`, `Cx`,
+#' @param df A data set with (at least) these properties: `id`, `mass`, `Cx`,
 #'   `Cy`, `Cz`, `Ixx`, `Iyy`, `Izz`, `Ixy`, `Ixz`, `Iyz`, `POIconv`, `Ipoint`,
 #'   `sigma_mass`, `sigma_Cx`, `sigma_Cy`, `sigma_Cz`,`sigma_Ixy`, `sigma_Ixz`,
 #'   `sigma_Iyz`.
@@ -105,8 +107,8 @@ get_mass_props_unc <- function(df, id) {
 #' @examples
 #' get_mass_props_and_unc(mp_table, "C.1.2.2.3.1.2.3")
 #'
-get_mass_props_and_unc <- function(df, id) {
-  c(get_mass_props(df, id), get_mass_props_unc(df, id))
+get_mass_props_and_unc <- function(ds, id, get_by_id = df_get_by_id) {
+  c(get_mass_props(ds, id, get_by_id), get_mass_props_unc(ds, id, get_by_id))
 }
 
 #' Set mass properties for a row in a data frame
@@ -238,6 +240,86 @@ set_mass_props_unc <- function(df, id, mpu) {
 #'
 set_mass_props_and_unc <- function(df, id, mpu) {
   set_mass_props_unc(set_mass_props(df, id, mpu), id, mpu)
+}
+
+#' Set POI sign convention for mass properties list to "+"
+#'
+#' @description
+#' `set_poi_conv_plus()` sets the products of inertia sign convention for a
+#' mass properties list to "+". This convention determines how products of inertia are
+#' saved to a data set.
+#'
+#' The signature of `set_poi_conv_plus()` is such that it can be passed as an `override` argument
+#' to `update_mass_props()` and `update_mass_props_and_unc()`, thus ensuring
+#' that calculated POI values are saved using the positive integral convention.
+#'
+#' @param ds Ignored.
+#' @param target Ignored.
+#' @param mp A mass properties list.
+#'
+#' @returns The input mass properties list with the named element `poi_conv` set to "+"
+#'
+#' @export
+#'
+#' @examples
+#' set_poi_conv_plus(NULL, NULL, get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+#'
+set_poi_conv_plus <- function(ds, target, mp) {
+  mp$poi_conv <- "+"
+  mp
+}
+
+#' Set POI sign convention for mass properties list to "-"
+#'
+#' @description
+#' `set_poi_conv_minus()` sets the products of inertia sign convention for a
+#' mass properties list to "-". This convention determines how products of inertia are
+#' saved to a data set.
+#'
+#' The signature of `set_poi_conv_minus()` is such that it can be passed as an `override` argument
+#' to `update_mass_props()` and `update_mass_props_and_unc()`, thus ensuring
+#' that calculated POI values are saved using the negative integral convention.
+#'
+#' @inheritParams set_poi_conv_plus
+#'
+#' @returns The mass properties list with the named element `poi_conv` set to "-"
+#'
+#' @export
+#'
+#' @examples
+#' set_poi_conv_minus(NULL, NULL, get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+#'
+set_poi_conv_minus <- function(ds, target, mp) {
+  mp$poi_conv <- "-"
+  mp
+}
+
+#' Set POI convention for mass properties list to match a target item
+#'
+#' @description
+#' `set_poi_conv_from_target()` sets the products of inertia sign convention for a
+#' mass properties list to that of a target item in a mass properties table. This convention
+#' determines how products of inertia are saved to the data frame.
+#'
+#' The signature `of set_poi_conv_from_target()` is such that it can be passed as an `override` argument
+#' to `update_mass_props()` and `update_mass_props_and_unc()`, thus ensuring
+#' that all calculated POI values follow the negative integral convention of the target item to which they are written.
+#'
+#' @inheritParams set_poi_conv_plus
+#' @param df A data frame with columns `id` and `POIconv`.
+#' @param target The `id` value of the target row.
+#'
+#' @return The mass properties list with the named element `poi_conv` set to the
+#'   `POIconv` column of the target row in the data frame.
+#'
+#' @export
+#'
+#' @examples
+#' set_poi_conv_from_target(mp_table, "C.1.2.2.3.2.1", get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
+#'
+set_poi_conv_from_target <- function(df, target, mp, get_by_id = df_get_by_id) {
+  mp$poi_conv <- get_by_id(df, target, "POIconv")
+  mp
 }
 
 #' Combine mass properties
@@ -405,86 +487,6 @@ combine_mass_props_unc <- function(mpl, amp) {
 #'
 combine_mass_props_and_unc <- function(mpl) {
   combine_mass_props_unc(mpl, amp = combine_mass_props(mpl))
-}
-
-#' Set POI sign convention for mass properties list to "+"
-#'
-#' @description
-#' `set_poi_conv_plus()` sets the products of inertia sign convention for a
-#' mass properties list to "+". This convention determines how products of inertia are
-#' saved to a data set.
-#'
-#' The signature of `set_poi_conv_plus()` is such that it can be passed as an `override` argument
-#' to `update_mass_props()` and `update_mass_props_and_unc()`, thus ensuring
-#' that calculated POI values are saved using the positive integral convention.
-#'
-#' @param ds Ignored.
-#' @param target Ignored.
-#' @param mp A mass properties list.
-#'
-#' @returns The input mass properties list with the named element `poi_conv` set to "+"
-#'
-#' @export
-#'
-#' @examples
-#' set_poi_conv_plus(NULL, NULL, get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
-#'
-set_poi_conv_plus <- function(ds, target, mp) {
-  mp$poi_conv <- "+"
-  mp
-}
-
-#' Set POI sign convention for mass properties list to "-"
-#'
-#' @description
-#' `set_poi_conv_minus()` sets the products of inertia sign convention for a
-#' mass properties list to "-". This convention determines how products of inertia are
-#' saved to a data set.
-#'
-#' The signature of `set_poi_conv_minus()` is such that it can be passed as an `override` argument
-#' to `update_mass_props()` and `update_mass_props_and_unc()`, thus ensuring
-#' that calculated POI values are saved using the negative integral convention.
-#'
-#' @inheritParams set_poi_conv_plus
-#'
-#' @returns The mass properties list with the named element `poi_conv` set to "-"
-#'
-#' @export
-#'
-#' @examples
-#' set_poi_conv_minus(NULL, NULL, get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
-#'
-set_poi_conv_minus <- function(ds, target, mp) {
-  mp$poi_conv <- "-"
-  mp
-}
-
-#' Set POI convention for mass properties list to match a target item
-#'
-#' @description
-#' `set_poi_conv_from_target()` sets the products of inertia sign convention for a
-#' mass properties list to that of a target item in a mass properties table. This convention
-#' determines how products of inertia are saved to the data frame.
-#'
-#' The signature `of set_poi_conv_from_target()` is such that it can be passed as an `override` argument
-#' to `update_mass_props()` and `update_mass_props_and_unc()`, thus ensuring
-#' that all calculated POI values follow the negative integral convention of the target item to which they are written.
-#'
-#' @inheritParams set_poi_conv_plus
-#' @param df A data frame with columns `id` and `POIconv`.
-#' @param target The `id` value of the target row.
-#'
-#' @return The mass properties list with the named element `poi_conv` set to the
-#'   `POIconv` column of the target row in the data frame.
-#'
-#' @export
-#'
-#' @examples
-#' set_poi_conv_from_target(mp_table, "C.1.2.2.3.2.1", get_mass_props(mp_table, "C.1.2.2.3.2.1.1"))
-#'
-set_poi_conv_from_target <- function(df, target, mp) {
-  mp$poi_conv <- df_get_by_id(df, target, "POIconv")
-  mp
 }
 
 #' Update mass properties
