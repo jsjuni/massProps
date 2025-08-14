@@ -511,14 +511,18 @@ combine_mass_props_and_unc <- function(mpl) {
 #' leaves <- names(igraph::neighbors(test_tree, "A.3", mode = "in"))
 #' update_mass_props(test_table, "A.3", leaves)
 #'
-update_mass_props <- function(df, target, sources, override = set_poi_conv_from_target) {
+update_mass_props <- function(df, target, sources,
+                              set = set_mass_props,
+                              get = get_mass_props,
+                              combine = combine_mass_props,
+                              override = set_poi_conv_from_target) {
   update_prop(
     df,
     target = target,
     sources = sources,
-    set = set_mass_props,
-    get = get_mass_props,
-    combine = combine_mass_props,
+    set,
+    get,
+    combine,
     override = override
   )
 }
@@ -546,14 +550,18 @@ update_mass_props <- function(df, target, sources, override = set_poi_conv_from_
 #' leaves <- names(igraph::neighbors(sawe_tree, "Combined", mode = "in"))
 #' update_mass_props_unc(sawe_table, "Combined", leaves)
 #'
-update_mass_props_unc <- function(df, target, sources, override = set_poi_conv_from_target) {
+update_mass_props_unc <- function(df, target, sources,
+                                  set = set_mass_props_unc,
+                                  get = get_mass_props_and_unc,
+                                  combine = function(l) { combine_mass_props_unc(l, amp = get_mass_props(df, target))},
+                                  override = set_poi_conv_from_target) {
   update_prop(
     df,
     target = target,
     sources = sources,
-    set = set_mass_props_unc,
-    get = get_mass_props_and_unc,
-    combine = function(l) { combine_mass_props_unc(l, amp = get_mass_props(df, target))},
+    set,
+    get,
+    combine,
     override = override
   )
 }
@@ -575,14 +583,18 @@ update_mass_props_unc <- function(df, target, sources, override = set_poi_conv_f
 #' leaves <- list("Widget", "2nd Part")
 #' update_mass_props_and_unc(sawe_table, "Combined", leaves)
 #'
-update_mass_props_and_unc <- function(df, target, sources, override = set_poi_conv_from_target) {
+update_mass_props_and_unc <- function(df, target, sources,
+                                      set = set_mass_props_and_unc,
+                                      get = get_mass_props_and_unc,
+                                      combine = combine_mass_props_and_unc,
+                                      override = set_poi_conv_from_target) {
   update_prop(
     df,
     target = target,
     sources = sources,
-    set = set_mass_props_and_unc,
-    get = get_mass_props_and_unc,
-    combine = combine_mass_props_and_unc,
+    set,
+    get,
+    combine,
     override = override
   )
 }
