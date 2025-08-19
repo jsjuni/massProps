@@ -4,7 +4,13 @@
 \alias{validate_mass_props_table}
 \title{Validate a mass properties table}
 \usage{
-validate_mass_props_table(tree, ds)
+validate_mass_props_table(
+  tree,
+  ds,
+  get_ids = df_get_ids,
+  get_mp = get_mass_props,
+  validate = validate_mass_props
+)
 }
 \arguments{
 \item{tree}{An 'igraph' tree whose vertices are named as the values of the \code{id}
@@ -12,6 +18,12 @@ column of \code{ds} and whose directed edges point from child id to parent id.}
 
 \item{ds}{A data set  with (at least) these properties: \code{id}, \code{mass}, \code{Cx},
 \code{Cy}, \code{Cz}, \code{Ixx}, \code{Iyy}, \code{Izz}, \code{Ixy}, \code{Ixz}, \code{Iyz}, \code{POIconv}, \code{Ipoint}.}
+
+\item{get_ids}{A function to get all ids from the data set, called as get_ids(ds). Default: df_get_ids().}
+
+\item{get_mp}{A function get the mass properties for a selected item, called as get_mp(ds, id). Default: get_mass_props().}
+
+\item{validate}{A function to validate a set of mass properties, called as validate(mp). Default: validate_mass_props().}
 }
 \value{
 TRUE if valid, stops with an error otherwise

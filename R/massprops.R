@@ -768,6 +768,9 @@ validate_mass_props_and_unc <- function(mpu) {
 #'
 #' @inheritParams update_mass_props
 #' @inheritParams rollup_mass_props
+#' @param get_ids A function to get all ids from the data set, called as get_ids(ds). Default: df_get_ids().
+#' @param get_mp A function get the mass properties for a selected item, called as get_mp(ds, id). Default: get_mass_props().
+#' @param validate A function to validate a set of mass properties, called as validate(mp). Default: validate_mass_props().
 #'
 #' @description
 #' `validate_mass_props_table()` ensures that the `id` column of the table and the vertices
@@ -780,14 +783,16 @@ validate_mass_props_and_unc <- function(mpu) {
 #'
 #' @examples
 #' validate_mass_props_table(mp_tree_small, mp_table_small)
-validate_mass_props_table <- function(tree, ds) {
-  validate_ds(tree, ds, df_get_ids, get_mass_props, validate_mass_props)
+validate_mass_props_table <- function(tree, ds, get_ids = df_get_ids, get_mp = get_mass_props, validate = validate_mass_props) {
+  validate_ds(tree, ds, get_ids, get_mp, validate)
 }
 
 #' Validate a mass properties and uncertainties table
 #'
 #' @inheritParams update_mass_props_and_unc
 #' @inheritParams validate_mass_props_table
+#' @param get_mpu A function get the mass properties and uncertainties for a selected item, called as get_mpu(ds, id). Default: get_mass_props_and_unc().
+#' @param validate A function to validate a set of mass properties, called as validate(mp). Default: validate_mass_props_and_unc().
 #'
 #' @description `validate_mass_props_and_unc()` calls
 #' `validate_mass_props_table()` and further applies the checks of
@@ -800,8 +805,8 @@ validate_mass_props_table <- function(tree, ds) {
 #'
 #' @examples
 #' validate_mass_props_and_unc_table(mp_tree_small, mp_table_small)
-validate_mass_props_and_unc_table <- function(tree, ds) {
-  validate_ds(tree, ds, df_get_ids, get_mass_props_and_unc, validate_mass_props_and_unc)
+validate_mass_props_and_unc_table <- function(tree, ds, get_ids = df_get_ids, get_mpu = get_mass_props_and_unc, validate = validate_mass_props_and_unc) {
+  validate_ds(tree, ds, get_ids, get_mpu, validate)
 }
 
 #' Roll up mass properties
