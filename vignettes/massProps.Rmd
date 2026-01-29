@@ -658,13 +658,13 @@ $$
 \begin{bmatrix}
 {p_X}_i - 2{p_Y}_i & 0 & 0 \\
 0 & {p_Y}_i - 2{p_X}_i & 0 \\
-0 & 0 & 2{p_Z}_i - 2{p_X}_i \\
+0 & 0 & {p_Z}_i - 2{p_X}_i \\
 \end{bmatrix} \\
 {\boldsymbol{M}_2}_i & = \boldsymbol{P}_i^T -
 \begin{bmatrix}
 {p_X}_i - 2{p_Z}_i & 0 & 0 \\
 0 & {p_Y}_i - 2{p_Z}_i & 0 \\
-0 & 0 & 2{p_Z}_i - 2{p_Y}_i \\
+0 & 0 & {p_Z}_i - 2{p_Y}_i \\
 \end{bmatrix} \\
 {\boldsymbol{M}_3}_i & = \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3 \\
 {\boldsymbol{M}_4}_i & =  w_i^2 \left(

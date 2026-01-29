@@ -1,3 +1,7 @@
+# massProps 0.3.4
+
+* Error in inertia tensor uncertainty documentation fixed (#64).
+
 # massProps 0.3.3
 
 * Benchmark results cleaned up (#54).
