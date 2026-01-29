@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">massProps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@
       <h1>massProps</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/jsjuni/massProps/blob/main/vignettes/massProps.Rmd" class="external-link"><code>vignettes/massProps.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jsjuni/massProps/blob/v0.3.4/vignettes/massProps.Rmd" class="external-link"><code>vignettes/massProps.Rmd</code></a></small>
       <div class="d-none name"><code>massProps.Rmd</code></div>
     </div>
 
@@ -237,7 +237,7 @@ zero)</p></li>
 <span><span class="co">#&gt; + edges from 7d8200c (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] A.2-&gt;A.1 A.3-&gt;A.1 C.1-&gt;A.1 P.1-&gt;A.2 P.2-&gt;A.2 P.3-&gt;A.2 P.4-&gt;A.2 P.5-&gt;A.3</span></span>
 <span><span class="co">#&gt;  [9] P.6-&gt;A.3 P.7-&gt;A.3 P.8-&gt;A.3</span></span></code></pre></div>
-<p><img src="massProps_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="massProps_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="700"></p>
 <p>Then we can compute mass properties for non-leaf elements by calling
 <code><a href="../reference/rollup_mass_props.html">rollup_mass_props()</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -782,20 +782,20 @@ Hadamard (element-wise) product with itself, then</p>
 }
 </annotation></semantics></math></p>
 <p>where</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><menclose notation="box"><mtable><mtr><mtd columnalign="right" style="text-align: right"><msub><msub><mi>𝐌</mi><mn>1</mn></msub><mi>i</mi></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mi>𝐏</mi><mi>i</mi></msub><mo>−</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><msub><mi>p</mi><mi>X</mi></msub><mi>i</mi></msub><mo>−</mo><mn>2</mn><msub><msub><mi>p</mi><mi>Y</mi></msub><mi>i</mi></msub></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><msub><msub><mi>p</mi><mi>Y</mi></msub><mi>i</mi></msub><mo>−</mo><mn>2</mn><msub><msub><mi>p</mi><mi>X</mi></msub><mi>i</mi></msub></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>2</mn><msub><msub><mi>p</mi><mi>Z</mi></msub><mi>i</mi></msub><mo>−</mo><mn>2</mn><msub><msub><mi>p</mi><mi>X</mi></msub><mi>i</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><msub><mi>𝐌</mi><mn>2</mn></msub><mi>i</mi></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msubsup><mi>𝐏</mi><mi>i</mi><mi>T</mi></msubsup><mo>−</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><msub><mi>p</mi><mi>X</mi></msub><mi>i</mi></msub><mo>−</mo><mn>2</mn><msub><msub><mi>p</mi><mi>Z</mi></msub><mi>i</mi></msub></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><msub><msub><mi>p</mi><mi>Y</mi></msub><mi>i</mi></msub><mo>−</mo><mn>2</mn><msub><msub><mi>p</mi><mi>Z</mi></msub><mi>i</mi></msub></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>2</mn><msub><msub><mi>p</mi><mi>Z</mi></msub><mi>i</mi></msub><mo>−</mo><mn>2</mn><msub><msub><mi>p</mi><mi>Y</mi></msub><mi>i</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><msub><mi>𝐌</mi><mn>3</mn></msub><mi>i</mi></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mi>𝐐</mi><mi>i</mi></msub><mo>−</mo><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐐</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><msub><mn>𝟏</mn><mn>3</mn></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><msub><mi>𝐌</mi><mn>4</mn></msub><mi>i</mi></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msubsup><mi>w</mi><mi>i</mi><mn>2</mn></msubsup><mrow><mo stretchy="true" form="prefix">(</mo><msup><msub><msub><mi>𝐌</mi><mn>1</mn></msub><mi>i</mi></msub><mn>2</mn></msup><mo>+</mo><msup><msub><msub><mi>𝐌</mi><mn>2</mn></msub><mi>i</mi></msub><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>σ</mi><msub><mi>w</mi><mi>i</mi></msub></msub><msub><msub><mi>𝐌</mi><mn>3</mn></msub><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mtd></mtr></mtable></menclose><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><menclose notation="box"><mtable><mtr><mtd columnalign="right" style="text-align: right"><msub><msub><mi>𝐌</mi><mn>1</mn></msub><mi>i</mi></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mi>𝐏</mi><mi>i</mi></msub><mo>−</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><msub><mi>p</mi><mi>X</mi></msub><mi>i</mi></msub><mo>−</mo><mn>2</mn><msub><msub><mi>p</mi><mi>Y</mi></msub><mi>i</mi></msub></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><msub><msub><mi>p</mi><mi>Y</mi></msub><mi>i</mi></msub><mo>−</mo><mn>2</mn><msub><msub><mi>p</mi><mi>X</mi></msub><mi>i</mi></msub></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><msub><msub><mi>p</mi><mi>Z</mi></msub><mi>i</mi></msub><mo>−</mo><mn>2</mn><msub><msub><mi>p</mi><mi>X</mi></msub><mi>i</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><msub><mi>𝐌</mi><mn>2</mn></msub><mi>i</mi></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msubsup><mi>𝐏</mi><mi>i</mi><mi>T</mi></msubsup><mo>−</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><msub><mi>p</mi><mi>X</mi></msub><mi>i</mi></msub><mo>−</mo><mn>2</mn><msub><msub><mi>p</mi><mi>Z</mi></msub><mi>i</mi></msub></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><msub><msub><mi>p</mi><mi>Y</mi></msub><mi>i</mi></msub><mo>−</mo><mn>2</mn><msub><msub><mi>p</mi><mi>Z</mi></msub><mi>i</mi></msub></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><msub><msub><mi>p</mi><mi>Z</mi></msub><mi>i</mi></msub><mo>−</mo><mn>2</mn><msub><msub><mi>p</mi><mi>Y</mi></msub><mi>i</mi></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><msub><mi>𝐌</mi><mn>3</mn></msub><mi>i</mi></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mi>𝐐</mi><mi>i</mi></msub><mo>−</mo><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐐</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><msub><mn>𝟏</mn><mn>3</mn></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><msub><mi>𝐌</mi><mn>4</mn></msub><mi>i</mi></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msubsup><mi>w</mi><mi>i</mi><mn>2</mn></msubsup><mrow><mo stretchy="true" form="prefix">(</mo><msup><msub><msub><mi>𝐌</mi><mn>1</mn></msub><mi>i</mi></msub><mn>2</mn></msup><mo>+</mo><msup><msub><msub><mi>𝐌</mi><mn>2</mn></msub><mi>i</mi></msub><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>σ</mi><msub><mi>w</mi><mi>i</mi></msub></msub><msub><msub><mi>𝐌</mi><mn>3</mn></msub><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mtd></mtr></mtable></menclose><annotation encoding="application/x-tex">
 \boxed{
 \begin{align}
 {\boldsymbol{M}_1}_i &amp; = \boldsymbol{P}_i - 
 \begin{bmatrix}
 {p_X}_i - 2{p_Y}_i &amp; 0 &amp; 0 \\
 0 &amp; {p_Y}_i - 2{p_X}_i &amp; 0 \\
-0 &amp; 0 &amp; 2{p_Z}_i - 2{p_X}_i \\
+0 &amp; 0 &amp; {p_Z}_i - 2{p_X}_i \\
 \end{bmatrix} \\
 {\boldsymbol{M}_2}_i &amp; = \boldsymbol{P}_i^T -
 \begin{bmatrix}
 {p_X}_i - 2{p_Z}_i &amp; 0 &amp; 0 \\
 0 &amp; {p_Y}_i - 2{p_Z}_i &amp; 0 \\
-0 &amp; 0 &amp; 2{p_Z}_i - 2{p_Y}_i \\
+0 &amp; 0 &amp; {p_Z}_i - 2{p_Y}_i \\
 \end{bmatrix} \\
 {\boldsymbol{M}_3}_i &amp; = \boldsymbol{Q}_i - \mathrm{tr}(\boldsymbol{Q}_i)\boldsymbol{1}_3 \\
 {\boldsymbol{M}_4}_i &amp; =  w_i^2 \left(
@@ -1286,7 +1286,7 @@ Society of Allied Weight Engineers.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
