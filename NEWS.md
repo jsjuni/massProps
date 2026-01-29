@@ -1,3 +1,5 @@
+# massProps (development version)
+
 # massProps 0.3.4
 
 * Error in inertia tensor uncertainty documentation fixed (#64).
