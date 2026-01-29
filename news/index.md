@@ -2,6 +2,8 @@
 
 ## massProps 0.3.4
 
+CRAN release: 2026-01-29
+
 - Error in inertia tensor uncertainty documentation fixed
   ([\#64](https://github.com/jsjuni/massProps/issues/64)).
 
