@@ -20,23 +20,24 @@
 #' get_mass_props(mp_table, "C.1.2.2.3.1.2.3")
 #'
 get_mass_props <- function(df, id) {
-  poi_conv <- df_get_by_id(df, id, "POIconv")
+  row <- df_get_row_by_id(df, id)
+  poi_conv <- row$POIconv
   list(
-    mass = df_get_by_id(df, id, "mass"),
-    center_mass = sapply(c(x = "Cx", y = "Cy", z = "Cz"), FUN=function(p) df_get_by_id(df, id, p)),
+    mass = row$mass,
+    center_mass = c(x = row$Cx, y = row$Cy, z = row$Cz),
     inertia = {
       xyz <- list("x", "y", "z")
       it <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
-      it["x", "x"] <- df_get_by_id(df, id, "Ixx")
-      it["y", "y"] <- df_get_by_id(df, id, "Iyy")
-      it["z", "z"] <- df_get_by_id(df, id, "Izz")
+      it["x", "x"] <- row$Ixx
+      it["y", "y"] <- row$Iyy
+      it["z", "z"] <- row$Izz
       poi_factor <- if (poi_conv == '-') 1 else -1
-      it["x", "y"] <- it["y", "x"] <- poi_factor * df_get_by_id(df, id, "Ixy")
-      it["x", "z"] <- it["z", "x"] <- poi_factor * df_get_by_id(df, id, "Ixz")
-      it["y", "z"] <- it["z", "y"] <- poi_factor * df_get_by_id(df, id, "Iyz")
+      it["x", "y"] <- it["y", "x"] <- poi_factor * row$Ixy
+      it["x", "z"] <- it["z", "x"] <- poi_factor * row$Ixz
+      it["y", "z"] <- it["z", "y"] <- poi_factor * row$Iyz
       it
     },
-    point = df_get_by_id(df, id, "Ipoint")
+    point = row[["Ipoint"]]
   )
 }
 
@@ -60,18 +61,19 @@ get_mass_props <- function(df, id) {
 #' get_mass_props_unc(mp_table, "C.1.2.2.3.1.2.3")
 #'
 get_mass_props_unc <- function(df, id) {
+  row <- df_get_row_by_id(df, id)
   list(
-    sigma_mass = df_get_by_id(df, id, "sigma_mass"),
-    sigma_center_mass = sapply(c(x = "sigma_Cx", y = "sigma_Cy", z = "sigma_Cz"), FUN=function(p) df_get_by_id(df, id, p)),
+    sigma_mass = row$sigma_mass,
+    sigma_center_mass = c(x = row$sigma_Cx, y = row$sigma_Cy, z = row$sigma_Cz),
     sigma_inertia = {
       xyz <- list("x", "y", "z")
       sit <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
-      sit["x", "x"] <- df_get_by_id(df, id, "sigma_Ixx")
-      sit["y", "y"] <- df_get_by_id(df, id, "sigma_Iyy")
-      sit["z", "z"] <- df_get_by_id(df, id, "sigma_Izz")
-      sit["x", "y"] <- sit["y", "x"] <- df_get_by_id(df, id, "sigma_Ixy")
-      sit["x", "z"] <- sit["z", "x"] <- df_get_by_id(df, id, "sigma_Ixz")
-      sit["y", "z"] <- sit["z", "y"] <- df_get_by_id(df, id, "sigma_Iyz")
+      sit["x", "x"] <- row$sigma_Ixx
+      sit["y", "y"] <- row$sigma_Iyy
+      sit["z", "z"] <- row$sigma_Izz
+      sit["x", "y"] <- sit["y", "x"] <- row$sigma_Ixy
+      sit["x", "z"] <- sit["z", "x"] <- row$sigma_Ixz
+      sit["y", "z"] <- sit["z", "y"] <- row$sigma_Iyz
       sit
     }
   )
@@ -160,11 +162,7 @@ set_mass_props <- function(df, id, mp) {
     POIconv = mp$poi_conv,
     Ipoint = mp$point
   )
-  Reduce(
-    f = function(d, n) df_set_by_id(d, id, n, values[[n]]),
-    x = names(values),
-    init = df
-  )
+  df_set_row_by_id(df, id, values)
 }
 
 #' Set mass properties uncertainties for a row in a data frame
@@ -202,11 +200,7 @@ set_mass_props_unc <- function(df, id, mpu) {
     sigma_Ixz = (mpu$sigma_inertia["x", "z"] + mpu$sigma_inertia["z", "x"]) / 2.0,
     sigma_Iyz = (mpu$sigma_inertia["y", "z"] + mpu$sigma_inertia["z", "y"]) / 2.0
   )
-  Reduce(
-    f = function(d, n) df_set_by_id(d, id, n, values[[n]]),
-    x = names(values),
-    init = df
-  )
+  df_set_row_by_id(df, id, values)
 }
 
 #' Set mass properties and uncertainties for a row in a data frame
