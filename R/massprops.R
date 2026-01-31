@@ -24,7 +24,9 @@ get_mass_props <- function(df, id) {
   poi_conv <- row$POIconv
   list(
     mass = row$mass,
+
     center_mass = c(x = row$Cx, y = row$Cy, z = row$Cz),
+
     inertia = {
       xyz <- list("x", "y", "z")
       it <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
@@ -37,6 +39,7 @@ get_mass_props <- function(df, id) {
       it["y", "z"] <- it["z", "y"] <- poi_factor * row$Iyz
       it
     },
+
     point = row[["Ipoint"]]
   )
 }
@@ -64,7 +67,9 @@ get_mass_props_unc <- function(df, id) {
   row <- df_get_row_by_id(df, id)
   list(
     sigma_mass = row$sigma_mass,
+
     sigma_center_mass = c(x = row$sigma_Cx, y = row$sigma_Cy, z = row$sigma_Cz),
+
     sigma_inertia = {
       xyz <- list("x", "y", "z")
       sit <- matrix(data = rep.int(0, 9), nrow = 3, dimnames = list(xyz, xyz))
@@ -139,7 +144,8 @@ get_mass_props_and_unc <- function(df, id) {
 #' set_mass_props(df, "C.1.2.2.3.2.1.1", mp)
 #'
 set_mass_props <- function(df, id, mp) {
-  m <- mp$inertia
+  cm <- mp$center_mass
+  it <- (mp$inertia + t(mp$inertia)) / 2
   tryCatch(
     poi_factor <- if (mp$poi_conv == "-") 1 else if (mp$poi_conv == "+") -1 else stop(),
     error = function(e) stop("invalid sign convention")
@@ -147,17 +153,17 @@ set_mass_props <- function(df, id, mp) {
   values <- list(
     mass = mp$mass,
 
-    Cx = mp$center_mass["x"],
-    Cy = mp$center_mass["y"],
-    Cz = mp$center_mass["z"],
+    Cx = cm["x"],
+    Cy = cm["y"],
+    Cz = cm["z"],
 
-    Ixx = m["x", "x"],
-    Iyy = m["y", "y"],
-    Izz = m["z", "z"],
+    Ixx = it["x", "x"],
+    Iyy = it["y", "y"],
+    Izz = it["z", "z"],
 
-    Ixy = poi_factor * (m["x", "y"] + m["y", "x"]) / 2.0,
-    Ixz = poi_factor * (m["x", "z"] + m["z", "x"]) / 2.0,
-    Iyz = poi_factor * (m["y", "z"] + m["z", "y"]) / 2.0,
+    Ixy = poi_factor * it["x", "y"],
+    Ixz = poi_factor * it["x", "z"],
+    Iyz = poi_factor * it["y", "z"],
 
     POIconv = mp$poi_conv,
     Ipoint = mp$point
@@ -185,20 +191,22 @@ set_mass_props <- function(df, id, mp) {
 #' set_mass_props_unc(sawe_table, "Combined", get_mass_props_unc(sawe_table, "Widget"))
 #'
 set_mass_props_unc <- function(df, id, mpu) {
+  sigma_cm <- mpu$sigma_center_mass
+  sigma_it <- (mpu$sigma_inertia + mpu$sigma_inertia) / 2
   values <- list(
     sigma_mass = mpu$sigma_mass,
 
-    sigma_Cx = mpu$sigma_center_mass["x"],
-    sigma_Cy = mpu$sigma_center_mass["y"],
-    sigma_Cz = mpu$sigma_center_mass["z"],
+    sigma_Cx = sigma_cm["x"],
+    sigma_Cy = sigma_cm["y"],
+    sigma_Cz = sigma_cm["z"],
 
-    sigma_Ixx = mpu$sigma_inertia["x", "x"],
-    sigma_Iyy = mpu$sigma_inertia["y", "y"],
-    sigma_Izz = mpu$sigma_inertia["z", "z"],
+    sigma_Ixx = sigma_it["x", "x"],
+    sigma_Iyy = sigma_it["y", "y"],
+    sigma_Izz = sigma_it["z", "z"],
 
-    sigma_Ixy = (mpu$sigma_inertia["x", "y"] + mpu$sigma_inertia["y", "x"]) / 2.0,
-    sigma_Ixz = (mpu$sigma_inertia["x", "z"] + mpu$sigma_inertia["z", "x"]) / 2.0,
-    sigma_Iyz = (mpu$sigma_inertia["y", "z"] + mpu$sigma_inertia["z", "y"]) / 2.0
+    sigma_Ixy = sigma_it["x", "y"],
+    sigma_Ixz = sigma_it["x", "z"],
+    sigma_Iyz = sigma_it["y", "z"]
   )
   df_set_row_by_id(df, id, values)
 }
