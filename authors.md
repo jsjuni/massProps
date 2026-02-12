@@ -8,16 +8,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/jsjuni/massProps/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/jsjuni/massProps/blob/v0.3.5/DESCRIPTION)
 
 Jenkins JS (2026). *massProps: Calculate Mass Properties and
-Uncertainties of Tree Structures*. R package version 0.3.4,
+Uncertainties of Tree Structures*. R package version 0.3.5,
 <https://jsjuni.github.io/massProps/>.
 
     @Manual{,
       title = {massProps: Calculate Mass Properties and Uncertainties of Tree Structures},
       author = {James Steven Jenkins},
       year = {2026},
-      note = {R package version 0.3.4},
+      note = {R package version 0.3.5},
       url = {https://jsjuni.github.io/massProps/},
     }

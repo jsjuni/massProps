@@ -1024,10 +1024,10 @@ benchmark('mp + unc             ' = rollup_mass_props_and_unc_fast(mp_tree, mp_t
 Times reported are in seconds.
 
                        test elapsed user.self sys.self
-    3 mp                     0.6754    0.6632   0.0123
-    4 mp       + validation  0.9793    0.9651   0.0143
-    1 mp + unc               1.0322    1.0139   0.0184
-    2 mp + unc + validation  1.5216    1.4957   0.0261
+    3 mp                     0.6469    0.6372   0.0098
+    4 mp       + validation  0.8942    0.8791   0.0151
+    1 mp + unc               0.9892    0.9635   0.0181
+    2 mp + unc + validation  1.3442    1.3157   0.0279
 
 ## References
 

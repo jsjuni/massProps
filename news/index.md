@@ -1,5 +1,10 @@
 # Changelog
 
+## massProps 0.3.5
+
+- Updated to use rollupTree::df\_{get,set}\_by_id()
+  ([\#66](https://github.com/jsjuni/massProps/issues/66))
+
 ## massProps 0.3.4
 
 CRAN release: 2026-01-29
