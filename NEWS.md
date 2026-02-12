@@ -1,6 +1,6 @@
 # massProps (development version)
 
-* updated to use rollupTree::df_{get,set}_by_id() (#66)
+* Updated to use rollupTree::df_{get,set}_by_id() (#66)
 
 # massProps 0.3.4
 
