@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/jsjuni/massProps/blob/v0.3.5/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/jsjuni/massProps/blob/main/DESCRIPTION)
 
 Jenkins JS (2026). *massProps: Calculate Mass Properties and
 Uncertainties of Tree Structures*. R package version 0.3.5,
